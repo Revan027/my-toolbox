@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+   <ion-toolbar>
+      <ion-title>
+         <div class="header-title">
+            <ion-icon name="server-outline"></ion-icon>
+            <span>Sauvegarde</span>
+         </div>
+      </ion-title>
+   </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+   <ion-row class="ion-align-items-center">
+      <ion-col>
+         <ion-card class="form-card">
+            <ion-card-content>
+
+               <div class="ion-margin-bottom">
+                  <ion-button (click)="export()" [strong]="true" expand="block" shape="round">
+                     <ion-icon slot="start" name="download-outline"></ion-icon>
+                     <ion-spinner [class]="showExportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> Exporter la base
+                  </ion-button>
+               </div>
+
+               <div>
+                   <input #inputFile type="file" hidden  (change)="import($event)" />
+                      
+                  <ion-button (click)="openFileSelector()" [strong]="true" expand="block" shape="round" color="secondary">
+                     <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+                     <ion-spinner [class]="showImportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> Importer une sauvegarde
+                  </ion-button>
+               </div>
+
+            </ion-card-content>
+         </ion-card>
+      </ion-col>
+   </ion-row>
+</ion-content>

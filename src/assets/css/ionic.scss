@@ -1,0 +1,182 @@
+ :host ion-content {
+     --keyboard-offset: 0px !important;
+  }
+
+/* HEADER */
+ion-header::after {
+  display: none;
+}
+
+ion-header {
+  background: var(--app-header-bg);
+  border-radius: 0 0 50% 50% / 0 0 30px 30px;
+  overflow: hidden;
+}
+
+ion-header ion-toolbar {
+  --background: transparent;
+  border-bottom: none;
+  --min-height: 70px;
+  padding-bottom: 26px;
+}
+
+ion-header ion-title {
+  padding-top: 10px;
+  color: var(--app-text-light);
+  font-weight: 600; 
+  font-size: var(--ion-font-size-2xl);
+}
+
+ion-header ion-buttons{
+  padding-top: 10px;
+}
+
+/* HEADER TITLE with icon */
+.header-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  ion-icon {
+    font-size: 1.25rem;
+    color: var(--app-text-light);
+  }
+
+  span {
+    letter-spacing: 0.3px;
+  }
+}
+
+ion-header ion-back-button {
+  color: var(--app-text-light);
+}
+
+ion-header[collapse="condense"] ion-toolbar {
+  --background: transparent;
+  border-bottom: none;
+}
+
+ion-card-title {
+  font-size: var(--ion-font-size-sm);
+}
+
+/* STRUCTURE */
+ion-row {
+  height: 100%;
+}
+
+/* DEFAULT BACKGROUND */
+ion-content {
+  --background: var(--app-bg);
+  --padding-end: 20px;
+  --padding-start: 20px;
+}
+
+/* WHITE CARD */
+ion-card.form-card {
+  --background: var(--app-card-bg);
+  border-radius: var(--app-card-radius);
+  box-shadow: var(--app-card-shadow);
+  --color: var(--app-text-color);
+  border: none;
+  padding: 8px;
+}
+
+/* INPUTS */
+ion-input,
+ion-select,
+ion-searchbar {
+  --background: var(--app-input-bg) !important;
+  --color: var(--app-text-color);
+  --placeholder-color: var(--app-text-muted);
+}
+ion-input .label-text {
+  line-height: 1.2!important;
+}
+
+ion-searchbar{
+--border-radius: 4px!important;;
+}
+
+ion-select::part(label) {
+  color: var(--app-label-color);
+}
+
+ion-input .label-text {
+  color: var(--app-label-color);
+}
+
+/* BUTTONS */
+ion-button {
+  --background: var(--app-accent);
+  --color: #fff;
+  --border-radius: 12px;
+}
+
+/* SEPARATOR */
+
+hr { width: 90%; opacity: 0.4;
+    border: none;
+    height: 2px;
+    background: var(--app-page-theme-color);
+}
+
+/* FONT UTILITIES */
+.bold {
+  font-weight: bold;
+}
+
+.text-xs {
+  font-size: var(--ion-font-size-xs);
+}
+
+.text-sm {
+  font-size: var(--ion-font-size-sm);
+}
+
+.text-base {
+  font-size: var(--ion-font-size-base);
+}
+
+.text-lg {
+  font-size: var(--ion-font-size-lg);
+}
+
+.text-xl {
+  font-size: var(--ion-font-size-xl);
+}
+
+.text-2xl {
+  font-size: var(--ion-font-size-2xl);
+}
+
+.text-3xl {
+  font-size: var(--ion-font-size-3xl);
+}
+
+/* CLASS UTILITIES */
+.d-none{
+  display: none;
+}
+
+.loader-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  ion-spinner {
+    transform: scale(3);
+  }
+}
+
+.card-image {
+    aspect-ratio: 828 / 1147;
+    object-fit: cover;
+    object-position: top; /* recadre par le bas au lieu du centre */
+}
+
+.serie-logo ion-img{
+  object-fit: contain;
+  max-width: 70px;
+}

@@ -1,0 +1,44 @@
+ion-tab-bar {
+  --background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  height: 64px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+ion-tab-button {
+  --color: #9ca3af;
+  --color-selected: #2563eb;
+}
+
+ion-tab-button[tab="backup"] {
+  --color-selected: #dc2626;
+}
+
+ion-tab-button[tab="tcg"] {
+  --color-selected: #7c3aed ;
+}
+
+
+ion-tab-button[tab="convertisseur"] {
+  --color-selected: #2563eb;
+}
+
+
+ion-tab-button.tab-selected ion-icon {
+  padding: 6px 18px;
+  border-radius: 20px;
+  display: inline-flex;
+}
+
+ion-tab-button.tab-selected ion-icon {
+  background: #eff6ff;
+}
+
+
+ion-tab-button ion-label {
+  font-size: 10px;
+}
+
+ion-tab-button.tab-selected ion-label {
+  font-weight: 600;
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MyToolbox</string>
+    <string name="title_activity_main">MyToolbox</string>
+    <string name="package_name">com.morgan.mytoolbox</string>
+    <string name="custom_url_scheme">com.morgan.mytoolbox</string>
+</resources>

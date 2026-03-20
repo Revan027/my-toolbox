@@ -1,0 +1,131 @@
+<ion-header [translucent]="true">
+   <ion-toolbar>
+      <ion-buttons slot="start">
+         <ion-back-button icon="caret-back"></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+         <div class="header-title">
+            <ion-icon name="create-outline"></ion-icon>
+            <span>{{ card?.id ? 'Edition' : 'Création' }}</span>
+         </div>
+      </ion-title>
+   </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+   @if(loaded){
+      <form [formGroup]="formGroup" novalidate >
+         <input formControlName="id" type="text" hidden />
+
+         <div class="ion-margin-top ion-margin-bottom">
+            <ion-input label="Nom" formControlName="name" label-placement="stacked" fill="outline"> </ion-input>
+
+            @if(formGroup.controls['name'].invalid && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)){
+               <ion-text color="danger">Le nom est requis</ion-text>
+            }
+         </div>
+         
+         <div class="ion-margin-top ion-margin-bottom">
+            <ion-label>
+               Image
+            </ion-label>
+
+            <ion-grid>
+               <ion-row>
+                  <ion-col>
+                     <input #inputFile type="file" hidden (change)="handleFileChanged($event)" />
+
+                     <ion-button size="small" (click)="openFileSelector($event)"> 
+                        <ion-icon name="document-outline" slot="start"></ion-icon> Choisir un fichier 
+                     </ion-button>
+
+                     <ion-button size="small" (click)="capturePhoto($event)">
+                        <ion-icon name="camera-outline" slot="start"></ion-icon> Prendre une photo
+                     </ion-button>
+                  </ion-col>
+
+                  <ion-col>
+                     @if(!formGroup.get('srcPicture')?.value){
+                        <div class="ion-text-center">
+                           <ion-img src="../../../../assets/card_empty.png" alt=""></ion-img> 
+                        </div>
+                     }
+                     @else{
+                        <ion-img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)"></ion-img>
+                     }   
+
+                     @if(card.serie.srcLogo){
+                        <div class="serie-logo ion-margin-top">
+                           <ion-img [src]="'../../../../' + card.serie.srcLogo" alt=""></ion-img>
+                        </div>
+                     }   
+                  </ion-col>
+
+                  <ion-col size="12">          
+                     <ion-input formControlName="srcPicture" class="d-none"></ion-input>
+                     <ion-input formControlName="picture" class="d-none"></ion-input>
+
+                     @if(formGroup.controls['srcPicture'].invalid && (formGroup.controls['srcPicture'].dirty || formGroup.controls['srcPicture'].touched)){
+                        <ion-text color="danger">L'image est requise</ion-text>
+                     }
+                  </ion-col>
+               </ion-row>
+            </ion-grid>
+         </div>
+
+         <div class="ion-margin-top ion-margin-bottom">
+            <ion-input class="ion-margin-bottom" (ionInput)="getFormatAmountInput($event)" label="Montant" formControlName="averagePrice" type="number" placeholder="00.00" label-placement="floating" fill="outline">
+               <ion-icon slot="start" name="cash-outline"></ion-icon>
+            </ion-input>
+
+            @if(formGroup.controls['averagePrice'].invalid && (formGroup.controls['averagePrice'].dirty || formGroup.controls['averagePrice'].touched)){
+               <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">Montant requis</p></ion-text>
+            }
+         </div>
+
+         <div class="ion-margin-top ion-margin-bottom">
+            <ion-select class="ion-margin-bottom" label="Génération" formControlName="generationID" interface="popover" placeholder="-" fill="outline">
+               @for(item of generations; track item) {
+                  <ion-select-option [value]="item.id"> 
+                     {{item.libelle}}
+                  </ion-select-option>
+               }
+            </ion-select>
+
+            @if(formGroup.controls['serieID'].invalid && (formGroup.controls['serieID'].dirty)){
+               <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">La génération est requise</p></ion-text>
+            }
+         </div>
+
+         <div class="ion-margin-top ion-margin-bottom">
+            <ion-select (ionChange)="serieChanged($event)" class="ion-margin-bottom" label="Série" formControlName="serieID" interface="popover" placeholder="-" fill="outline">
+               @for(item of series; track item) {
+                  <ion-select-option [value]="item.id"> 
+                     {{item.name}}
+                  </ion-select-option>
+               }
+            </ion-select>
+
+            @if(formGroup.controls['serieID'].invalid && (formGroup.controls['serieID'].dirty)){
+               <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">La série est requise</p></ion-text>
+            }
+         </div>
+
+         <div class="ion-margin-top ion-margin-bottom">
+            <ion-toggle class="ion-margin-top" formControlName="isPriority">Prioritaire</ion-toggle>
+         </div>
+
+         <div class="action-buttons ion-margin">
+            @if(card.id > 0){
+               <ion-button (click)="delete()" color="danger" [strong]="true">Supprimer</ion-button>
+            }
+            <ion-button (click)="submit(formGroup.value)" color="primary" [strong]="true" [disabled]="formGroup.invalid">Enregistrer</ion-button>
+         </div>
+      </form>
+   }
+   @else{
+      <div class="loader-center">
+         <ion-spinner name="dots"></ion-spinner>
+      </div>
+   }
+</ion-content>

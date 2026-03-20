@@ -1,0 +1,28 @@
+:host {
+  --app-page-theme-color: linear-gradient(135deg, #3b1f6e 0%, #7c3aed 100%);
+}
+
+ion-header {
+  background: var(--app-page-theme-color)
+}
+
+ion-button.active {
+ --background: var(--ion-color-success);
+}
+
+ion-fab-button{
+  --background: var(--app-page-theme-color);
+}
+
+.filter-generation {
+  overflow: auto;
+}
+
+.filter-generation ion-button{
+  text-transform: capitalize;
+}
+
+
+.filter-generation ion-row{
+  flex-wrap: nowrap;
+}

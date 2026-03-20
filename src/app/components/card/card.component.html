@@ -1,0 +1,23 @@
+<ion-card> 
+   <ion-card-header>
+      <ion-card-title class="ion-text-center">
+         {{ card.name }}
+      </ion-card-title> 
+
+      <div>
+         @if (card.srcPicture) {
+            <ion-img class="card-image" [alt]="card.name" [src]="getSrc(card.srcPicture)"></ion-img>
+         }
+      </div>
+   </ion-card-header>
+
+   <ion-card-content select="[body]">
+      <div class="serie-logo">
+         <ion-thumbnail>
+            <ion-img [src]="'../../../../' + card.serie.srcLogo" alt=""></ion-img>
+         </ion-thumbnail>
+      </div>
+
+      <ng-content></ng-content>
+   </ion-card-content>
+</ion-card>

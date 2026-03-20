@@ -1,0 +1,21 @@
+:host {
+  --app-page-theme-color: linear-gradient(135deg, #3b1f6e 0%, #7c3aed 100%);
+}
+
+ion-header {
+  background: var(--app-page-theme-color);
+}
+
+ion-content {
+  --padding-bottom: 80px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.serie-logo {
+  display: flex;
+  justify-content: end;
+}

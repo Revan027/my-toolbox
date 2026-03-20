@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+   <ion-toolbar>
+      <ion-title>
+         <div class="header-title">
+            <ion-icon name="albums-outline"></ion-icon>
+            <span>Suivi Collection TCG</span>
+         </div>
+      </ion-title>
+      <ion-buttons slot="end">
+         <ion-fab-button size="small" [routerLink]="['creation']" routerDirection="forward" [routerAnimation]="slideForward">
+            <ion-icon name="add"></ion-icon>
+         </ion-fab-button>
+      </ion-buttons>
+   </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+   @if(loaded){
+      <div class="ion-margin-top ion-margin-bottom">
+         <ion-searchbar show-clear-button="always" [(ngModel)]="searchText" (ionInput)="searchTextChanged()" [debounce]="800" placeholder="Rechercher une carte"></ion-searchbar>
+
+         <ion-grid class="filter-generation">
+            <ion-row>
+               @for (item of generations; track item) 
+               {
+                  <ion-col>
+                     <ion-button size="small" color="light" (click)="generationChanged(item.id, $event)">{{item.libelle}}</ion-button>
+                  </ion-col>
+               } 
+               @empty {
+                  <ion-col>
+                     <ion-text color="danger">Problème au chargement des générations</ion-text>
+                  </ion-col>
+               }
+            </ion-row>
+         </ion-grid>
+      </div>
+
+      <hr />
+      <ion-grid class="ion-margin-top ion-margin-bottom">
+         <ion-row>
+            @for (item of cards(); track item) 
+            {
+               <ion-col size="4">
+                  <app-card [card]="item" [routerLink]="['detail', item.id]" routerDirection="forward" [routerAnimation]="slideForward">
+                     <!-- <p body>Injecte du contenu dans la partie body du composant</p> -->
+                  </app-card>
+               </ion-col>
+            } 
+            @empty {
+               <ion-col>
+                  <ion-text color="info">Aucune cartes trouvées</ion-text>
+               </ion-col>
+            }
+         </ion-row>
+      </ion-grid>
+   } 
+   @else{
+      <div class="loader-center">
+         <ion-spinner name="dots"></ion-spinner>
+      </div>
+   }
+</ion-content>
