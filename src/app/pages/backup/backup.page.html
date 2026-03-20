@@ -18,7 +18,8 @@
                <div class="ion-margin-bottom">
                   <ion-button (click)="export()" [strong]="true" expand="block" shape="round">
                      <ion-icon slot="start" name="download-outline"></ion-icon>
-                     <ion-spinner [class]="showExportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> Exporter la base
+                     <ion-spinner [class]="showExportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
+                     <ion-label>Exporter la base</ion-label>
                   </ion-button>
                </div>
 
@@ -27,10 +28,10 @@
                       
                   <ion-button (click)="openFileSelector()" [strong]="true" expand="block" shape="round" color="secondary">
                      <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
-                     <ion-spinner [class]="showImportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> Importer une sauvegarde
+                     <ion-spinner [class]="showImportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
+                     <ion-label>Importer une sauvegarde</ion-label>
                   </ion-button>
                </div>
-
             </ion-card-content>
          </ion-card>
       </ion-col>

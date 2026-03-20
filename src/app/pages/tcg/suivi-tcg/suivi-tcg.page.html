@@ -21,7 +21,7 @@
 
          <ion-grid class="filter-generation">
             <ion-row>
-               @for (item of generations; track item) 
+               @for (item of generations; track item.id) 
                {
                   <ion-col>
                      <ion-button size="small" color="light" (click)="generationChanged(item.id, $event)">{{item.libelle}}</ion-button>
@@ -39,7 +39,7 @@
       <hr />
       <ion-grid class="ion-margin-top ion-margin-bottom">
          <ion-row>
-            @for (item of cards(); track item) 
+            @for (item of cards(); track item.id) 
             {
                <ion-col size="4">
                   <app-card [card]="item" [routerLink]="['detail', item.id]" routerDirection="forward" [routerAnimation]="slideForward">

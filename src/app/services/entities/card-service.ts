@@ -11,7 +11,9 @@ export class CardService {
     constructor(private storageService: StorageService) {}
 
     async getAll() {
-        let result = await this.storageService.getDb().query(`SELECT * FROM ${tableName.card}`);
+        let result = await this.storageService.getDb().query(`
+            SELECT id, name, srcPicture, isPriority, averagePrice, serieID
+            FROM ${tableName.card}`);
 
         return result.values as Card[];
     }

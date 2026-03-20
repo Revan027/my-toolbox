@@ -24,6 +24,51 @@ Application mobile **Ionic / Angular / Capacitor** pour les collectionneurs de c
 - **3 devises** : EUR, USD, DOP
 - Base de données SQLite locale avec migrations
 
+## Base de données
+
+Le schéma est défini dans `src/app/constants/database.ts`. Il utilise le système de migrations de `@capacitor-community/sqlite`.
+
+### Structure
+
+```typescript
+export const DB_NAME = 'todo_list_db';   // nom du fichier SQLite
+export const DB_VERSION = 1;             // version courante
+
+// Tableau de statements SQL pour la version 1
+export const version1: string[] = [
+    `CREATE TABLE IF NOT EXISTS ...`,
+    `INSERT INTO ...`,
+];
+
+// Tableau des migrations — une entrée par version
+export const DB_UPGRADES = [
+    { toVersion: 1, statements: version1 },
+];
+```
+
+### Ajouter une migration
+
+Quand tu modifies le schéma (nouvelle colonne, nouvelle table) :
+
+1. Incrémenter `DB_VERSION`
+2. Créer un nouveau tableau `version2` avec les statements de migration (`ALTER TABLE`, etc.)
+3. Ajouter une entrée dans `DB_UPGRADES`
+
+```typescript
+export const DB_VERSION = 2;
+
+export const version2: string[] = [
+    `ALTER TABLE card ADD COLUMN picture TEXT`,
+];
+
+export const DB_UPGRADES = [
+    { toVersion: 1, statements: version1 },
+    { toVersion: 2, statements: version2 },
+];
+```
+
+> Ne jamais modifier `version1` — les migrations existantes ne doivent pas changer.
+
 ## Stack technique
 
 | Technologie | Version |

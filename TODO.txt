@@ -1,0 +1,1 @@
+- Ajouter des index SQLite sur card(name, generationID, serieID) si la table dépasse 100 000 lignes

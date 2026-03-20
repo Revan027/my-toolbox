@@ -129,8 +129,11 @@ ion-button {
   --border-radius: 12px;
 }
 
-/* SEPARATOR */
+ion-button ion-label {
+  width: 100%;
+}
 
+/* SEPARATOR */
 hr { width: 90%; opacity: 0.4;
     border: none;
     height: 2px;
