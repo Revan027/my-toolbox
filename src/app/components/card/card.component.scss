@@ -37,3 +37,10 @@ ion-item {
   display: flex;
   justify-content: center;
 }
+
+ion-icon.acquired {
+  position: absolute;
+  z-index: 1;
+  top: -2px;
+  color: #3b1f6e;
+}

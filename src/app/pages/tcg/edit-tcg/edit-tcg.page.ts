@@ -85,6 +85,7 @@ export class EditTCGPage implements OnInit, OnDestroy {
             srcPicture: [this.card?.srcPicture, Validators.required],
             averagePrice: [ { value: this.card?.averagePrice == 0 ? "" : this.card?.averagePrice, disabled: false } , null],
             isPriority: [ { value: this.card?.isPriority, disabled: false } , null],
+            isAcquired: [ { value: this.card?.isAcquired, disabled: false } , null],
             serieID: [this.card?.serieID, Validators.required],
             generationID: [this.card?.generationID, Validators.required],
             picture: [this.card?.picture, Validators.required],

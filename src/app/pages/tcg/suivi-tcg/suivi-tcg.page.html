@@ -37,7 +37,14 @@
       </div>
 
       <hr />
-      <ion-grid class="ion-margin-top ion-margin-bottom">
+      
+      @if(this.cards().length > 0){
+         <div class="ion-display-flex ion-justify-content-end">
+            <ion-badge class="text-xs">{{this.cards().length}} carte{{this.cards().length > 1 ? "s" : ""}}</ion-badge>
+         </div>
+      }
+        
+      <ion-grid class="ion-margin-bottom">
          <ion-row>
             @for (item of cards(); track item.id) 
             {
