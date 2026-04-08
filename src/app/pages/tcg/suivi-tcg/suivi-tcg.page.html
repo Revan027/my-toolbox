@@ -25,12 +25,12 @@
             </ion-fab-button>    
          </div>
 
-         <span class="ion-margin-start">
+         <span class="">
             <ion-badge class="text-xs">{{this.cards().length}} carte{{this.cards().length > 1 ? "s" : ""}}</ion-badge>
          </span>    
       }
 
-      <ion-grid class="ion-margin-bottom">
+      <ion-grid class="grid-cards ion-margin-bottom">
          <ion-row>
             @for (item of cards(); track item.id) 
             {

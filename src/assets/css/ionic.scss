@@ -1,6 +1,6 @@
- :host ion-content {
-     --keyboard-offset: 0px !important;
-  }
+:host ion-content {
+  --keyboard-offset: 0px !important;
+}
 
 /* HEADER */
 ion-header::after {
@@ -65,10 +65,17 @@ ion-row {
   height: 100%;
 }
 
-/* DEFAULT BACKGROUND */
+/* MAIN CONTENT */
 ion-content {
   --background: var(--app-bg);
+  --padding-start: 10px;
+  --padding-end: 10px;
 }
+
+ion-content::part(scroll) {
+  scroll-behavior: smooth;
+}
+
 
 /* WHITE CARD */
 ion-card {
@@ -205,7 +212,7 @@ hr { width: 90%; opacity: 0.4;
     object-position: top; /* recadre par le bas au lieu du centre */
 }
 
-.serie-logo ion-img{
+.serie-logo img{
   object-fit: contain;
   max-width: 70px;
 }

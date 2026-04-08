@@ -6,13 +6,13 @@
       <ion-title>
          <div class="header-title">
             <ion-icon name="create-outline"></ion-icon>
-            <span>{{ card?.id ? 'Edition' : 'Création' }}</span>
+            <span>Edition</span>
          </div>
       </ion-title>
    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding-top">
    @if(loaded){
       <form [formGroup]="formGroup" novalidate >
          <input formControlName="id" type="text" hidden />
@@ -47,16 +47,16 @@
                   <ion-col>
                      @if(!formGroup.get('srcPicture')?.value){
                         <div class="ion-text-center">
-                           <ion-img src="../../../../assets/card_empty.png" alt=""></ion-img> 
+                           <img src="../../../../assets/card_empty.png" alt=""/>
                         </div>
                      }
                      @else{
-                        <ion-img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)"></ion-img>
+                        <img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)">
                      }   
 
                      @if(card.serie.srcLogo){
                         <div class="serie-logo ion-margin-top">
-                           <ion-img [src]="'../../../../' + card.serie.srcLogo" alt=""></ion-img>
+                           <img [src]="'../../../../' + card.serie.srcLogo" alt="">
                         </div>
                      }   
                   </ion-col>

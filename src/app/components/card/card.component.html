@@ -4,13 +4,15 @@
 
  <ion-card> 
    <ion-card-header>
-      <ion-card-title class="ion-text-center">
-         {{ card.name }}
-      </ion-card-title> 
-
+      <div class="card-title-wrapper ion-align-items-center ion-align-content-center">
+         <ion-card-title class="ion-text-center">
+            {{ card.name }}
+         </ion-card-title> 
+      </div>
+     
       <div>
          @if (card.srcPicture) {
-            <ion-img class="card-image" [alt]="card.name" [src]="getSrc(card.srcPicture)"></ion-img>
+            <img class="card-image" [alt]="card.name" [src]="getSrc(card.srcPicture)"/>
          }
       </div>
    </ion-card-header>
@@ -18,7 +20,7 @@
    <ion-card-content select="[body]">
       <div class="serie-logo">
          <ion-thumbnail>
-            <ion-img [src]="'../../../../' + card.serie.srcLogo" alt=""></ion-img>
+            <img [src]="'../../../../' + card.serie.srcLogo" alt=""/>
          </ion-thumbnail>
       </div>
 
