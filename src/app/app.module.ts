@@ -12,6 +12,7 @@ import { Capacitor } from '@capacitor/core';
 import { CurrencyPipe } from '@angular/common';
 import { FileService } from './services/common/file.service';
 
+
 @NgModule({
     declarations: [AppComponent, LoaderComponent],
     imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],

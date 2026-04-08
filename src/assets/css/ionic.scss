@@ -68,8 +68,6 @@ ion-row {
 /* DEFAULT BACKGROUND */
 ion-content {
   --background: var(--app-bg);
-  --padding-end: 20px;
-  --padding-start: 20px;
 }
 
 /* WHITE CARD */
@@ -106,6 +104,7 @@ ion-searchbar {
   --color: var(--app-text-color);
   --placeholder-color: var(--app-text-muted);
 }
+
 ion-input .label-text {
   line-height: 1.2!important;
 }
@@ -173,6 +172,17 @@ hr { width: 90%; opacity: 0.4;
   font-size: var(--ion-font-size-3xl);
 }
 
+/* COULEUR */
+
+.ion-color-tcg {
+	--ion-color-base: var(--ion-color-tcg);
+	--ion-color-base-rgb: var(--ion-color-tcg-rgb);
+	--ion-color-contrast: var(--ion-color-tcg-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-tcg-contrast-rgb);
+	--ion-color-shade: var(--ion-color-tcg-shade);
+	--ion-color-tint: var(--ion-color-tcg-tint);
+}
+ 
 /* CLASS UTILITIES */
 .d-none{
   display: none;
