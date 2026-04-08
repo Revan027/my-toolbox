@@ -10,6 +10,10 @@ ion-content {
   --padding-bottom: 80px;
 }
 
+ion-grid{
+  --ion-grid-padding: 0;
+}
+
 .action-buttons {
   display: flex;
   justify-content: space-between;

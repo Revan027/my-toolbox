@@ -120,6 +120,33 @@ Cloner le repo des services communs dans le bon dossier :
 git clone https://github.com/Revan027/services.common.git src/app/services/common
 ```
 
+## Incrémenter la version de l'application
+
+La version doit être mise à jour manuellement dans deux fichiers :
+
+### 1. `package.json`
+
+```json
+"version": "X.Y.Z"
+```
+
+### 2. `android/app/build.gradle`
+
+```gradle
+versionCode X        // entier, toujours incrémenté de 1 (ex: 1, 2, 3...)
+versionName "X.Y.Z"  // version lisible, doit correspondre à package.json
+```
+
+### Convention de versioning (semver)
+
+| Type de changement | Exemple | Quand l'utiliser |
+|--------------------|---------|------------------|
+| `PATCH` (Z) | 1.0.0 → 1.0.1 | Correction de bug |
+| `MINOR` (Y) | 1.0.0 → 1.1.0 | Nouvelle fonctionnalité rétrocompatible |
+| `MAJOR` (X) | 1.0.0 → 2.0.0 | Changement majeur / breaking change |
+
+> Le `versionCode` Android doit toujours être incrémenté de 1 à chaque build publié sur le Play Store, indépendamment du `versionName`.
+
 ## Lancer en développement web
 
 ```bash

@@ -1,7 +1,19 @@
 import { tableName } from './table-names';
 
 export const DB_NAME = 'todo_list_db';
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
+
+export const version2: string[] = [
+`INSERT INTO ${tableName.serie} (name, srcLogo) VALUES
+  ('Destined Rivals',         'assets/images/tcg-logos/sv10.png'),
+  ('Black Bolt',              'assets/images/tcg-logos/zsv10pt5.png'),
+  ('White Flare',             'assets/images/tcg-logos/rsv10pt5.png'),
+  ('Mega Evolution',          'assets/images/tcg-logos/me1.png'),
+  ('Phantasmal Flames',       'assets/images/tcg-logos/me2.png'),
+  ('Ascended Heroes',         'assets/images/tcg-logos/me2pt5.png'),
+  ('Perfect Order',           'assets/images/tcg-logos/me3.png');`,
+  `ALTER TABLE ${tableName.card} ADD COLUMN isAcquired BOOLEAN DEFAULT 0;`
+];
 
 export const version1: string[] = [
   `CREATE TABLE IF NOT EXISTS ${tableName.currency} (
@@ -195,4 +207,4 @@ export const version1: string[] = [
   `,
 ];
 
-export const DB_UPGRADES = [{ toVersion: DB_VERSION, statements: version1 }];
+export const DB_UPGRADES = [{ toVersion: DB_VERSION, statements: version2 }];

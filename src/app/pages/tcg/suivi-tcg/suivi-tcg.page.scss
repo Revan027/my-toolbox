@@ -1,17 +1,30 @@
 :host {
-  --app-page-theme-color: linear-gradient(135deg, #3b1f6e 0%, #7c3aed 100%);
+  --app-page-theme-color: var(--ion-color-tcg);
 }
 
 ion-header {
   background: var(--app-page-theme-color)
 }
 
-ion-button.active {
- --background: var(--ion-color-success);
+ion-fab-button.btn-add{
+  --background: var(--app-page-theme-color);
 }
 
-ion-fab-button{
+ion-fab-button.btn-filters{
   --background: var(--app-page-theme-color);
+  margin: 0 auto;
+}
+   
+ion-icon.filters{
+  --color: var(--app-page-theme-color);
+}
+
+ion-badge {
+ --background: var(--app-page-theme-color);
+}
+
+ion-grid.grid-cards{
+  --ion-grid-padding: 0;
 }
 
 .filter-generation {
@@ -22,7 +35,10 @@ ion-fab-button{
   text-transform: capitalize;
 }
 
-
 .filter-generation ion-row{
   flex-wrap: nowrap;
+}
+
+.filter-generation ion-button.active {
+  --background: red
 }

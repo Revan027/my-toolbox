@@ -45,24 +45,33 @@ export class SuiviTCGPage implements OnInit {
         return this.fileService.getSrcWeb(uri);
     }
 
-    async generationChanged(id: number, event: any) {
+    async generationChanged(generationID: number, event: any) {
         let input = event.srcElement;
+        const color = this.initGenerationColor(generationID);
 
         // On ajoute au tableaux les ids de générations pokémon filtrés
-        if (input.getAttribute('color') == 'primary') {
-            input.setAttribute('color', 'light');
+        if (input.getAttribute('color') == 'tcg') {
+
             this.generationsIDs = this.generationsIDs.filter(
                 function (value, index, array) {
-                    return id != value;
+                    return generationID != value;
                 },
             );
         } else {
-            input.setAttribute('color', 'primary');
-
-            this.generationsIDs.push(id);
+            this.generationsIDs.push(generationID);
         }
 
+        input.setAttribute('color', color);
+
         await this.search();
+    }
+
+    initGenerationColor(generationID: number) {
+        const result = this.generationsIDs.some((id) => {
+            return generationID == id
+        });
+
+        return result ? "tcg" : "light";
     }
 
     async searchTextChanged() {

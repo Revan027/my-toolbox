@@ -37,4 +37,12 @@
   --ion-color-success-contrast-rgb: 255, 255, 255;
   --ion-color-success-shade: #4f6e4f;
   --ion-color-success-tint: #6b8a6b;
+
+  // Custom color
+  --ion-color-tcg: linear-gradient(135deg, #3b1f6e 0%, #7c3aed 100%);;
+	--ion-color-tcg-rgb: 59,31,110;
+	--ion-color-tcg-contrast: #ffffff;
+	--ion-color-tcg-contrast-rgb: 255,255,255;
+	--ion-color-tcg-shade: #341b61;
+	--ion-color-tcg-tint: #4f357d;
 }

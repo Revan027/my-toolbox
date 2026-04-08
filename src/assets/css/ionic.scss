@@ -1,6 +1,6 @@
- :host ion-content {
-     --keyboard-offset: 0px !important;
-  }
+:host ion-content {
+  --keyboard-offset: 0px !important;
+}
 
 /* HEADER */
 ion-header::after {
@@ -65,12 +65,17 @@ ion-row {
   height: 100%;
 }
 
-/* DEFAULT BACKGROUND */
+/* MAIN CONTENT */
 ion-content {
   --background: var(--app-bg);
-  --padding-end: 20px;
-  --padding-start: 20px;
+  --padding-start: 10px;
+  --padding-end: 10px;
 }
+
+ion-content::part(scroll) {
+  scroll-behavior: smooth;
+}
+
 
 /* WHITE CARD */
 ion-card {
@@ -106,6 +111,7 @@ ion-searchbar {
   --color: var(--app-text-color);
   --placeholder-color: var(--app-text-muted);
 }
+
 ion-input .label-text {
   line-height: 1.2!important;
 }
@@ -173,6 +179,17 @@ hr { width: 90%; opacity: 0.4;
   font-size: var(--ion-font-size-3xl);
 }
 
+/* COULEUR */
+
+.ion-color-tcg {
+	--ion-color-base: var(--ion-color-tcg);
+	--ion-color-base-rgb: var(--ion-color-tcg-rgb);
+	--ion-color-contrast: var(--ion-color-tcg-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-tcg-contrast-rgb);
+	--ion-color-shade: var(--ion-color-tcg-shade);
+	--ion-color-tint: var(--ion-color-tcg-tint);
+}
+ 
 /* CLASS UTILITIES */
 .d-none{
   display: none;
@@ -195,7 +212,7 @@ hr { width: 90%; opacity: 0.4;
     object-position: top; /* recadre par le bas au lieu du centre */
 }
 
-.serie-logo ion-img{
+.serie-logo img{
   object-fit: contain;
   max-width: 70px;
 }

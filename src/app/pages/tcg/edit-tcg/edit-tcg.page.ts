@@ -24,12 +24,12 @@ import { SerieService } from 'src/app/services/entities/serie-service';
     templateUrl: './edit-tcg.page.html',
     styleUrls: ['./edit-tcg.page.scss'],
 })
-export class EditTCGPage implements OnInit, OnDestroy {
+export class EditTCGPage implements OnDestroy {
     private destroyRef = inject(DestroyRef);
     @ViewChild('inputFile') inputFile!: ElementRef;
 
     formGroup!: FormGroup;
-    card!: Card;
+    card: Card = new Card();
 
     generations: Generation[] = [];
     series: Serie[] = [];
@@ -50,28 +50,30 @@ export class EditTCGPage implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         private router: Router,
         private generationService: GenerationService
-    ) {}
+    ) { }
 
-    async ngOnInit() {
+    //on évite ainsi avec ce lifecycle de faire ramer avec l'animation
+    async ionViewDidEnter() { 
+
         this.generations = await this.generationService.getAll();
+        this.series = await this.serieService.getAll();
 
         // Ecoute de l'event si l'url change. On ne repasse pas 2 fois dans un ngOnInit normalement
         this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (params) => {
+            this.loaded = false;
+
             const id = Number(params.get('id'));
 
-            if(Capacitor.isNativePlatform()){
-                this.card = id ? await this.cardService.getById(id) : new Card();
+            if (Capacitor.isNativePlatform() && id){
+                this.card = await this.cardService.getById(id);
                 this.lastSrcPicture = this.card.srcPicture;
-            }
-            else{
-                this.card = new Card();
             }
 
             this.createForm();
          
-            this.series = await this.serieService.getAll();
             this.loaded = true;
-        }); 
+        });
+
     }
 
     ngOnDestroy() {
@@ -85,6 +87,7 @@ export class EditTCGPage implements OnInit, OnDestroy {
             srcPicture: [this.card?.srcPicture, Validators.required],
             averagePrice: [ { value: this.card?.averagePrice == 0 ? "" : this.card?.averagePrice, disabled: false } , null],
             isPriority: [ { value: this.card?.isPriority, disabled: false } , null],
+            isAcquired: [ { value: this.card?.isAcquired, disabled: false } , null],
             serieID: [this.card?.serieID, Validators.required],
             generationID: [this.card?.generationID, Validators.required],
             picture: [this.card?.picture, Validators.required],
