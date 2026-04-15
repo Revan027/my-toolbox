@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
-import { StorageService } from '../common/storage-service';
 import { Card } from 'src/app/models/Card';
 import { tableName } from 'src/app/constants/table-names';
+import { StorageService } from '../storage.services.common/storage-service';
+
 @Injectable({
     providedIn: 'root',
 })

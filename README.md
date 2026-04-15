@@ -117,7 +117,7 @@ Remplacer `YOUR_API_KEY` par ta clé [CurrencyFreaks](https://currencyfreaks.com
 Cloner le repo des services communs dans le bon dossier :
 
 ```bash
-git clone https://github.com/Revan027/services.common.git src/app/services/common
+git clone https://github.com/Revan027/services.common.git src/app/services/services.common
 ```
 
 ## Incrémenter la version de l'application

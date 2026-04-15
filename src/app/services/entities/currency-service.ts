@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { StorageService } from '../common/storage-service';
 import { Currency } from 'src/app/models/Currency';
 import { tableName } from 'src/app/constants/table-names';
+import { StorageService } from '../storage.services.common/storage-service';
 
 @Injectable({
     providedIn: 'root',

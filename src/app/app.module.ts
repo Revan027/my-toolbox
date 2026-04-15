@@ -6,12 +6,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoaderComponent } from './components/loader/loader.component';
 import { provideHttpClient } from '@angular/common/http';
-import { StorageService } from './services/common/storage-service';
-import { ErrorService } from './services/common/error.service';
 import { Capacitor } from '@capacitor/core';
 import { CurrencyPipe } from '@angular/common';
-import { FileService } from './services/common/file.service';
-
+import { ErrorService } from './services/services.common/error.service';
+import { FileService } from './services/file.services.common/file.service';
+import { StorageService } from './services/storage.services.common/storage-service';
 
 @NgModule({
     declarations: [AppComponent, LoaderComponent],

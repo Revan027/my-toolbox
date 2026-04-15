@@ -7,16 +7,16 @@ import { folder } from 'src/app/constants/folder';
 import { Card } from 'src/app/models/Card';
 import { Generation } from 'src/app/models/Generation';
 import { Serie } from 'src/app/models/Serie';
-import { AmountService } from 'src/app/services/common/amount.service';
-import { ConfirmationService } from 'src/app/services/common/confirmation.service';
-import { MessageEnum } from 'src/app/services/common/enum/MessageEnum';
-import { StatusEnum } from 'src/app/services/common/enum/status.enum';
-import { FileService } from 'src/app/services/common/file.service';
-import { MediaService } from 'src/app/services/common/media.service';
-import { ToastService } from 'src/app/services/common/toast.service';
 import { CardService } from 'src/app/services/entities/card-service';
 import { GenerationService } from 'src/app/services/entities/generation-service';
 import { SerieService } from 'src/app/services/entities/serie-service';
+import { FileService } from 'src/app/services/file.services.common/file.service';
+import { MediaService } from 'src/app/services/media.services.common/media.service';
+import { AmountService } from 'src/app/services/services.common/amount.service';
+import { ConfirmationService } from 'src/app/services/services.common/confirmation.service';
+import { MessageEnum } from 'src/app/services/services.common/enum/MessageEnum';
+import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
+import { ToastService } from 'src/app/services/services.common/toast.service';
 
 @Component({
     standalone: false,

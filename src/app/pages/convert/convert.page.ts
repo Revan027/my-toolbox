@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Currency } from 'src/app/models/Currency';
 import { Rate } from 'src/app/models/Rate';
 import { ExchangeRateService } from 'src/app/services/entities/exchange-rate.service';
-import { AmountService } from 'src/app/services/common/amount.service';
+import { AmountService } from 'src/app/services/services.common/amount.service';
 
 @Component({
     standalone: false,

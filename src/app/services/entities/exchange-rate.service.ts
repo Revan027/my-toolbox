@@ -5,8 +5,8 @@ import { Rate } from 'src/app/models/Rate';
 import { CurrencyService } from './currency-service';
 import { RateService } from './rate-service';
 import { Network } from '@capacitor/network';
-import { HttpService } from '../common/http-service';
 import { environment } from 'src/environments/environment';
+import { HttpService } from '../services.common/http-service';
 
 @Injectable({
     providedIn: 'root',

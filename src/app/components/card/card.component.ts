@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Card } from 'src/app/models/Card';
-import { FileService } from 'src/app/services/common/file.service';
+import { FileService } from 'src/app/services/file.services.common/file.service';
 
 @Component({
     standalone: false,

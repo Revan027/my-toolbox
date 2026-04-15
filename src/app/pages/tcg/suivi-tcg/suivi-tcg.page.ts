@@ -3,9 +3,9 @@ import { Capacitor } from '@capacitor/core';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
 import { MOCK_CARDS } from 'src/app/constants/mock-data';
 import { Generation } from 'src/app/models/Generation';
-import { FileService } from 'src/app/services/common/file.service';
 import { CardService } from 'src/app/services/entities/card-service';
 import { GenerationService } from 'src/app/services/entities/generation-service';
+import { FileService } from 'src/app/services/file.services.common/file.service';
 
 
 @Component({

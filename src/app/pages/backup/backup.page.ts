@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { folder } from 'src/app/constants/folder';
-import { MessageEnum } from 'src/app/services/common/enum/MessageEnum';
-import { StatusEnum } from 'src/app/services/common/enum/status.enum';
-import { FileService } from 'src/app/services/common/file.service';
-import { StorageService } from 'src/app/services/common/storage-service';
-import { ToastService } from 'src/app/services/common/toast.service';
 import { CardService } from 'src/app/services/entities/card-service';
+import { FileService } from 'src/app/services/file.services.common/file.service';
+import { MessageEnum } from 'src/app/services/services.common/enum/MessageEnum';
+import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
+import { ToastService } from 'src/app/services/services.common/toast.service';
+import { StorageService } from 'src/app/services/storage.services.common/storage-service';
 
 @Component({
     standalone: false,
