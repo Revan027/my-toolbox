@@ -94,39 +94,6 @@ export class EditTCGPage implements OnDestroy {
         });
     }
 
-    async submit(card: Card) {
-        let result = this.card.id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
-        isSuccess = (result.changes?.changes ?? 0) > 0;
-
-        await this.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
-
-        if(this.card.id == 0){
-            this.createForm();
-
-            // On reset les éléments dynamique
-            this.lastSrcPicture = "";
-
-            this.card = new Card();
-        } 
-    }
-
-    async delete() {
-        var me = this;
-
-        let callback = async function(){
-            let result = await me.cardService.delete(me.card.id),
-                isSuccess = (result.changes?.changes ?? 0) > 0;
-
-                await me.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
-                
-                me.router.navigate(['/tcg']);
-        }
-
-        await this.confirmationService.getModalDelete(callback);
-        
-        this.createForm();
-    }
-
     getSrc(path: string){
        return this.fileService.getSrcWeb(this.fileService.getAbsolutePath(this.fileService.documentsUri(), path));
     }
@@ -143,10 +110,53 @@ export class EditTCGPage implements OnDestroy {
         }, 800);
     }
 
-    async capturePhoto(event: Event) {
+    private async deleteLastFile(){
+        if (this.lastSrcPicture){
+            await this.fileService.deleteFile(this.lastSrcPicture);
+        }
+    }
+
+    async onSubmit(card: Card) {
+        let result = this.card.id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
+        isSuccess = (result.changes?.changes ?? 0) > 0;
+
+        await this.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
+
+        if(this.card.id == 0){
+            this.createForm();
+
+            // On reset les éléments dynamique
+            this.lastSrcPicture = "";
+
+            this.card = new Card();
+        } 
+    }
+
+    async onDelete() {
+        var me = this;
+
+        let callback = async function(){
+            let result = await me.cardService.delete(me.card.id),
+                isSuccess = (result.changes?.changes ?? 0) > 0;
+
+                if (isSuccess)  me.deleteLastFile();
+
+                await me.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
+                
+                me.router.navigate(['/tcg']);
+        }
+
+        await this.confirmationService.getModalDelete(callback);
+        
+        this.createForm();
+    }
+
+    async onCapturePhoto(event: Event) {
         const photo = await this.mediaService.takePhoto(),
             fileName = this.fileService.getFileName(photo),
             path = this.getPath(fileName);
+
+        this.deleteLastFile();
 
         const result = await this.fileService.writeFile(
             photo.base64String!,
@@ -155,30 +165,26 @@ export class EditTCGPage implements OnDestroy {
         );
 
         this.formGroup.get("srcPicture")?.setValue(path, { emitEvent: false },);
-
         this.formGroup.get("picture")?.setValue(photo.base64String, { emitEvent: false },);
 
         this.lastSrcPicture = path;
     }
 
-    openFileSelector(event: Event) {
+    onFileSelector(event: Event) {
         this.inputFile.nativeElement.click();
     }
 
-    async handleFileChanged(event: any) {
+    async onFileChanged(event: any) {
         const file: File = event.target.files[0],
             fileName = this.fileService.getFileName(file),
             path = this.getPath(fileName);
 
-        if (this.lastSrcPicture){
-            await this.fileService.deleteFile(this.lastSrcPicture);
-        }
+       this.deleteLastFile();
         
         const result = await this.fileService.saveFile(file, fileName, folder.TCG);
 
         // On save l'uri où est stocké l'image dans le champ caché
         this.formGroup.get("srcPicture")?.setValue(path, { emitEvent: false },);
-
         this.formGroup.get("picture")?.setValue(await this.fileService.fileToBase64(file), { emitEvent: false },);
 
         this.lastSrcPicture = path;
@@ -191,7 +197,7 @@ export class EditTCGPage implements OnDestroy {
         //const testSrc64 =`data:${file.type};base64,${stream.data}`;
     }
 
-    async serieChanged(event: CustomEvent) {
+    async onSerieChanged(event: CustomEvent) {
        this.card.serie.srcLogo = this.series.find((serie)=> serie.id == event.detail.value)?.srcLogo || "";
     }
 }

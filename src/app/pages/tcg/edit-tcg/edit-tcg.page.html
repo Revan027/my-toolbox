@@ -33,13 +33,13 @@
             <ion-grid>
                <ion-row>
                   <ion-col>
-                     <input #inputFile type="file" hidden (change)="handleFileChanged($event)" />
+                     <input #inputFile type="file" hidden (change)="onFileChanged($event)" />
 
-                     <ion-button size="small" (click)="openFileSelector($event)"> 
+                     <ion-button size="small" (click)="onFileSelector($event)"> 
                         <ion-icon name="document-outline" slot="start"></ion-icon> Choisir un fichier 
                      </ion-button>
 
-                     <ion-button size="small" (click)="capturePhoto($event)">
+                     <ion-button size="small" (click)="onCapturePhoto($event)">
                         <ion-icon name="camera-outline" slot="start"></ion-icon> Prendre une photo
                      </ion-button>
                   </ion-col>
@@ -98,7 +98,7 @@
          </div>
 
          <div class="ion-margin-top ion-margin-bottom">
-            <ion-select (ionChange)="serieChanged($event)" class="ion-margin-bottom" label="Série" formControlName="serieID" interface="popover" placeholder="-" fill="outline">
+            <ion-select (ionChange)="onSerieChanged($event)" class="ion-margin-bottom" label="Série" formControlName="serieID" interface="popover" placeholder="-" fill="outline">
                @for(item of series; track item.id) {
                   <ion-select-option [value]="item.id"> 
                      {{item.name}}
@@ -119,9 +119,9 @@
 
          <div class="action-buttons ion-margin">
             @if(card.id > 0){
-               <ion-button (click)="delete()" color="danger" [strong]="true">Supprimer</ion-button>
+               <ion-button (click)="onDelete()" color="danger" [strong]="true">Supprimer</ion-button>
             }
-            <ion-button (click)="submit(formGroup.value)" color="primary" [strong]="true" [disabled]="formGroup.invalid">Enregistrer</ion-button>
+            <ion-button (click)="onSubmit(formGroup.value)" color="primary" [strong]="true" [disabled]="formGroup.invalid">Enregistrer</ion-button>
          </div>
       </form>
    }
