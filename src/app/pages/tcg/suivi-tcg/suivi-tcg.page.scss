@@ -3,18 +3,15 @@
 }
 
 ion-header {
-  background: var(--app-page-theme-color)
-}
+  background: var(--app-page-theme-color);
 
-ion-fab-button.btn-add{
-  --background: var(--app-page-theme-color);
+  ion-fab-button{
+    &.btn-add{
+      --background: var(--app-page-theme-color);
+    }
+  }
 }
-
-ion-fab-button.btn-filters{
-  --background: var(--app-page-theme-color);
-  margin: 0 auto;
-}
-   
+ 
 ion-icon.filters{
   --color: var(--app-page-theme-color);
 }
@@ -27,18 +24,34 @@ ion-grid.grid-cards{
   --ion-grid-padding: 0;
 }
 
+ion-fab{
+  display: flex;
+  bottom: 20px;
+
+  ion-fab-button{
+    &.btn-filters{
+      --background: var(--app-page-theme-color);
+    }
+
+     &.btn-order{
+      --background: var(--app-page-theme-color);
+    }
+  }
+}
+
 .filter-generation {
   overflow: auto;
+
+  ion-button{
+    text-transform: capitalize;
+  }
+
+  ion-row{
+    flex-wrap: nowrap;
+  }
+
+   ion-button.active {
+    --background: red
+  }
 }
 
-.filter-generation ion-button{
-  text-transform: capitalize;
-}
-
-.filter-generation ion-row{
-  flex-wrap: nowrap;
-}
-
-.filter-generation ion-button.active {
-  --background: red
-}

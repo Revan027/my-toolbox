@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { App } from '@capacitor/app';
 
 @Component({
     selector: 'app-menu',
@@ -7,5 +8,13 @@ import { Component } from '@angular/core';
     standalone: false,
 })
 export class MenuComponent {
+    numVersion!: string;
+    
     constructor() {}
+
+    async ngOnInit() {
+       const info = await App.getInfo();
+
+       this.numVersion = info.version;
+    }
 }

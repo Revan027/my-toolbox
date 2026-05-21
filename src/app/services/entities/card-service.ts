@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Card } from 'src/app/models/Card';
 import { tableName } from 'src/app/constants/table-names';
 import { StorageService } from '../storage.services.common/storage-service';
+import { CardFilter } from 'src/app/models/CardFilter';
 
 @Injectable({
     providedIn: 'root',
@@ -11,9 +12,45 @@ export class CardService {
 
     constructor(private storageService: StorageService) {}
 
+    async create(card: Card) {
+        const sql = `
+            INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isAcquired, serieID, generationID, picture) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        const result = await this.storageService.getDb().run(sql, [card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, card.generationID, card.picture]);
+
+        return result;
+    }
+
+    async update(card: Card) {
+        const sql = `
+            UPDATE ${tableName.card} 
+            SET name = "${card.name}", srcPicture = "${card.srcPicture}", averagePrice = "${card.averagePrice}", isAcquired = ${card.isAcquired}, serieID = "${card.serieID}", generationID = "${card.generationID}", picture = "${card.picture}" 
+            WHERE id = "${card.id}"`;
+
+        return await this.storageService.getDb().execute(sql);
+    }
+
+    async updatePicture(card: Card) {
+        const sql = `
+            UPDATE ${tableName.card} 
+            SET srcPicture = "${card.srcPicture}" 
+            WHERE id = "${card.id}"`;
+
+        return await this.storageService.getDb().execute(sql);
+    }
+
+    async delete(id: number) {
+        const sql = `DELETE FROM ${tableName.card} WHERE id = ${id}`;
+
+        const result = await this.storageService.getDb().execute(sql);
+
+        return result;
+    }
+
     async getAll() {
         let result = await this.storageService.getDb().query(`
-            SELECT id, name, srcPicture, isPriority, isAcquired, averagePrice, serieID
+            SELECT id, name, srcPicture, isAcquired, averagePrice, serieID
             FROM ${tableName.card}`);
 
         return result.values as Card[];
@@ -23,7 +60,7 @@ export class CardService {
         let result = await this.storageService.getDb().query(`
             SELECT 
             generation.id AS generationID, generation.libelle AS generation_libelle, 
-            card.id, card.name, card.srcPicture, card.picture, card.isPriority, card.isAcquired, card.averagePrice, card.serieID, 
+            card.id, card.name, card.srcPicture, card.picture, card.isAcquired, card.averagePrice, card.serieID, 
             serie.name AS serie_name, serie.srcLogo As serie_src_logo
             FROM ${tableName.card} AS card 
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
@@ -50,17 +87,16 @@ export class CardService {
         return card.picture || "";
     }
 
-    async search(search: string, generationIDs: number[]) {
+    async search(cardFilter: CardFilter) {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
-            SELECT 
-            card.id, card.name, card.srcPicture, card.averagePrice, card.isPriority, card.isAcquired, card.serieID, 
-            serie.srcLogo As serie_src_logo
-            FROM ${tableName.card} AS card 
-            INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
-            INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId WHERE
-            (${search?.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${search.toLowerCase()}%') AND 
-            (${generationIDs?.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${generationIDs})) `);
+             SELECT 
+                card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, 
+                serie.srcLogo As serie_src_logo
+                FROM ${tableName.card} AS card 
+            ${this.getQuerySearch(cardFilter)}
+            ORDER BY card.generationID ASC, card.name ASC
+            LIMIT ${cardFilter.offsetBase} OFFSET ${cardFilter.offset}`);
         
             const cards: Card[] = result.values?.map((data: any)=>{
                 return Card.fromSQL(data);
@@ -69,51 +105,32 @@ export class CardService {
         return cards;
     }
 
-    async create(card: Card) {
-        const sql = `
-            INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isPriority, isAcquired, serieID, generationID, picture) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-
-        const result = await this.storageService.getDb().run(sql, [card.name, card.srcPicture, card.averagePrice, card.isPriority, card.isAcquired, card.serieID, card.generationID, card.picture]);
-
-        return result;
+    async countSearch(cardFilter: CardFilter): Promise<number>{
+        // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
+        let result = await this.storageService.getDb().query(`
+            SELECT COUNT(*) FROM ${tableName.card} AS card
+            ${this.getQuerySearch(cardFilter)}
+            LIMIT ${cardFilter.offsetBase} OFFSET ${cardFilter.offset}`);
+        
+        return result.values != undefined ? result.values[0] : 0
     }
 
-    async update(card: Card) {
-        const sql = `
-            UPDATE ${tableName.card} 
-            SET name = "${card.name}", srcPicture = "${card.srcPicture}", averagePrice = "${card.averagePrice}", isPriority = ${card.isPriority}, isAcquired = ${card.isAcquired}, serieID = "${card.serieID}", generationID = "${card.generationID}", picture = "${card.picture}" 
-            WHERE id = "${card.id}"`;
+    async refreshSearchCards(cardFilter: CardFilter) {
+        const cards = await this.search(cardFilter);
 
-        return await this.storageService.getDb().execute(sql);
+        this.cards.set(this.cards().concat(cards));
     }
 
-    async updatePicture(card: Card) {
-        const sql = `
-            UPDATE ${tableName.card} 
-            SET srcPicture = "${card.srcPicture}" 
-            WHERE id = "${card.id}"`;
-
-        return await this.storageService.getDb().execute(sql);
+    async resetSearchCards() {
+        this.cards.set([]);
     }
 
-    async delete(id: number) {
-        const sql = `DELETE FROM ${tableName.card} WHERE id = ${id}`;
-
-        const result = await this.storageService.getDb().execute(sql);
-
-        return result;
-    }
-
-    async refreshAllCards() {
-        const cards = await this.getAll();
-
-        this.cards.set(cards);
-    }
-
-    async refreshSearchCards(search: string, generationIDs: number[]) {
-        const cards = await this.search(search, generationIDs);
-
-        this.cards.set(cards);
+    private getQuerySearch(cardFilter: CardFilter){
+        return`
+            INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
+            INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
+            WHERE
+                (${cardFilter.search.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.search.toLowerCase()}%') AND 
+                (${cardFilter.generationIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
     }
 }

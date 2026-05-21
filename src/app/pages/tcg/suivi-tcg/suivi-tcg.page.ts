@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
 import { MOCK_CARDS } from 'src/app/constants/mock-data';
+import { CardFilter } from 'src/app/models/CardFilter';
 import { Generation } from 'src/app/models/Generation';
 import { CardService } from 'src/app/services/entities/card-service';
 import { GenerationService } from 'src/app/services/entities/generation-service';
@@ -22,6 +24,7 @@ export class SuiviTCGPage implements OnInit {
 
     searchText: string = '';
     generationsIDs: number[] = [];
+    cardFilter: CardFilter = new CardFilter();
 
     loaded: boolean = false;
 
@@ -32,13 +35,13 @@ export class SuiviTCGPage implements OnInit {
     ) {}
 
     async ngOnInit() {      
-        this.generations = await this.generationService.getAll();
-    }
+        this.loaded = true;
 
-    async ionViewWillEnter(){    
+        this.generations = await this.generationService.getAll();
+
         await this.search();
 
-        this.loaded = true;
+        this.loaded = false;
     }
 
     getSrc(uri: string){  
@@ -83,7 +86,27 @@ export class SuiviTCGPage implements OnInit {
             this.cards.set(MOCK_CARDS);
         }
         else{
-            await this.cardService.refreshSearchCards(this.searchText, this.generationsIDs);
+            this.loaded = true;
+
+            this.cardFilter.search = this.searchText
+            this.cardFilter.generationIDs = this.generationsIDs;
+            this.cardFilter.page = 1;
+
+            await this.cardService.resetSearchCards();
+            await this.cardService.refreshSearchCards(this.cardFilter);
+
+            this.loaded = false;
         }       
+    }
+
+    async onIonInfinite(event: InfiniteScrollCustomEvent) {
+        if(this.loaded)
+            return;
+
+        this.cardFilter.page++;
+
+        await this.cardService.refreshSearchCards(this.cardFilter);
+           
+        await event.target.complete();
     }
 }
