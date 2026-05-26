@@ -3,19 +3,21 @@ import { Card } from 'src/app/models/Card';
 import { tableName } from 'src/app/constants/table-names';
 import { StorageService } from '../storage.services.common/storage-service';
 import { CardFilter } from 'src/app/models/CardFilter';
+import { PagedCardResult } from 'src/app/models/PagedCardResult';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CardService {
-    cards = signal<Card[]>([]);
+    pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
+    hasCardsChanged = signal<boolean>(false);
 
     constructor(private storageService: StorageService) {}
 
     async create(card: Card) {
         const sql = `
             INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isAcquired, serieID, generationID, picture) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         const result = await this.storageService.getDb().run(sql, [card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, card.generationID, card.picture]);
 
@@ -86,45 +88,7 @@ export class CardService {
     
         return card.picture || "";
     }
-
-    async search(cardFilter: CardFilter) {
-        // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
-        let result = await this.storageService.getDb().query(`
-             SELECT 
-                card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, 
-                serie.srcLogo As serie_src_logo
-                FROM ${tableName.card} AS card 
-            ${this.getQuerySearch(cardFilter)}
-            ORDER BY card.generationID ASC, card.name ASC
-            LIMIT ${cardFilter.offsetBase} OFFSET ${cardFilter.offset}`);
-        
-            const cards: Card[] = result.values?.map((data: any)=>{
-                return Card.fromSQL(data);
-            })|| [];   
-
-        return cards;
-    }
-
-    async countSearch(cardFilter: CardFilter): Promise<number>{
-        // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
-        let result = await this.storageService.getDb().query(`
-            SELECT COUNT(*) FROM ${tableName.card} AS card
-            ${this.getQuerySearch(cardFilter)}
-            LIMIT ${cardFilter.offsetBase} OFFSET ${cardFilter.offset}`);
-        
-        return result.values != undefined ? result.values[0] : 0
-    }
-
-    async refreshSearchCards(cardFilter: CardFilter) {
-        const cards = await this.search(cardFilter);
-
-        this.cards.set(this.cards().concat(cards));
-    }
-
-    async resetSearchCards() {
-        this.cards.set([]);
-    }
-
+   
     private getQuerySearch(cardFilter: CardFilter){
         return`
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
@@ -132,5 +96,46 @@ export class CardService {
             WHERE
                 (${cardFilter.search.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.search.toLowerCase()}%') AND 
                 (${cardFilter.generationIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
+    }
+
+    async search(cardFilter: CardFilter): Promise<PagedCardResult> {
+        // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
+        let result = await this.storageService.getDb().query(`
+             SELECT 
+                card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, 
+                serie.srcLogo As serie_src_logo
+                FROM ${tableName.card} AS card 
+            ${this.getQuerySearch(cardFilter)}
+            ORDER BY card.generationID ASC, card.name COLLATE NOCASE ASC
+            LIMIT ${cardFilter.offsetBase} OFFSET ${cardFilter.offset}`);
+        
+        const cards: Card[] = result.values?.map((data: any)=>{
+            return Card.fromSQL(data);
+        })|| [];   
+
+        let pagedCardResult = new PagedCardResult();   
+        pagedCardResult.cards = cards;
+        pagedCardResult.totalCount = await this.countSearch(cardFilter);
+
+        return pagedCardResult;
+    }
+
+    private async countSearch(cardFilter: CardFilter): Promise<number>{
+        let result = await this.storageService.getDb().query(`
+            SELECT COUNT(*) as totalCount FROM ${tableName.card} AS card
+            ${this.getQuerySearch(cardFilter)}`);
+        
+        return result.values != undefined ? result.values[0].totalCount : 0
+    }
+
+    async refreshSearchCards(cardFilter: CardFilter) {
+        const pagedCardResult = await this.search(cardFilter);
+        pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
+
+        this.pagedCardResult.set(pagedCardResult);
+    }
+
+    resetSearchCards() {
+        this.pagedCardResult.set(new PagedCardResult());
     }
 }

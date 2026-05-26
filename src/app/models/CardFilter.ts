@@ -11,5 +11,4 @@ export class CardFilter {
     get offset(): number {
         return this.offsetBase * (this.page - 1);
     }
- 
 }

@@ -27,15 +27,15 @@
    </ion-fab>
    @if(!loaded){
 
-      @if(this.cards().length > 0){
+      @if(this.pagedCardResult().cards.length > 0){
         <span class="">
-            <ion-badge class="text-xs">{{this.cards().length}} carte{{this.cards().length > 1 ? "s" : ""}}</ion-badge>
+            <ion-badge class="text-xs">{{this.pagedCardResult().cards.length}} carte{{this.pagedCardResult().cards.length > 1 ? "s" : ""}}</ion-badge>
          </span>    
       }
 
       <ion-grid class="grid-cards ion-margin-bottom">
          <ion-row>
-            @for (item of cards(); track item.id) 
+            @for (item of pagedCardResult().cards; track item.id) 
             {
                <ion-col size="4">
                   <app-card [card]="item" [routerLink]="['detail', item.id]" routerDirection="forward" [routerAnimation]="slideForward">
@@ -50,8 +50,8 @@
             }
          </ion-row>
       </ion-grid>  
-      
-      <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+
+      <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="pagedCardResult().isFinished">
          <ion-infinite-scroll-content loadingText="Chargement..." loadingSpinner="dots"></ion-infinite-scroll-content>
       </ion-infinite-scroll>    
    } 

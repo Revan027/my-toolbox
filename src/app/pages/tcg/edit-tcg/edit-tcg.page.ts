@@ -129,6 +129,10 @@ export class EditTCGPage implements OnDestroy {
 
             this.card = new Card();
         } 
+
+        this.cardService.hasCardsChanged.set(true);
+
+        this.router.navigate(['/tcg']);
     }
 
     async onDelete() {
@@ -142,6 +146,8 @@ export class EditTCGPage implements OnDestroy {
 
                 await me.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
                 
+                me.cardService.hasCardsChanged.set(true);
+
                 me.router.navigate(['/tcg']);
         }
 
