@@ -33,7 +33,7 @@ export class FilterComponent implements OnInit {
         });
     }
 
-    onSubmit(datas: any) {
+    onSubmit(datas: CardFilter) {
         let cardFilter = new CardFilter();
         cardFilter.generationIDs = this.generationsIDs;
         cardFilter.searchText = datas.searchText;

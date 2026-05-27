@@ -27,7 +27,11 @@ export class SortComponent {
         });
     }
 
-    onSubmit(cardSort: CardSort) {
+    onSubmit(datas: CardSort) {
+        let cardSort = new CardSort();
+        cardSort.generationAscending = datas.generationAscending;
+        cardSort.nameAscending = datas.nameAscending;
+
         this.cardService.updateCardSort(cardSort);
     }
 }
