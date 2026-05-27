@@ -157,12 +157,12 @@ export class CardService {
         this.pagedCardResult.set(pagedCardResult);
     }
 
-    setCardSort(cardSort: CardSort) {
-        this.cardSort.set(cardSort);
+    updateCardSort(newCardSort: CardSort) {
+        this.cardSort.update((cardSort) => newCardSort);
     }
 
-    setCardFilter(cardFilter: CardFilter) {
-        this.cardFilter.set(cardFilter);
+    updateCardFilter(newCardFilter: CardFilter) {
+        this.cardFilter.update((cardFilter) => newCardFilter);
     }
 
     setHasCardsChanged(hasChanged: boolean) {

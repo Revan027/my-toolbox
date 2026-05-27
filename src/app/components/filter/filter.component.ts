@@ -33,10 +33,12 @@ export class FilterComponent implements OnInit {
         });
     }
 
-    onSubmit(cardFilter: CardFilter) {
+    onSubmit(datas: any) {
+        let cardFilter = new CardFilter();
         cardFilter.generationIDs = this.generationsIDs;
+        cardFilter.searchText = datas.searchText;
 
-        this.cardService.setCardFilter(cardFilter);
+        this.cardService.updateCardFilter(cardFilter);
     }
 
     initGenerationColor(generationID: number) {

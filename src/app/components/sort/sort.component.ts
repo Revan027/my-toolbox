@@ -28,6 +28,6 @@ export class SortComponent {
     }
 
     onSubmit(cardSort: CardSort) {
-        this.cardService.setCardSort(cardSort);
+        this.cardService.updateCardSort(cardSort);
     }
 }
