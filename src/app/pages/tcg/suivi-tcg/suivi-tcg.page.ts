@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, untracked } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
 import { MOCK_CARDS } from 'src/app/constants/mock-data';
-import { Generation } from 'src/app/models/Generation';
+import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardService } from 'src/app/services/entities/card-service';
-import { GenerationService } from 'src/app/services/entities/generation-service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 
 
@@ -14,76 +14,62 @@ import { FileService } from 'src/app/services/file.services.common/file.service'
     templateUrl: './suivi-tcg.page.html',
     styleUrls: ['./suivi-tcg.page.scss'],
 })
-export class SuiviTCGPage implements OnInit {
+export class SuiviTCGPage {
     slideForward = pageTransition;
 
-    generations: Generation[] = [];
-    cards = this.cardService.cards;
-
-    searchText: string = '';
-    generationsIDs: number[] = [];
+    pagedCardResult = this.cardService.pagedCardResult;
 
     loaded: boolean = false;
 
-    constructor(
-        private generationService: GenerationService,
-        private cardService: CardService,
-        private fileService: FileService
-    ) {}
+    constructor(private cardService: CardService, private fileService: FileService
+    ) 
+    {
+        effect(async () => {
+            if (this.cardService.hasCardsChanged()){
+                untracked(async () => {
+                    await this.search()
+                    this.cardService.setHasCardsChanged(false);
+                })    
+            }
+        });
 
-    async ngOnInit() {      
-        this.generations = await this.generationService.getAll();
-    }
+        effect(() => {
+            const sort = this.cardService.cardSort();
+            const filter = this.cardService.cardFilter();
 
-    async ionViewWillEnter(){    
-        await this.search();
-
-        this.loaded = true;
+            untracked(async () => await this.search()) // on track pas les interactions avec d'autre signaux faites dedans pour ne pas réveiller le effect          
+        });
     }
 
     getSrc(uri: string){  
         return this.fileService.getSrcWeb(uri);
     }
 
-    async generationChanged(generationID: number, event: any) {
-        let input = event.srcElement;
-        const color = this.initGenerationColor(generationID);
+    async onIonInfinite(event: InfiniteScrollCustomEvent) {
+        if (this.loaded)
+            return;
 
-        // On ajoute au tableaux les ids de générations pokémon filtrés
-        if (input.getAttribute('color') == 'tcg') {
-
-            this.generationsIDs = this.generationsIDs.filter(
-                function (value, index, array) {
-                    return generationID != value;
-                },
-            );
-        } else {
-            this.generationsIDs.push(generationID);
-        }
-
-        input.setAttribute('color', color);
-
-        await this.search();
-    }
-
-    initGenerationColor(generationID: number) {
-        const result = this.generationsIDs.some((id) => {
-            return generationID == id
-        });
-
-        return result ? "tcg" : "light";
-    }
-
-    async searchTextChanged() {
-        await this.search();
+        await this.cardService.loadNextPage();
+           
+        await event.target.complete();
     }
 
     private async search() {
-        if(!Capacitor.isNativePlatform()){
-            this.cards.set(MOCK_CARDS);
+        if (!Capacitor.isNativePlatform()){
+            let pagedCardResult = new PagedCardResult();   
+            pagedCardResult.cards = MOCK_CARDS;
+            pagedCardResult.totalCount = MOCK_CARDS.length;
+
+            this.cardService.setPagedCardResult(pagedCardResult);
         }
         else{
-            await this.cardService.refreshSearchCards(this.searchText, this.generationsIDs);
+            this.loaded = true;
+
+            this.cardService.resetPagedCardResult();
+
+            await this.cardService.loadNextPage();
+
+            this.loaded = false;
         }       
-    }
+    }  
 }

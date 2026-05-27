@@ -16,23 +16,27 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding-top">
-   @if(loaded){
+   <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+      <ion-fab-button class="btn-filters" size="small" id="btn-modal-filters" expand="block">
+         <ion-icon size="small" name="filter-outline"></ion-icon>
+      </ion-fab-button>
 
-      @if(this.cards().length > 0){
-         <div>
-            <ion-fab-button class="btn-filters" size="small" id="modal-filters" expand="block">
-               <ion-icon size="small" name="filter-outline"></ion-icon>
-            </ion-fab-button>    
-         </div>
+      <ion-fab-button class="btn-sorts" size="small"id="btn-modal-sorts" expand="block">
+         <ion-icon  size="small" name="swap-vertical-outline"></ion-icon> 
+      </ion-fab-button>   
+   </ion-fab>
 
-         <span class="">
-            <ion-badge class="text-xs">{{this.cards().length}} carte{{this.cards().length > 1 ? "s" : ""}}</ion-badge>
+   @if(!loaded){
+
+      @if(this.pagedCardResult().cards.length > 0){
+        <span class="">
+            <ion-badge class="text-xs">{{this.pagedCardResult().cards.length}} carte{{this.pagedCardResult().cards.length > 1 ? "s" : ""}}</ion-badge>
          </span>    
       }
 
       <ion-grid class="grid-cards ion-margin-bottom">
          <ion-row>
-            @for (item of cards(); track item.id) 
+            @for (item of pagedCardResult().cards; track item.id) 
             {
                <ion-col size="4">
                   <app-card [card]="item" [routerLink]="['detail', item.id]" routerDirection="forward" [routerAnimation]="slideForward">
@@ -46,37 +50,19 @@
                </ion-col>
             }
          </ion-row>
-      </ion-grid>   
-      
-      <ion-modal #modal trigger="modal-filters" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
-         <ng-template>
-            <ion-content>             
-               <div class="ion-margin-top ion-margin-bottom">
-                  <ion-searchbar show-clear-button="always" [(ngModel)]="searchText" (ionInput)="searchTextChanged()" [debounce]="800" placeholder="Rechercher une carte"></ion-searchbar>
+      </ion-grid>  
 
-                  <ion-grid class="filter-generation">
-                     <ion-row>
-                        @for (item of generations; track item.id) 
-                        {
-                           <ion-col>
-                              <ion-button size="small" [color]="initGenerationColor(item.id)" (click)="generationChanged(item.id, $event)">{{item.libelle}}</ion-button>
-                           </ion-col>
-                        } 
-                        @empty {
-                           <ion-col>
-                              <ion-text color="danger">Problème au chargement des générations</ion-text>
-                           </ion-col>
-                        }
-                     </ion-row>
-                  </ion-grid>
-               </div>
-            </ion-content>
-         </ng-template>
-      </ion-modal>
+      <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="pagedCardResult().isFinished">
+         <ion-infinite-scroll-content loadingText="Chargement..." loadingSpinner="dots"></ion-infinite-scroll-content>
+      </ion-infinite-scroll>    
    } 
    @else{
       <div class="loader-center">
          <ion-spinner name="dots"></ion-spinner>
       </div>
    }
+
+   <app-filter></app-filter>
+      
+   <app-sort></app-sort>
 </ion-content>

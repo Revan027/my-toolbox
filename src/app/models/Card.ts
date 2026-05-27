@@ -8,7 +8,6 @@ export class Card {
     name!: string;
     srcPicture!: string;
     averagePrice: number = 0;
-    isPriority: boolean = false;
     isAcquired: boolean = false;
     serieID!: number;
     serie: Serie = new Serie();
@@ -22,7 +21,6 @@ export class Card {
         card.name = data.name;
         card.srcPicture = data.srcPicture;
         card.picture = data.picture;
-        card.isPriority = data.isPriority;
         card.isAcquired = data.isAcquired;
         card.averagePrice = data.averagePrice;
         card.serieID = data.serieID;

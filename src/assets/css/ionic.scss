@@ -81,9 +81,6 @@ ion-content::part(scroll) {
 ion-card {
   --background: transparent;
   border-radius: var(--app-card-radius);
-  box-shadow:
-    0 6px 24px rgba(0, 0, 0, 0.15),
-    inset 0 2px 0 rgba(255, 255, 255, 1);
   --color: var(--app-text-color);
   border: 1px solid rgba(255, 255, 255, 0.95);
   padding: 8px;
