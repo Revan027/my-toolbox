@@ -1,3 +1,5 @@
+import { SortEnum } from "../constants/SortEnum";
+
 export class CardFilter {
     constructor() {}
 

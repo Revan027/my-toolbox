@@ -8,6 +8,7 @@ import { SuiviTCGPageRoutingModule } from './suivi-tcg-routing.module';
 
 import { SuiviTCGPage } from './suivi-tcg.page';
 import { CardModule } from 'src/app/components/card/card.module';
+import { SortModule } from 'src/app/components/sort/sort.module';
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import { CardModule } from 'src/app/components/card/card.module';
         IonicModule,
         SuiviTCGPageRoutingModule,
         CardModule,
+        SortModule,
     ],
     declarations: [SuiviTCGPage],
 })

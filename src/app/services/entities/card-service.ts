@@ -4,11 +4,14 @@ import { tableName } from 'src/app/constants/table-names';
 import { StorageService } from '../storage.services.common/storage-service';
 import { CardFilter } from 'src/app/models/CardFilter';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
+import { CardSort } from 'src/app/models/CardSort';
+import { SortEnum } from 'src/app/constants/SortEnum';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CardService {
+    cardSort = signal<CardSort>(new CardSort());
     pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
     hasCardsChanged = signal<boolean>(false);
 
@@ -98,6 +101,10 @@ export class CardService {
                 (${cardFilter.generationIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
     }
 
+    getSortDirection(checked: boolean): string{
+        return checked ? SortEnum.ASC : SortEnum.DESC
+    }
+
     async search(cardFilter: CardFilter): Promise<PagedCardResult> {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
@@ -106,7 +113,7 @@ export class CardService {
                 serie.srcLogo As serie_src_logo
                 FROM ${tableName.card} AS card 
             ${this.getQuerySearch(cardFilter)}
-            ORDER BY card.generationID ASC, card.name COLLATE NOCASE ASC
+            ORDER BY card.generationID ${this.getSortDirection(this.cardSort().generationAscending)}, card.name COLLATE NOCASE ${this.getSortDirection(this.cardSort().nameAscending)}
             LIMIT ${cardFilter.offsetBase} OFFSET ${cardFilter.offset}`);
         
         const cards: Card[] = result.values?.map((data: any)=>{
@@ -132,10 +139,22 @@ export class CardService {
         const pagedCardResult = await this.search(cardFilter);
         pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
 
-        this.pagedCardResult.set(pagedCardResult);
+        this.setPagedCardResult(pagedCardResult);
     }
 
     resetSearchCards() {
         this.pagedCardResult.set(new PagedCardResult());
+    }
+
+    setPagedCardResult(pagedCardResult: PagedCardResult) {
+        this.pagedCardResult.set(pagedCardResult);
+    }
+
+    setCardSort(cardSort: CardSort) {
+        this.cardSort.set(cardSort);
+    }
+
+    setHasCardsChanged(hasChanged: boolean) {
+        this.hasCardsChanged.set(hasChanged);
     }
 }

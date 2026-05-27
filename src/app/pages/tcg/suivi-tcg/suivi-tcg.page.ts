@@ -37,29 +37,36 @@ export class SuiviTCGPage implements OnInit {
     {
         effect(() => {
             if (this.cardService.hasCardsChanged()){
-
                 this.search();
 
-                this.cardService.hasCardsChanged.set(false);
+                this.cardService.setHasCardsChanged(false);
+            }
+        });
+
+        effect(() => {
+            if (this.cardService.cardSort()){
+                this.search();
             }
         });
     }
 
     async ngOnInit() {      
-        this.loaded = true;
-
         this.generations = await this.generationService.getAll();
+    }
 
-        await this.search();
+    initGenerationColor(generationID: number) {
+        const result = this.generationsIDs.some((id) => {
+            return generationID == id
+        });
 
-        this.loaded = false;
+        return result ? "tcg" : "light";
     }
 
     getSrc(uri: string){  
         return this.fileService.getSrcWeb(uri);
     }
 
-    async generationChanged(generationID: number, event: any) {
+    async onGenerationChanged(generationID: number, event: any) {
         let input = event.srcElement;
         const color = this.initGenerationColor(generationID);
 
@@ -80,25 +87,32 @@ export class SuiviTCGPage implements OnInit {
         await this.search();
     }
 
-    initGenerationColor(generationID: number) {
-        const result = this.generationsIDs.some((id) => {
-            return generationID == id
-        });
-
-        return result ? "tcg" : "light";
-    }
-
-    async searchTextChanged() {
+    async onSearchTextChanged() {
         await this.search();
     }
 
+    onSortClicked(){
+        this.cardFilter.page = 1;
+    }
+
+    async onIonInfinite(event: InfiniteScrollCustomEvent) {
+        if (this.loaded)
+            return;
+
+        this.cardFilter.page++;
+
+        await this.cardService.refreshSearchCards(this.cardFilter);
+           
+        await event.target.complete();
+    }
+
     private async search() {
-        if(!Capacitor.isNativePlatform()){
+        if (!Capacitor.isNativePlatform()){
             let pagedCardResult = new PagedCardResult();   
             pagedCardResult.cards = MOCK_CARDS;
             pagedCardResult.totalCount = MOCK_CARDS.length;
 
-            this.pagedCardResult.set(pagedCardResult);
+            this.cardService.setPagedCardResult(pagedCardResult);
         }
         else{
             this.loaded = true;
@@ -112,16 +126,5 @@ export class SuiviTCGPage implements OnInit {
 
             this.loaded = false;
         }       
-    }
-
-    async onIonInfinite(event: InfiniteScrollCustomEvent) {
-        if (this.loaded)
-            return;
-
-        this.cardFilter.page++;
-
-        await this.cardService.refreshSearchCards(this.cardFilter);
-           
-        await event.target.complete();
-    }
+    }  
 }
