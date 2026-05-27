@@ -39,19 +39,3 @@ ion-fab{
   }
 }
 
-.filter-generation {
-  overflow: auto;
-
-  ion-button{
-    text-transform: capitalize;
-  }
-
-  ion-row{
-    flex-wrap: nowrap;
-  }
-
-   ion-button.active {
-    --background: red
-  }
-}
-

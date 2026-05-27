@@ -22,12 +22,12 @@ export class SortComponent {
 
     private createForm() {
         this.formGroup = this.formBuilder.group({
-            generationAscending: [ { value: this.cardSort().generationAscending } , null],
-            nameAscending: [ { value: this.cardSort().nameAscending } , null],
+            generationAscending: [this.cardSort().generationAscending],
+            nameAscending: [this.cardSort().nameAscending],
         });
     }
 
-    async onSubmit(cardSort: CardSort) {
+    onSubmit(cardSort: CardSort) {
         this.cardService.setCardSort(cardSort);
     }
 }

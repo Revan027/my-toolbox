@@ -10,11 +10,14 @@ import { SortEnum } from 'src/app/constants/SortEnum';
 @Injectable({
     providedIn: 'root',
 })
-export class CardService {
+export class CardService {    
     cardSort = signal<CardSort>(new CardSort());
+    cardFilter = signal<CardFilter>(new CardFilter());
     pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
     hasCardsChanged = signal<boolean>(false);
 
+    readonly offsetBase: number = 15;
+     
     constructor(private storageService: StorageService) {}
 
     async create(card: Card) {
@@ -97,7 +100,7 @@ export class CardService {
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
             WHERE
-                (${cardFilter.search.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.search.toLowerCase()}%') AND 
+                (${cardFilter.searchText.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.searchText.toLowerCase()}%') AND 
                 (${cardFilter.generationIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
     }
 
@@ -105,16 +108,16 @@ export class CardService {
         return checked ? SortEnum.ASC : SortEnum.DESC
     }
 
-    async search(cardFilter: CardFilter): Promise<PagedCardResult> {
+    private async fetchPage(offset: number): Promise<PagedCardResult> {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
              SELECT 
                 card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, 
                 serie.srcLogo As serie_src_logo
                 FROM ${tableName.card} AS card 
-            ${this.getQuerySearch(cardFilter)}
+            ${this.getQuerySearch(this.cardFilter())}
             ORDER BY card.generationID ${this.getSortDirection(this.cardSort().generationAscending)}, card.name COLLATE NOCASE ${this.getSortDirection(this.cardSort().nameAscending)}
-            LIMIT ${cardFilter.offsetBase} OFFSET ${cardFilter.offset}`);
+            LIMIT ${this.offsetBase} OFFSET ${offset}`);
         
         const cards: Card[] = result.values?.map((data: any)=>{
             return Card.fromSQL(data);
@@ -122,7 +125,7 @@ export class CardService {
 
         let pagedCardResult = new PagedCardResult();   
         pagedCardResult.cards = cards;
-        pagedCardResult.totalCount = await this.countSearch(cardFilter);
+        pagedCardResult.totalCount = await this.countSearch(this.cardFilter());
 
         return pagedCardResult;
     }
@@ -135,14 +138,18 @@ export class CardService {
         return result.values != undefined ? result.values[0].totalCount : 0
     }
 
-    async refreshSearchCards(cardFilter: CardFilter) {
-        const pagedCardResult = await this.search(cardFilter);
+    async loadNextPage() {
+        let nextPage = this.pagedCardResult().page + 1;
+        let offset = this.offsetBase * (nextPage - 1);
+
+        const pagedCardResult = await this.fetchPage(offset);
         pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
+        pagedCardResult.page = nextPage;
 
         this.setPagedCardResult(pagedCardResult);
     }
 
-    resetSearchCards() {
+    resetPagedCardResult() {
         this.pagedCardResult.set(new PagedCardResult());
     }
 
@@ -152,6 +159,10 @@ export class CardService {
 
     setCardSort(cardSort: CardSort) {
         this.cardSort.set(cardSort);
+    }
+
+    setCardFilter(cardFilter: CardFilter) {
+        this.cardFilter.set(cardFilter);
     }
 
     setHasCardsChanged(hasChanged: boolean) {
