@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
+import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
 import { folder } from 'src/app/constants/folder';
 import { Card } from 'src/app/models/Card';
 import { Generation } from 'src/app/models/Generation';
@@ -26,7 +27,9 @@ import { ToastService } from 'src/app/services/services.common/toast.service';
 })
 export class EditTCGPage implements OnDestroy {
     private destroyRef = inject(DestroyRef);
+
     @ViewChild('inputFile') inputFile!: ElementRef;
+    @ViewChild('cardImageZoomed') image!: ElementRef;
 
     formGroup!: FormGroup;
     card: Card = new Card();
@@ -37,6 +40,8 @@ export class EditTCGPage implements OnDestroy {
     private debounceTimer: any;
     lastSrcPicture: string = "";
     loaded: boolean = false;
+    hasZoom: boolean = false;
+    panzoom?: PanzoomObject;
 
     constructor(
         private route: ActivatedRoute,
@@ -73,11 +78,36 @@ export class EditTCGPage implements OnDestroy {
          
             this.loaded = true;
         });
-
     }
 
     ngOnDestroy() {
         clearTimeout(this.debounceTimer);
+    }
+
+    initZoom(event: any){  
+        this.hasZoom = true;
+
+        // ne s'execute qu'une fois le code exécuté e  le navigateur a rendu/mis à jour le DOM.
+        setTimeout(()=> {
+            this.panzoom = Panzoom( this.image.nativeElement, {
+                maxScale: 5,
+                minScale: 1,
+            })
+            
+            // on init le zoom au min
+            this.panzoom.zoom(1);
+
+            const me = this;
+            setTimeout(() => me.panzoom?.pan(0, 0)); // pas de translate
+        })             
+    }
+
+    closeZoom(){
+        this.panzoom?.reset({ animate: true });
+        this.panzoom?.resetStyle();
+        this.panzoom?.destroy();
+
+        this.hasZoom = false;
     }
 
     private createForm() {

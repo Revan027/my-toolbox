@@ -45,15 +45,17 @@
                   </ion-col>
 
                   <ion-col>
-                     @if(!formGroup.get('srcPicture')?.value){
-                        <div class="ion-text-center">
-                           <img src="../../../../assets/card_empty.png" alt=""/>
-                        </div>
+                     @if(!hasZoom){
+                        @if(!formGroup.get('srcPicture')?.value){
+                           <div class="ion-text-center">
+                              <img class="card-image"  src="../../../../assets/card_empty.png" alt=""/>
+                           </div>
+                        }
+                        @else{
+                           <img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)" (click)="initZoom($event)">
+                        }   
                      }
-                     @else{
-                        <img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)">
-                     }   
-
+                    
                      @if(card.serie.srcLogo){
                         <div class="serie-logo ion-margin-top">
                            <img [src]="'../../../../' + card.serie.srcLogo" alt="">
@@ -128,4 +130,11 @@
          <ion-spinner name="dots"></ion-spinner>
       </div>
    }
+
+   @if (hasZoom){
+      <div class="backdrop-zoom" (click)="closeZoom()">
+         <img class="card-image" #cardImageZoomed [src]="getSrc(formGroup.get('srcPicture')?.value)">
+      </div>
+   }
+  
 </ion-content>

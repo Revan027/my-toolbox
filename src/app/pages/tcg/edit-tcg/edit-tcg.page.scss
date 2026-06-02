@@ -5,7 +5,9 @@
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #005a00;
   --ion-color-primary-tint: #1a751a;
-}:host {
+}
+
+:host {
   --app-page-theme-color: linear-gradient(135deg, #3b1f6e 0%, #7c3aed 100%);
 }
 
@@ -29,4 +31,18 @@ ion-grid{
 .serie-logo {
   display: flex;
   justify-content: end;
+}
+
+.backdrop-zoom{
+  background-color: rgb(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50px;
+  z-index: 100;
+  position: fixed;
+  left: 0px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
