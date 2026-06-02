@@ -21,8 +21,7 @@ export class SuiviTCGPage {
 
     loaded: boolean = false;
 
-    constructor(private cardService: CardService, private fileService: FileService
-    ) 
+    constructor(private cardService: CardService, private fileService: FileService) 
     {
         effect(async () => {
             if (this.cardService.hasCardsChanged()){

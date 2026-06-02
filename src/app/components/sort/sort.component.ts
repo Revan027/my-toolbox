@@ -32,6 +32,6 @@ export class SortComponent {
         cardSort.generationAscending = datas.generationAscending;
         cardSort.nameAscending = datas.nameAscending;
 
-        this.cardService.updateCardSort(cardSort);
+        this.cardService.setCardSort(cardSort);
     }
 }

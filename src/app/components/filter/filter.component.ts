@@ -2,8 +2,10 @@ import { Component, OnInit, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CardFilter } from 'src/app/models/CardFilter';
 import { Generation } from 'src/app/models/Generation';
+import { Serie } from 'src/app/models/Serie';
 import { CardService } from 'src/app/services/entities/card-service';
 import { GenerationService } from 'src/app/services/entities/generation-service';
+import { SerieService } from 'src/app/services/entities/serie-service';
 
 @Component({
     standalone: false,
@@ -16,29 +18,21 @@ export class FilterComponent implements OnInit {
 
     generations: Generation[] = [];
     generationsIDs: number[] = [];
+    series: Serie[] = [];
     formGroup!: FormGroup;
 
-    constructor(private formBuilder: FormBuilder, private cardService: CardService, private generationService: GenerationService){       
+    constructor(
+        private formBuilder: FormBuilder, 
+        private cardService: CardService, 
+        private generationService: GenerationService, 
+        private serieService: SerieService){       
     }
 
     async ngOnInit() {
         this.generations = await this.generationService.getAll();
+        this.series = await this.serieService.getAll();
 
         this.createForm();
-    }
-
-    private createForm() {
-        this.formGroup = this.formBuilder.group({
-            searchText: [this.cardFilter().searchText],
-        });
-    }
-
-    onSubmit(datas: CardFilter) {
-        let cardFilter = new CardFilter();
-        cardFilter.generationIDs = this.generationsIDs;
-        cardFilter.searchText = datas.searchText;
-
-        this.cardService.updateCardFilter(cardFilter);
     }
 
     initGenerationColor(generationID: number) {
@@ -48,7 +42,35 @@ export class FilterComponent implements OnInit {
 
         return result ? "tcg" : "light";
     }
-    
+
+    private createForm() {
+        this.formGroup = this.formBuilder.group({
+            searchText: [this.cardFilter().searchText],
+            isAcquired: [this.cardFilter().isAcquired],
+            serieIDs: [this.cardFilter().serieIDs],
+            minPrice:  [this.cardFilter().minPrice],
+            maxPrice:  [this.cardFilter().maxPrice],
+        });
+    }
+
+    onSubmit(datas: CardFilter) {
+        let cardFilter = new CardFilter();//on recréer une isntance sinon les méthodes ne sont pas passées et de plus le signal n'méttra qu'une fois le set
+        cardFilter.generationIDs = this.generationsIDs;
+        cardFilter.searchText = datas.searchText;
+        cardFilter.isAcquired = datas.isAcquired;
+        cardFilter.minPrice = datas.minPrice;
+        cardFilter.maxPrice = datas.maxPrice;
+        cardFilter.serieIDs = datas.serieIDs;
+
+        this.cardService.setCardFilter(cardFilter);
+    }
+
+    onReset() {     
+        this.cardService.setCardFilter(new CardFilter());
+        this.generationsIDs = [];
+        this.createForm();
+    }
+
     async onGenerationChanged(generationID: number, event: any) {
         let input = event.srcElement;
         const color = this.initGenerationColor(generationID);

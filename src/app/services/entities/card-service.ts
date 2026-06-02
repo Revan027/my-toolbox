@@ -100,7 +100,11 @@ export class CardService {
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
             WHERE
-                (${cardFilter.searchText.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.searchText.toLowerCase()}%') AND 
+                (${cardFilter.searchText.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.searchText.toLowerCase()}%') AND
+                (${cardFilter.isAcquired != undefined ? 'FALSE' : 'TRUE'} OR card.isAcquired IS ${cardFilter.isAcquired || false}) AND 
+                (${cardFilter.minPrice != undefined ? 'FALSE' : 'TRUE'} OR card.averagePrice >= ${cardFilter.minPrice || 0}) AND 
+                (${cardFilter.maxPrice != undefined  ? 'FALSE' : 'TRUE'} OR card.averagePrice <= ${cardFilter.maxPrice || 0}) AND 
+                (${cardFilter.serieIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.serieID IN (${cardFilter.serieIDs})) AND  
                 (${cardFilter.generationIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
     }
 
@@ -111,10 +115,10 @@ export class CardService {
     private async fetchPage(offset: number): Promise<PagedCardResult> {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
-             SELECT 
+            SELECT 
                 card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, 
                 serie.srcLogo As serie_src_logo
-                FROM ${tableName.card} AS card 
+            FROM ${tableName.card} AS card 
             ${this.getQuerySearch(this.cardFilter())}
             ORDER BY card.generationID ${this.getSortDirection(this.cardSort().generationAscending)}, card.name COLLATE NOCASE ${this.getSortDirection(this.cardSort().nameAscending)}
             LIMIT ${this.offsetBase} OFFSET ${offset}`);
@@ -159,11 +163,11 @@ export class CardService {
         this.pagedCardResult.set(pagedCardResult);
     }
 
-    updateCardSort(cardSort: CardSort) {
+   setCardSort(cardSort: CardSort) {
         this.cardSort.set(cardSort);
     }
 
-    updateCardFilter(cardFilter: CardFilter) {
+    setCardFilter(cardFilter: CardFilter) {
         this.cardFilter.set(cardFilter);
     }
 
