@@ -7,6 +7,7 @@ import { SuiviTCGPage } from './suivi-tcg.page';
 import { CardModule } from 'src/app/components/card/card.module';
 import { SortModule } from 'src/app/components/sort/sort.module';
 import { FilterModule } from 'src/app/components/filter/filter.module';
+import { DashboardModule } from 'src/app/components/dashboard/dashboard.module';
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import { FilterModule } from 'src/app/components/filter/filter.module';
         SuiviTCGPageRoutingModule,
         CardModule,
         SortModule,
-        FilterModule
+        FilterModule,
+        DashboardModule
     ],
     declarations: [SuiviTCGPage],
 })

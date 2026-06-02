@@ -1,0 +1,64 @@
+.btn-dashboard {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 0 16px 16px 0;
+
+  background: var(--app-page-theme-color);
+  color: var(--ion-color-tcg-contrast);
+  box-shadow: 4px 4px 12px -3px rgba(0, 0, 0, 0.4);
+
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+.dashboard-panel {
+    position: absolute;
+    transform: translateX(-110%);
+
+    &.open {
+        position: relative;
+        animation-name: animationDashboardOpen;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards
+    }
+   
+    &.close {
+        position: relative;
+        animation-name: animationDashboardClose;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards
+    }
+}
+  
+@keyframes animationDashboardOpen {
+    from {
+        transform: translateX(-110%);
+    }
+
+    to { 
+        transform: translateX(0);
+    }
+}
+
+@keyframes animationDashboardClose {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {   
+        transform: translateX(-110%);
+    }
+}
