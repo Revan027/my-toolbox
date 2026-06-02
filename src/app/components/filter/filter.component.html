@@ -1,28 +1,77 @@
-  <ion-modal #modal class="modal-filters" trigger="btn-modal-filters" [initialBreakpoint]="0.37" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  <ion-modal #modal class="modal-filters" trigger="btn-modal-filters" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.25, 0.5, 0.75]">
     <ng-template>
         <ion-content>        
             <ion-title class="ion-margin ion-text-center"> Filtrer </ion-title>   
 
-            <form [formGroup]="formGroup" novalidate>
-                <ion-input label="Rechercher" formControlName="searchText" label-placement="stacked" fill="outline"></ion-input>
+            <form [formGroup]="formGroup" novalidate>             
+                <ion-grid>
+                <ion-row>
+                        <ion-col>
+                            <ion-input label="Rechercher par nom de carte" formControlName="searchText" label-placement="stacked" fill="outline"></ion-input>
+                        </ion-col>
 
-                <ion-grid class="filter-generation">
-                    <ion-row>
-                        @for (item of generations; track item.id) 
-                        {
-                            <ion-col>
-                                <ion-button size="small" [color]="initGenerationColor(item.id)" (click)="onGenerationChanged(item.id, $event)">{{item.libelle}}</ion-button>
-                            </ion-col>
-                        } 
-                        @empty {
-                            <ion-col>
-                                <ion-text color="danger">Problème au chargement des générations</ion-text>
-                            </ion-col>
-                        }
+                        <ion-col>
+                            <ion-label>
+                                Générations
+                            </ion-label>
+
+                            <ion-grid class="filter-generation">
+                                <ion-row>
+                                    @for (item of generations; track item.id) 
+                                    {
+                                        <ion-col>
+                                            <ion-button size="small" [color]="initGenerationColor(item.id)" (click)="onGenerationChanged(item.id, $event)">{{item.libelle}}</ion-button>
+                                        </ion-col>
+                                    } 
+                                    @empty {
+                                        <ion-col>
+                                            <ion-text color="danger">Problème au chargement des générations</ion-text>
+                                        </ion-col>
+                                    }
+                                </ion-row>
+                            </ion-grid>
+                        </ion-col>
+                    
+                        <ion-col size="12">
+                            <ion-label>
+                                Séries
+                            </ion-label>
+
+                            <ion-select class="ion-margin-bottom" label="Série" formControlName="serieIDs" interface="popover" [interfaceOptions]="{ side: 'top' }" placeholder="-" fill="outline" [multiple]="true">
+                                @for(item of series; track item.id) {
+                                    <ion-select-option [value]="item.id"> 
+                                        {{item.name}}
+                                    </ion-select-option>
+                                }
+                            </ion-select> 
+                        </ion-col>
+
+                        <ion-col size="6">
+                            <ion-label>
+                                Prix minimun
+                            </ion-label>
+
+                            <ion-input class="ion-margin-bottom" formControlName="minPrice" type="number" placeholder="00.00" fill="outline"></ion-input>
+                        </ion-col>
+
+                        <ion-col size="6">
+                            <ion-label>
+                                Prix maximun
+                            </ion-label>
+
+                            <ion-input class="ion-margin-bottom" formControlName="maxPrice" type="number" placeholder="00.00" fill="outline"></ion-input>
+                        </ion-col>
+
+                        <ion-col size="6">                    
+                            <div class="ion-display-flex ion-justify-content-between">
+                                <ion-toggle formControlName="isAcquired">Acquise</ion-toggle>
+                            </div> 
+                        </ion-col>
                     </ion-row>
                 </ion-grid>
-
+               
                 <div class="ion-margin ion-text-end">
+                    <ion-button class="ion-margin-end" (click)="onReset()" color="danger" [strong]="true" >Annuler</ion-button>
                     <ion-button (click)="onSubmit(formGroup.value)" color="primary" [strong]="true" [disabled]="formGroup.invalid">Filtrer</ion-button>
                 </div>
             </form> 
