@@ -153,16 +153,18 @@ export class CardService {
         this.pagedCardResult.set(new PagedCardResult());
     }
 
+    // set() : remplacement complet (primitif ou nouvel objet) — nouvelle référence garantie
+    // update() : modification partielle → utiliser le spread { ...current, prop: newValue } pour créer une nouvelle référence
     setPagedCardResult(pagedCardResult: PagedCardResult) {
         this.pagedCardResult.set(pagedCardResult);
     }
 
-    updateCardSort(newCardSort: CardSort) {
-        this.cardSort.update((cardSort) => newCardSort);
+    updateCardSort(cardSort: CardSort) {
+        this.cardSort.set(cardSort);
     }
 
-    updateCardFilter(newCardFilter: CardFilter) {
-        this.cardFilter.update((cardFilter) => newCardFilter);
+    updateCardFilter(cardFilter: CardFilter) {
+        this.cardFilter.set(cardFilter);
     }
 
     setHasCardsChanged(hasChanged: boolean) {
