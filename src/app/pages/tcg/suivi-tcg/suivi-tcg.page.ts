@@ -1,4 +1,5 @@
-import { Component, effect, untracked } from '@angular/core';
+import { Component, DestroyRef, effect, inject, untracked } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Capacitor } from '@capacitor/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
@@ -15,6 +16,8 @@ import { FileService } from 'src/app/services/file.services.common/file.service'
     styleUrls: ['./suivi-tcg.page.scss'],
 })
 export class SuiviTCGPage {
+    private destroyRef = inject(DestroyRef);
+
     slideForward = pageTransition;
 
     pagedCardResult = this.cardService.pagedCardResult;
@@ -23,12 +26,9 @@ export class SuiviTCGPage {
 
     constructor(private cardService: CardService, private fileService: FileService) 
     {
-        effect(async () => {
-            if (this.cardService.hasCardsChanged()){
-                untracked(async () => {
-                    await this.search()
-                    this.cardService.setHasCardsChanged(false);
-                })    
+        this.cardService.hasCardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (hasCardsChanged: boolean) => {
+            if (hasCardsChanged){
+                await this.search();
             }
         });
 

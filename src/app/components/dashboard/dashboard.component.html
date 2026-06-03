@@ -13,7 +13,7 @@
       </p>
 
       <p class="metric-banner__amount">
-       
+         {{ totalValue| currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
       </p>
 
       <div class="metric-banner__stats">
@@ -36,7 +36,7 @@
          </div>
 
          <p class="grid-counters__card-footer">
-            342
+            {{totalCard}}
          </p>
       </div>
 
@@ -51,7 +51,7 @@
          </div>
 
          <p class="grid-counters__card-footer">
-            271
+            {{totalAcquiredCard}}
          </p>
       </div>
 
@@ -66,7 +66,7 @@
          </div>
 
          <p class="grid-counters__card-footer">
-            71
+            {{totalMissingCard}}
          </p>
       </div>
 
@@ -81,7 +81,7 @@
          </div>
 
          <p class="grid-counters__card-footer">
-            3,65 €
+            {{ percentageCompletion | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
          </p>
       </div>
    </div>
