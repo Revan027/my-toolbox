@@ -21,10 +21,8 @@ export class DashboardComponent implements OnInit {
   averagePrice: number = 0;
 
   constructor(private dashboardService: DashboardService, private cardService: CardService, ) { 
-    this.cardService.hasCardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (hasCardsChanged: boolean) => {
-      if (hasCardsChanged){
-        this.initDashboard();
-      }
+    this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+       this.initDashboard()
     });
   }
   

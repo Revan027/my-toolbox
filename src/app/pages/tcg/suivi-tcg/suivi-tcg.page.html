@@ -30,37 +30,20 @@
 
    @if(!loaded){
    
-      <!-- Barre de résumé de recherche : résultats · valeur · complétion (données de test) -->
       @if(this.pagedCardResult().cards.length > 0){
-        <div style="
-          display: flex;
-          align-items: stretch;
-          background: var(--app-card-bg);
-          border-radius: var(--app-card-radius);
-          box-shadow: var(--app-card-shadow);
-          padding: 8px 4px;
-          margin-bottom: 12px;
-        ">
+        <div class="resume-search">
           <!-- Résultats -->
-          <div style="flex: 1; text-align: center; padding: 0 6px;">
-            <p style="margin: 0; font-size: var(--ion-font-size-base); font-weight: 800; color: var(--app-text-color);">71</p>
-            <span style="font-size: 11px; color: var(--app-text-muted);">résultats</span>
+          <div class="resume-search__section">
+            <p class="resume-search__section-value">{{ totalCard }}</p>
+            <span class="resume-search__section-result">carte{{(totalCard > 1 ? "s" : "")}}</span>
           </div>
 
-          <div style="width: 1px; background: var(--app-border-color, #e0e0e0); margin: 4px 0;"></div>
+          <div class="resume-search__separator"></div>
 
           <!-- Valeur -->
-          <div style="flex: 1; text-align: center; padding: 0 6px;">
-            <p style="margin: 0; font-size: var(--ion-font-size-base); font-weight: 800; color: var(--app-text-color);">259,40 €</p>
-            <span style="font-size: 11px; color: var(--app-text-muted);">valeur</span>
-          </div>
-
-          <div style="width: 1px; background: var(--app-border-color, #e0e0e0); margin: 4px 0;"></div>
-
-          <!-- Complétion -->
-          <div style="flex: 1; text-align: center; padding: 0 6px;">
-            <p style="margin: 0; font-size: var(--ion-font-size-base); font-weight: 800; color: #7c3aed;">79 %</p>
-            <span style="font-size: 11px; color: var(--app-text-muted);">complétion</span>
+          <div class="resume-search__section">
+            <p class="resume-search__section-value"> {{ totalValue | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</p>
+            <span class="resume-search__section-result">valeur</span>
           </div>
         </div>
       }
