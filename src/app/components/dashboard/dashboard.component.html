@@ -4,7 +4,6 @@
 
 
 <div class="dashboard-panel ion-margin-bottom" [class.open]="displayDashboard == true" [class.close]="displayDashboard === false" (animationend)="onAnimationDone($event)">
-
    <div class="metric-banner">
       <ion-icon class="metric-banner__icon" name="diamond-outline"></ion-icon>
 
@@ -24,7 +23,6 @@
    </div>
 
    <div class="grid-counters">
-
       <!-- Total cartes -->
       <div class="grid-counters__card">
          <div class="grid-counters__card-header">
@@ -81,7 +79,7 @@
          </div>
 
          <p class="grid-counters__card-footer">
-            {{ percentageCompletion | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
+            {{ averagePrice | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
          </p>
       </div>
    </div>
@@ -89,12 +87,11 @@
    <div class="completion">
       <div class="completion__header">
          <span class="completion__title">Complétion</span>
-         <span class="completion__percentage">79 %</span>
+         <span class="completion__percentage"> {{ percentageCompletion | number:'1.0-0' }} %</span>
       </div>
+
       <div class="completion__track">
-         <div class="completion__fill"></div>
+         <div class="completion__fill" [style.width.%]="percentageCompletion"></div>
       </div>
    </div>
 </div>
-
-

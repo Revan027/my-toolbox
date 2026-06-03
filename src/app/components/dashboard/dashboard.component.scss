@@ -46,6 +46,7 @@
   background: var(--ion-color-tcg);
   color: var(--ion-color-tcg-contrast);
 }
+
 .metric-banner__icon {
   position: absolute;
   right: -10px;
@@ -53,6 +54,7 @@
   font-size: 96px;
   opacity: 0.12;
 }
+
 .metric-banner__title {
   margin: 0;
   font-size: var(--ion-font-size-xs);
@@ -60,12 +62,14 @@
   text-transform: uppercase;
   letter-spacing: 0.6px;
 }
+
 .metric-banner__amount {
   margin: 2px 0 0;
   font-size: var(--ion-font-size-3xl);
   font-weight: 800;
   line-height: 1.1;
 }
+
 .metric-banner__stats {
   display: none; // v3 : masqué (était flex)
   align-items: center;
@@ -80,17 +84,20 @@
   gap: 12px;
   margin-top: 12px;
 }
+
 .grid-counters__card {
   padding: 14px 16px;
   border-radius: var(--app-card-radius);
   box-shadow: var(--app-card-shadow);
   background: var(--app-card-bg);
 }
+
 .grid-counters__card-header {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .grid-counters__card-header-content {
   display: flex;
   align-items: center;
@@ -105,6 +112,7 @@
   &--orange { background: rgba(217, 119, 6, 0.14); }
   &--indigo { background: rgba(59, 31, 110, 0.12); }
 }
+
 .grid-counters__card-header-icon {
   font-size: 18px;
 
@@ -114,10 +122,12 @@
   &--orange { color: #d97706; }
   &--indigo { color: #3b1f6e; }
 }
+
 .grid-counters__card-content {
   font-size: var(--ion-font-size-xs);
   color: var(--app-text-muted);
 }
+
 .grid-counters__card-footer {
   margin: 10px 0 0;
   font-size: var(--ion-font-size-2xl);
@@ -133,31 +143,35 @@
   box-shadow: var(--app-card-shadow);
   background: var(--app-card-bg);
 }
+
 .completion__header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 8px;
 }
+
 .completion__title {
   font-size: var(--ion-font-size-sm);
   font-weight: 700;
   color: var(--app-text-color);
 }
+
 .completion__percentage {
   font-size: var(--ion-font-size-sm);
   font-weight: 800;
   color: #7c3aed;
 }
+
 .completion__track {
   height: 10px;
   border-radius: 99px;
   background: #ececec;
   overflow: hidden;
 }
+
 .completion__fill {
   height: 100%;
-  width: 79%;
   border-radius: 99px;
   background: var(--ion-color-tcg);
 }

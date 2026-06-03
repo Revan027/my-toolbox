@@ -18,8 +18,9 @@ export class DashboardComponent implements OnInit {
   totalMissingCard: number = 0;
   totalAcquiredCard: number = 0;
   percentageCompletion: number = 0;
+  averagePrice: number = 0;
 
-  constructor(private dashboardService: DashboardService,private cardService: CardService, ) { 
+  constructor(private dashboardService: DashboardService, private cardService: CardService, ) { 
     this.cardService.hasCardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (hasCardsChanged: boolean) => {
       if (hasCardsChanged){
         this.initDashboard();
@@ -43,6 +44,8 @@ export class DashboardComponent implements OnInit {
     this.totalValue = totalValue;
     this.totalMissingCard = totalMissingCard;
     this.totalAcquiredCard = totalAcquiredCard;
+    this.averagePrice = this.dashboardService.getAveragePrice(this.totalValue,  this.totalCard);
+    this.percentageCompletion = this.dashboardService.getPercentageCompletion(this.totalAcquiredCard,  this.totalCard);
   }
 
   onDisplayDashboard(){

@@ -39,14 +39,11 @@ export class DashboardService {
         return result.values != undefined ? result.values[0].totalAcquiredCard : 0
     }
 
-    async getAveragePrice(): Promise<number>{
-        const totalValue = await this.countTotalValue();
-        const totalCard = await this.countTotalCard();
-
+    getAveragePrice(totalValue: number, totalCard: number): number{
         return totalValue / totalCard;
     }
 
     getPercentageCompletion(totalAcquiredCard: number, totalCard: number): number{
-        return (100 * totalAcquiredCard) / 100;
+        return (100 * totalAcquiredCard) / totalCard;
     }
 }
