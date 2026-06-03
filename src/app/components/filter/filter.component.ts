@@ -74,6 +74,8 @@ export class FilterComponent implements OnInit {
         this.cardService.setCardFilter(new CardFilter());
         this.generationsIDs = [];
         this.createForm();
+
+        this.modalFilters.dismiss();
     }
 
     async onGenerationChanged(generationID: number, event: any) {
