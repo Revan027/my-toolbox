@@ -1,0 +1,97 @@
+<button class="btn-dashboard" type="button" aria-label="Afficher le dashboard" (click)="onDisplayDashboard()">
+   <ion-icon name="stats-chart-outline"></ion-icon>
+</button>
+
+
+<div class="dashboard-panel ion-margin-bottom" [class.open]="displayDashboard == true" [class.close]="displayDashboard === false" (animationend)="onAnimationDone($event)">
+   <div class="metric-banner">
+      <ion-icon class="metric-banner__icon" name="diamond-outline"></ion-icon>
+
+      <p class="metric-banner__title">
+         Valeur de la collection
+      </p>
+
+      <p class="metric-banner__amount">
+         {{ totalValue | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
+      </p>
+
+      <div class="metric-banner__stats">
+         <ion-icon name="trending-up-outline"></ion-icon>
+
+         <span style="font-size: var(--ion-font-size-xs); opacity: 0.9;">+82,30 € ce mois</span>
+      </div>
+   </div>
+
+   <div class="grid-counters">
+      <!-- Total cartes -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--purple">
+               <ion-icon name="albums-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--purple"></ion-icon>
+            </div>
+
+            <span class="grid-counters__card-content">Total cartes</span>
+         </div>
+
+         <p class="grid-counters__card-footer">
+            {{totalCard}}
+         </p>
+      </div>
+
+      <!-- Cartes acquises -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--green">
+               <ion-icon name="checkmark-circle-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--green"></ion-icon>
+            </div>
+
+            <span class="grid-counters__card-content">Acquises</span>
+         </div>
+
+         <p class="grid-counters__card-footer">
+            {{totalAcquiredCard}}
+         </p>
+      </div>
+
+      <!-- Manquantes -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--orange">
+               <ion-icon name="search-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--orange"></ion-icon>
+            </div>
+
+            <span class="grid-counters__card-content">Manquantes</span>
+         </div>
+
+         <p class="grid-counters__card-footer">
+            {{totalMissingCard}}
+         </p>
+      </div>
+
+      <!-- Prix moyen -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--indigo">
+               <ion-icon name="cash-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--indigo"></ion-icon>
+            </div>
+
+            <span class="grid-counters__card-content">Prix moyen</span>
+         </div>
+
+         <p class="grid-counters__card-footer">
+            {{ averagePrice | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
+         </p>
+      </div>
+   </div>
+
+   <div class="completion">
+      <div class="completion__header">
+         <span class="completion__title">Complétion</span>
+         <span class="completion__percentage"> {{ percentageCompletion | number:'1.0-0' }} %</span>
+      </div>
+
+      <div class="completion__track">
+         <div class="completion__fill" [style.width.%]="percentageCompletion"></div>
+      </div>
+   </div>
+</div>

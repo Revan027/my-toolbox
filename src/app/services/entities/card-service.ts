@@ -6,6 +6,7 @@ import { CardFilter } from 'src/app/models/CardFilter';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardSort } from 'src/app/models/CardSort';
 import { SortEnum } from 'src/app/constants/SortEnum';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +15,8 @@ export class CardService {
     cardSort = signal<CardSort>(new CardSort());
     cardFilter = signal<CardFilter>(new CardFilter());
     pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
-    hasCardsChanged = signal<boolean>(false);
+    private cardsChanged$ = new Subject<void>();
+    readonly cardsChanged = this.cardsChanged$.asObservable();
 
     readonly offsetBase: number = 15;
      
@@ -95,7 +97,7 @@ export class CardService {
         return card.picture || "";
     }
    
-    private getQuerySearch(cardFilter: CardFilter){
+    getQuerySearch(cardFilter: CardFilter){
         return`
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
@@ -163,7 +165,7 @@ export class CardService {
         this.pagedCardResult.set(pagedCardResult);
     }
 
-   setCardSort(cardSort: CardSort) {
+    setCardSort(cardSort: CardSort) {
         this.cardSort.set(cardSort);
     }
 
@@ -171,7 +173,7 @@ export class CardService {
         this.cardFilter.set(cardFilter);
     }
 
-    setHasCardsChanged(hasChanged: boolean) {
-        this.hasCardsChanged.set(hasChanged);
+    notifyCardsChanged() {
+        this.cardsChanged$.next();
     }
 }

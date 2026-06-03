@@ -39,3 +39,44 @@ ion-fab{
   }
 }
 
+.resume-search{
+  display: flex;
+  align-items: stretch;
+  background: var(--app-card-bg);
+  border-radius: var(--app-card-radius);
+  box-shadow: var(--app-card-shadow);
+  padding: 8px 4px;
+  margin-bottom: 12px;
+}
+
+.resume-search__section{
+  flex: 1; 
+  text-align: center; 
+  padding: 0 6px;
+}
+
+.resume-search__section-value{
+  margin: 0; 
+  font-size: var(--ion-font-size-base); 
+  font-weight: 800; color: 
+  var(--app-text-color);
+}
+
+.resume-search__section-result{
+  font-size: 11px; 
+  color: var(--app-text-muted);
+}
+
+.resume-search__section-value--indigo {
+  color: #7c3aed;
+}
+
+.resume-search__separator{
+  width: 1px; 
+  background: var(--app-border-color, #e0e0e0); 
+  margin: 4px 0;
+}
+
+.resume-search__section-result--muted{
+
+}

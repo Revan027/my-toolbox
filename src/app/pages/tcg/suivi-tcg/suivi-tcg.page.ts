@@ -1,10 +1,12 @@
-import { Component, effect, untracked } from '@angular/core';
+import { Component, DestroyRef, effect, inject, untracked } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Capacitor } from '@capacitor/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
 import { MOCK_CARDS } from 'src/app/constants/mock-data';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardService } from 'src/app/services/entities/card-service';
+import { ResumeService } from 'src/app/services/entities/resume-service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 
 
@@ -15,21 +17,21 @@ import { FileService } from 'src/app/services/file.services.common/file.service'
     styleUrls: ['./suivi-tcg.page.scss'],
 })
 export class SuiviTCGPage {
+    private destroyRef = inject(DestroyRef);
+
     slideForward = pageTransition;
 
     pagedCardResult = this.cardService.pagedCardResult;
 
     loaded: boolean = false;
+    totalCard: number = 0;
+    totalValue: number = 0;
+    percentageCompletion: number = 0;
 
-    constructor(private cardService: CardService, private fileService: FileService) 
+    constructor(private cardService: CardService, private fileService: FileService, private resumeService: ResumeService) 
     {
-        effect(async () => {
-            if (this.cardService.hasCardsChanged()){
-                untracked(async () => {
-                    await this.search()
-                    this.cardService.setHasCardsChanged(false);
-                })    
-            }
+        this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+            this.search();
         });
 
         effect(() => {
@@ -40,17 +42,17 @@ export class SuiviTCGPage {
         });
     }
 
-    getSrc(uri: string){  
-        return this.fileService.getSrcWeb(uri);
+    private async initResumeSearch(){
+        const promises = await Promise.all([
+            this.resumeService.countTotalCard(),
+            this.resumeService.countTotalValue(),
+        ]);
+        this.totalCard = promises[0];
+        this.totalValue = promises[1];
     }
 
-    async onIonInfinite(event: InfiniteScrollCustomEvent) {
-        if (this.loaded)
-            return;
-
-        await this.cardService.loadNextPage();
-           
-        await event.target.complete();
+    getSrc(uri: string){  
+        return this.fileService.getSrcWeb(uri);
     }
 
     private async search() {
@@ -64,6 +66,8 @@ export class SuiviTCGPage {
         else{
             this.loaded = true;
 
+            this.initResumeSearch();
+
             this.cardService.resetPagedCardResult();
 
             await this.cardService.loadNextPage();
@@ -71,4 +75,13 @@ export class SuiviTCGPage {
             this.loaded = false;
         }       
     }  
+
+    async onIonInfinite(event: InfiniteScrollCustomEvent) {
+        if (this.loaded)
+            return;
+
+        await this.cardService.loadNextPage();
+           
+        await event.target.complete();
+    }
 }
