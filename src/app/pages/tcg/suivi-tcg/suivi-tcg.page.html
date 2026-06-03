@@ -26,9 +26,10 @@
       </ion-fab-button>   
    </ion-fab>
 
-   @if(!loaded){
-     <app-dashboard></app-dashboard>
+   <app-dashboard></app-dashboard>
 
+   @if(!loaded){
+   
       @if(this.pagedCardResult().cards.length > 0){
         <span class="">
             <ion-badge class="text-xs">{{this.pagedCardResult().cards.length}} carte{{this.pagedCardResult().cards.length > 1 ? "s" : ""}}</ion-badge>

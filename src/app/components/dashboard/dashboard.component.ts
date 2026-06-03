@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DashboardService } from 'src/app/services/entities/dashboard-service';
 
 @Component({
     standalone: false,
@@ -10,14 +11,14 @@ export class DashboardComponent {
 
     displayDashboard?: boolean = undefined;
 
-    constructor() { }
+    constructor(private dashboardService: DashboardService) { }
 
     onDisplayDashboard(){
-        this.displayDashboard = !this.displayDashboard;
+      this.displayDashboard = !this.displayDashboard;
     }
 
     onAnimationDone(event: any){
-      if (this.displayDashboard === false){console.log("f")
+      if (this.displayDashboard === false){
         this.displayDashboard = undefined;
       }
     }

@@ -163,7 +163,7 @@ export class CardService {
         this.pagedCardResult.set(pagedCardResult);
     }
 
-   setCardSort(cardSort: CardSort) {
+    setCardSort(cardSort: CardSort) {
         this.cardSort.set(cardSort);
     }
 

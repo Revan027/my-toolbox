@@ -3,147 +3,98 @@
 </button>
 
 
-    <div class="dashboard-panel" [class.open]="displayDashboard == true" [class.close]="displayDashboard === false" (animationend)="onAnimationDone($event)" style="margin-bottom: 18px;">
+<div class="dashboard-panel ion-margin-bottom" [class.open]="displayDashboard == true" [class.close]="displayDashboard === false" (animationend)="onAnimationDone($event)">
 
-         <!-- Bannière métrique phare : valeur de la collection -->
-         <div style="
-            background: var(--ion-color-tcg);
-            border-radius: var(--app-card-radius);
-            box-shadow: var(--app-card-shadow);
-            color: var(--ion-color-tcg-contrast);
-            padding: 18px 20px;
-            position: relative;
-            overflow: hidden;
-         ">
-            <ion-icon name="diamond-outline" style="
-               position: absolute; right: -10px; top: -10px;
-               font-size: 96px; opacity: 0.12;
-            "></ion-icon>
+   <div class="metric-banner">
+      <ion-icon class="metric-banner__icon" name="diamond-outline"></ion-icon>
 
-            <p style="margin: 0; font-size: var(--ion-font-size-xs); opacity: 0.85; text-transform: uppercase; letter-spacing: 0.6px;">
-               Valeur de la collection
-            </p>
-            <p style="margin: 2px 0 0; font-size: var(--ion-font-size-3xl); font-weight: 800; line-height: 1.1;">
-               1 248,50 €
-            </p>
-            <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
-               <ion-icon name="trending-up-outline" style="font-size: 14px;"></ion-icon>
-               <span style="font-size: var(--ion-font-size-xs); opacity: 0.9;">+82,30 € ce mois</span>
+      <p class="metric-banner__title">
+         Valeur de la collection
+      </p>
+
+      <p class="metric-banner__amount">
+       
+      </p>
+
+      <div class="metric-banner__stats">
+         <ion-icon name="trending-up-outline"></ion-icon>
+
+         <span style="font-size: var(--ion-font-size-xs); opacity: 0.9;">+82,30 € ce mois</span>
+      </div>
+   </div>
+
+   <div class="grid-counters">
+
+      <!-- Total cartes -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--purple">
+               <ion-icon name="albums-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--purple"></ion-icon>
             </div>
+
+            <span class="grid-counters__card-content">Total cartes</span>
          </div>
 
-         <!-- Grille de tuiles compteurs -->
-         <div style="
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 12px;
-         ">
-            <!-- Total cartes -->
-            <div style="
-               background: var(--app-card-bg);
-               border-radius: var(--app-card-radius);
-               box-shadow: var(--app-card-shadow);
-               padding: 14px 16px;
-            ">
-               <div style="display: flex; align-items: center; gap: 8px;">
-                  <div style="
-                     width: 34px; height: 34px; border-radius: 10px;
-                     display: flex; align-items: center; justify-content: center;
-                     background: rgba(124, 58, 237, 0.12);
-                  ">
-                     <ion-icon name="albums-outline" style="font-size: 18px; color: #7c3aed;"></ion-icon>
-                  </div>
-                  <span style="font-size: var(--ion-font-size-xs); color: var(--app-text-muted);">Total cartes</span>
-               </div>
-               <p style="margin: 10px 0 0; font-size: var(--ion-font-size-2xl); font-weight: 800; color: var(--app-text-color);">
-                  342
-               </p>
+         <p class="grid-counters__card-footer">
+            342
+         </p>
+      </div>
+
+      <!-- Cartes acquises -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--green">
+               <ion-icon name="checkmark-circle-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--green"></ion-icon>
             </div>
 
-            <!-- Cartes acquises -->
-            <div style="
-               background: var(--app-card-bg);
-               border-radius: var(--app-card-radius);
-               box-shadow: var(--app-card-shadow);
-               padding: 14px 16px;
-            ">
-               <div style="display: flex; align-items: center; gap: 8px;">
-                  <div style="
-                     width: 34px; height: 34px; border-radius: 10px;
-                     display: flex; align-items: center; justify-content: center;
-                     background: rgba(90, 125, 90, 0.15);
-                  ">
-                     <ion-icon name="checkmark-circle-outline" style="font-size: 18px; color: var(--ion-color-success);"></ion-icon>
-                  </div>
-                  <span style="font-size: var(--ion-font-size-xs); color: var(--app-text-muted);">Acquises</span>
-               </div>
-               <p style="margin: 10px 0 0; font-size: var(--ion-font-size-2xl); font-weight: 800; color: var(--app-text-color);">
-                  271
-               </p>
-            </div>
-
-            <!-- Manquantes -->
-            <div style="
-               background: var(--app-card-bg);
-               border-radius: var(--app-card-radius);
-               box-shadow: var(--app-card-shadow);
-               padding: 14px 16px;
-            ">
-               <div style="display: flex; align-items: center; gap: 8px;">
-                  <div style="
-                     width: 34px; height: 34px; border-radius: 10px;
-                     display: flex; align-items: center; justify-content: center;
-                     background: rgba(217, 119, 6, 0.14);
-                  ">
-                     <ion-icon name="search-outline" style="font-size: 18px; color: #d97706;"></ion-icon>
-                  </div>
-                  <span style="font-size: var(--ion-font-size-xs); color: var(--app-text-muted);">Manquantes</span>
-               </div>
-               <p style="margin: 10px 0 0; font-size: var(--ion-font-size-2xl); font-weight: 800; color: var(--app-text-color);">
-                  71
-               </p>
-            </div>
-
-            <!-- Prix moyen -->
-            <div style="
-               background: var(--app-card-bg);
-               border-radius: var(--app-card-radius);
-               box-shadow: var(--app-card-shadow);
-               padding: 14px 16px;
-            ">
-               <div style="display: flex; align-items: center; gap: 8px;">
-                  <div style="
-                     width: 34px; height: 34px; border-radius: 10px;
-                     display: flex; align-items: center; justify-content: center;
-                     background: rgba(59, 31, 110, 0.12);
-                  ">
-                     <ion-icon name="cash-outline" style="font-size: 18px; color: #3b1f6e;"></ion-icon>
-                  </div>
-                  <span style="font-size: var(--ion-font-size-xs); color: var(--app-text-muted);">Prix moyen</span>
-               </div>
-               <p style="margin: 10px 0 0; font-size: var(--ion-font-size-2xl); font-weight: 800; color: var(--app-text-color);">
-                  3,65 €
-               </p>
-            </div>
+            <span class="grid-counters__card-content">Acquises</span>
          </div>
 
-         <!-- Barre de complétion -->
-         <div style="
-            background: var(--app-card-bg);
-            border-radius: var(--app-card-radius);
-            box-shadow: var(--app-card-shadow);
-            padding: 14px 16px;
-            margin-top: 12px;
-         ">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
-               <span style="font-size: var(--ion-font-size-sm); font-weight: 700; color: var(--app-text-color);">Complétion</span>
-               <span style="font-size: var(--ion-font-size-sm); font-weight: 800; color: #7c3aed;">79 %</span>
+         <p class="grid-counters__card-footer">
+            271
+         </p>
+      </div>
+
+      <!-- Manquantes -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--orange">
+               <ion-icon name="search-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--orange"></ion-icon>
             </div>
-            <div style="height: 10px; border-radius: 99px; background: #ececec; overflow: hidden;">
-               <div style="height: 100%; width: 79%; border-radius: 99px; background: var(--ion-color-tcg);"></div>
-            </div>
+
+            <span class="grid-counters__card-content">Manquantes</span>
          </div>
- </div>
+
+         <p class="grid-counters__card-footer">
+            71
+         </p>
+      </div>
+
+      <!-- Prix moyen -->
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--indigo">
+               <ion-icon name="cash-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--indigo"></ion-icon>
+            </div>
+
+            <span class="grid-counters__card-content">Prix moyen</span>
+         </div>
+
+         <p class="grid-counters__card-footer">
+            3,65 €
+         </p>
+      </div>
+   </div>
+
+   <div class="completion">
+      <div class="completion__header">
+         <span class="completion__title">Complétion</span>
+         <span class="completion__percentage">79 %</span>
+      </div>
+      <div class="completion__track">
+         <div class="completion__fill"></div>
+      </div>
+   </div>
+</div>
 
 

@@ -1,5 +1,6 @@
-import { Component, OnInit, WritableSignal } from '@angular/core';
+import { Component, OnInit, ViewChild, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { IonModal } from '@ionic/angular';
 import { CardFilter } from 'src/app/models/CardFilter';
 import { Generation } from 'src/app/models/Generation';
 import { Serie } from 'src/app/models/Serie';
@@ -14,6 +15,8 @@ import { SerieService } from 'src/app/services/entities/serie-service';
     styleUrls: ['./filter.component.scss'],
 })
 export class FilterComponent implements OnInit {
+    @ViewChild('modalFilters') modalFilters!: IonModal;
+
     private cardFilter: WritableSignal<CardFilter> = this.cardService.cardFilter;
 
     generations: Generation[] = [];
@@ -61,6 +64,8 @@ export class FilterComponent implements OnInit {
         cardFilter.minPrice = datas.minPrice;
         cardFilter.maxPrice = datas.maxPrice;
         cardFilter.serieIDs = datas.serieIDs;
+
+        this.modalFilters.dismiss();
 
         this.cardService.setCardFilter(cardFilter);
     }
