@@ -16,7 +16,7 @@
             <ion-card-content>
                @if(loaded){
                   <form [formGroup]="formGroup" novalidate>
-                     <ion-input class="ion-margin-bottom" (ionInput)="formatAmountInput($event)" label="Montant" formControlName="amount" type="number" placeholder="00.00" label-placement="floating" fill="outline">
+                     <ion-input class="ion-margin-bottom" label="Montant" formControlName="amount" type="number" inputmode="decimal" placeholder="00.00" label-placement="floating" fill="outline">
                         <ion-icon slot="start" name="cash-outline"></ion-icon>
                      </ion-input>
 

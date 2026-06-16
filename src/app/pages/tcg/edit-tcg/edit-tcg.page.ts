@@ -115,8 +115,8 @@ export class EditTCGPage implements OnDestroy {
             id: [this.card?.id],
             name: [this.card?.name, Validators.compose([Validators.required])],
             srcPicture: [this.card?.srcPicture, Validators.required],
-            averagePrice: [ { value: this.card?.averagePrice == 0 ? "" : this.card?.averagePrice, disabled: false } , null],
-            isAcquired: [ { value: this.card?.isAcquired, disabled: false } , null],
+            averagePrice: [this.card?.averagePrice == 0 ? undefined : this.card?.averagePrice, null],
+            isAcquired: [this.card?.isAcquired, null],
             serieID: [this.card?.serieID, Validators.required],
             generationID: [this.card?.generationID, Validators.required],
             picture: [this.card?.picture, Validators.required],
@@ -129,14 +129,6 @@ export class EditTCGPage implements OnDestroy {
 
     getPath(fileName: string){
         return `${folder.TCG}/${fileName}`;
-    }
-
-    getFormatAmountInput(event: CustomEvent) {
-        clearTimeout(this.debounceTimer);
-
-        this.debounceTimer = setTimeout(() => {
-            this.amountService.formatAmountInput("averagePrice", event.detail.value, this.formGroup);      
-        }, 800);
     }
 
     private async deleteLastFile(){
