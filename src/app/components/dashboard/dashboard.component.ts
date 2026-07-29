@@ -12,7 +12,7 @@ import { DashboardService } from 'src/app/services/entities/dashboard-service';
 export class DashboardComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
-  displayDashboard?: boolean = undefined;
+  displayDashboard: boolean | undefined = true;
   totalValue: number = 0;
   totalCard: number = 0;
   totalMissingCard: number = 0;
@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private dashboardService: DashboardService, private cardService: CardService, ) { 
     this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-       this.initDashboard()
+      this.initDashboard()
     });
   }
   

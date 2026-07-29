@@ -79,25 +79,13 @@ ion-content::part(scroll) {
 
 /* WHITE CARD */
 ion-card {
-  --background: transparent;
+  --background: var(--app-card-bg);
   border-radius: var(--app-card-radius);
   --color: var(--app-text-color);
   border: 1px solid rgba(255, 255, 255, 0.95);
   padding: 8px;
-  background: linear-gradient(160deg, #ffffff 0%, #ebebf3 100%);
   overflow: hidden;
   position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 45%;
-    background: linear-gradient(to bottom, rgba(147, 197, 253, 0.15), transparent);
-    pointer-events: none;
-  }
 }
 
 /* INPUTS */

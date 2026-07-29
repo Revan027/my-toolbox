@@ -68,11 +68,12 @@ Thumbs.db
 # Claude
 .claude/
 
-# Shared services (repo séparé)
-src/app/services/file.services.common
-src/app/services/media.services.common
-src/app/services/services.common
-src/app/services/storage.services.common
+# Shared services : suivis en sous-modules git (voir .gitmodules)
+# → nécessaires au build CI, ne pas les ignorer
+
+# Keystore de signature : jamais versionné (dépôt public),
+# reconstitué en CI depuis le secret ANDROID_DEBUG_KEYSTORE
+android/keystore/
 
 # Environnements (contiennent des clés API)
 src/environments/environment.ts

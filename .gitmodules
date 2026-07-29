@@ -1,0 +1,12 @@
+[submodule "src/app/services/file.services.common"]
+	path = src/app/services/file.services.common
+	url = https://github.com/Revan027/file.services.common.git
+[submodule "src/app/services/media.services.common"]
+	path = src/app/services/media.services.common
+	url = https://github.com/Revan027/media.services.common.git
+[submodule "src/app/services/storage.services.common"]
+	path = src/app/services/storage.services.common
+	url = https://github.com/Revan027/storage.services.common.git
+[submodule "src/app/services/services.common"]
+	path = src/app/services/services.common
+	url = https://github.com/Revan027/services.common.git
