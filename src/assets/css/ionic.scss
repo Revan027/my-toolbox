@@ -1,3 +1,5 @@
+ @use './font' as f; 
+
 :host ion-content {
   --keyboard-offset: 0px !important;
 }
@@ -7,48 +9,48 @@ ion-header::after {
   display: none;
 }
 
-ion-header {
+/*ion-header {
   background: var(--app-header-bg);
   border-radius: 0 0 50% 50% / 0 0 30px 30px;
   overflow: hidden;
 }
+*/
+ion-header {
+  box-shadow: none!important;
+  border-bottom: 1px solid var(--color-border);
+  background-color: white;
+  padding-left: 10px;
 
-ion-header ion-toolbar {
-  --background: transparent;
-  border-bottom: none;
-  --min-height: 70px;
-  padding-bottom: 26px;
-}
+  ion-toolbar {
+    --min-height: 70px;
 
-ion-header ion-title {
-  padding-top: 10px;
-  color: var(--app-text-light);
-  font-weight: 600; 
-  font-size: var(--ion-font-size-2xl);
-}
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
 
-ion-header ion-buttons{
-  padding-top: 10px;
-}
+      .header-text{
+         display: flex;
+         flex-wrap: wrap;
+      }
 
-/* HEADER TITLE with icon */
-.header-title {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+      ion-buttons{
+        display: inline-block;
+      }
 
-  ion-icon {
-    font-size: 1.25rem;
-    color: var(--app-text-light);
+      .header-title{
+        @include f.title;
+
+        color: var(--color-ink);
+      }
+
+      .header-description{
+        @include f.meta;
+
+        color: var(--color-meta);
+      }
+    }
   }
-
-  span {
-    letter-spacing: 0.3px;
-  }
-}
-
-ion-header ion-back-button {
-  color: var(--app-text-light);
 }
 
 ion-header[collapse="condense"] ion-toolbar {
@@ -67,7 +69,7 @@ ion-row {
 
 /* MAIN CONTENT */
 ion-content {
-  --background: var(--app-bg);
+  --background: var(--color-background);
   --padding-start: 10px;
   --padding-end: 10px;
 }
@@ -113,16 +115,7 @@ ion-input .label-text {
   color: var(--app-label-color);
 }
 
-/* BUTTONS */
-ion-button {
-  --background: var(--app-accent);
-  --color: #fff;
-  --border-radius: 12px;
-}
 
-ion-button ion-label {
-  width: 100%;
-}
 
 // POPPOVER
 ion-popover{

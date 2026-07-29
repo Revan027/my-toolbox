@@ -1,14 +1,24 @@
 <ion-header [translucent]="true">
    <ion-toolbar>
-      <ion-buttons slot="start">
-         <ion-back-button icon="caret-back"></ion-back-button>
-      </ion-buttons>
-      <ion-title>
-         <div class="header-title">
-            <ion-icon name="create-outline"></ion-icon>
-            <span>Edition</span>
-         </div>
-      </ion-title>
+
+      <div class="header-content">
+         <ion-buttons>
+            <ion-back-button fill="outline" icon="chevron-back-outline"></ion-back-button>
+         </ion-buttons>
+
+         @if(card.id == 0){
+            <div class="header-text">
+               <span class="header-title">Modifier la carte</span> 
+            
+               <span class="header-description">
+                  {{card.name}}.{{ card.serie.name}}
+               </span> 
+            </div>
+         }@else{
+            <span class="header-title">Ajouter une carte</span>
+         }     
+            
+      </div>
    </ion-toolbar>
 </ion-header>
 
@@ -17,50 +27,43 @@
       <form [formGroup]="formGroup" novalidate >
          <input formControlName="id" type="text" hidden />
 
-         <div class="ion-margin-top ion-margin-bottom">
-            <ion-input label="Nom" formControlName="name" label-placement="stacked" fill="outline"> </ion-input>
-
-            @if(formGroup.controls['name'].invalid && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)){
-               <ion-text color="danger">Le nom est requis</ion-text>
-            }
-         </div>
          
          <div class="ion-margin-top ion-margin-bottom">
-            <ion-label>
-               Image
-            </ion-label>
-
             <ion-grid>
                <ion-row>
-                  <ion-col>
-                     <input #inputFile type="file" hidden (change)="onFileChanged($event)" />
-
-                     <ion-button size="small" (click)="onFileSelector($event)"> 
-                        <ion-icon name="document-outline" slot="start"></ion-icon> Choisir un fichier 
-                     </ion-button>
-
-                     <ion-button size="small" (click)="onCapturePhoto($event)">
-                        <ion-icon name="camera-outline" slot="start"></ion-icon> Prendre une photo
-                     </ion-button>
-                  </ion-col>
-
                   <ion-col>
                      @if(!hasZoom){
                         @if(!formGroup.get('srcPicture')?.value){
                            <div class="ion-text-center">
-                              <img class="card-image"  src="../../../../assets/card_empty.png" alt=""/>
+                              <img class="card-image card-image--placeholder" src="../../../../assets/card_empty.png" alt=""/>
                            </div>
                         }
                         @else{
                            <img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)" (click)="initZoom($event)">
                         }   
                      }
-                    
+                  
                      @if(card.serie.srcLogo){
                         <div class="serie-logo ion-margin-top">
                            <img [src]="'../../../../' + card.serie.srcLogo" alt="">
                         </div>
                      }   
+                  </ion-col>
+
+                  <ion-col class="card-image-wrapper">
+                     <ion-label>
+                        IMAGE
+                     </ion-label>
+
+                     <input #inputFile type="file" hidden (change)="onFileChanged($event)" />
+
+                     <ion-button fill="outline" (click)="onFileSelector($event)">      
+                        <ion-icon name="image-outline" slot="start"></ion-icon> Choisir un fichier 
+                     </ion-button>
+
+                     <ion-button fill="outline" (click)="onCapturePhoto($event)">
+                        <ion-icon name="camera-outline" slot="start"></ion-icon> Prendre une photo
+                     </ion-button>
                   </ion-col>
 
                   <ion-col size="12">          
@@ -74,6 +77,15 @@
                </ion-row>
             </ion-grid>
          </div>
+
+         <div class="ion-margin-top ion-margin-bottom">
+            <ion-input label="Nom" formControlName="name" label-placement="stacked" fill="outline"> </ion-input>
+
+            @if(formGroup.controls['name'].invalid && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)){
+               <ion-text color="danger">Le nom est requis</ion-text>
+            }
+         </div>
+         
 
          <div class="ion-margin-top ion-margin-bottom">
             <ion-input class="ion-margin-bottom" label="Montant" formControlName="averagePrice" type="number" inputmode="decimal" placeholder="00.00" label-placement="floating" fill="outline">
