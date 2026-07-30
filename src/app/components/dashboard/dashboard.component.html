@@ -1,7 +1,6 @@
-<button class="btn-dashboard" type="button" aria-label="Afficher le dashboard" (click)="onDisplayDashboard()">
+<button class="button--dashboard" type="button" aria-label="Afficher le dashboard" (click)="onDisplayDashboard()">
    <ion-icon name="stats-chart-outline"></ion-icon>
 </button>
-
 
 <div class="dashboard-panel ion-margin-bottom" [class.open]="displayDashboard == true" [class.close]="displayDashboard === false" (animationend)="onAnimationDone($event)">
    <div class="metric-banner">

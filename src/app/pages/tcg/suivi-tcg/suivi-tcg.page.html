@@ -1,27 +1,34 @@
 <ion-header [translucent]="true">
    <ion-toolbar>
-      <ion-title>
-         <div class="header-title">
-            <ion-icon name="albums-outline"></ion-icon>
-            <span>Suivi Collection TCG</span>
+      <div class="header-content">
+         <div class="hearder-icon">
+           <ion-icon name="briefcase-outline"></ion-icon>
          </div>
-      </ion-title>
+
+        <div class="header-text">
+            <span class="header-title">Ma collection</span> 
+         
+            <span class="header-description">
+               Trading Card Game
+            </span> 
+         </div>              
+      </div>
 
       <ion-buttons slot="end">
-         <ion-fab-button class="btn-add" size="small" [routerLink]="['creation']" routerDirection="forward" [routerAnimation]="slideForward">
+         <ion-fab-button class="button--create" size="small" [routerLink]="['creation']" routerDirection="forward" [routerAnimation]="slideForward">
             <ion-icon name="add"></ion-icon>
          </ion-fab-button>
       </ion-buttons>
-   </ion-toolbar>
+   </ion-toolbar>  
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding-top">
    <ion-fab slot="fixed" horizontal="end" vertical="bottom">
-      <ion-fab-button class="btn-filters" size="small" id="btn-modal-filters" expand="block">
+      <ion-fab-button class="button--filters" size="small" id="btn-modal-filters" expand="block">
          <ion-icon size="small" name="filter-outline"></ion-icon>
       </ion-fab-button>
 
-      <ion-fab-button class="btn-sorts" size="small"id="btn-modal-sorts" expand="block">
+      <ion-fab-button class="button--sorts" size="small"id="btn-modal-sorts" expand="block">
          <ion-icon  size="small" name="swap-vertical-outline"></ion-icon> 
       </ion-fab-button>   
    </ion-fab>

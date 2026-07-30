@@ -1,18 +1,17 @@
 <ion-header [translucent]="true">
    <ion-toolbar>
-
       <div class="header-content">
          <ion-buttons>
             <ion-back-button fill="outline" icon="chevron-back-outline"></ion-back-button>
          </ion-buttons>
 
-         @if(card.id == 0){
+         @if(card.id > 0){
             <div class="header-text">
-               <span class="header-title">Modifier la carte</span> 
+               <div class="header-title">Modifier la carte</div> 
             
-               <span class="header-description">
+               <div class="header-description">
                   {{card.name}}.{{ card.serie.name}}
-               </span> 
+               </div> 
             </div>
          }@else{
             <span class="header-title">Ajouter une carte</span>

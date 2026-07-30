@@ -11,16 +11,6 @@
   --ion-color-primary-shade: #341b61;
   --ion-color-primary-tint: #4f357d;
 
-  // Font sizes
-  --ion-font-size-xxs: 0.6rem;    
-  --ion-font-size-xs: 0.75rem;
-  --ion-font-size-sm: 0.875rem;
-  --ion-font-size-base: 1rem;
-  --ion-font-size-lg: 1.125rem;
-  --ion-font-size-xl: 1.25rem;
-  --ion-font-size-2xl: 1.5rem;
-  --ion-font-size-3xl: 2rem;
-
   // Theme colors — Dark background, white cards
   --app-bg: #f0f0f0;
   --app-card-bg: #ffffff;
@@ -37,20 +27,4 @@
   --app-tab-inactive-color: #666666;
   --app-accent: #3b82f6;
   --app-page-theme-color: white;
-
-  // Success color (vert olive)
-  --ion-color-success: #5a7d5a;
-  --ion-color-success-rgb: 90, 125, 90;
-  --ion-color-success-contrast: #ffffff;
-  --ion-color-success-contrast-rgb: 255, 255, 255;
-  --ion-color-success-shade: #4f6e4f;
-  --ion-color-success-tint: #6b8a6b;
-
-  // Custom color
-  --ion-color-tcg: linear-gradient(135deg, #3b1f6e 0%, #7c3aed 100%);;
-	--ion-color-tcg-rgb: 59,31,110;
-	--ion-color-tcg-contrast: #ffffff;
-	--ion-color-tcg-contrast-rgb: 255,255,255;
-	--ion-color-tcg-shade: #341b61;
-	--ion-color-tcg-tint: #4f357d;
 }

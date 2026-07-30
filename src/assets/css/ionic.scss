@@ -30,8 +30,17 @@ ion-header {
       gap: 10px;
 
       .header-text{
-         display: flex;
-         flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .hearder-icon{
+        font-size: var(--ion-font-size-xl);
+        color: white;
+        background-color: var(--color-main);
+        padding: 7px;
+        border-radius: 25%;
+        display: flex;
       }
 
       ion-buttons{
@@ -42,6 +51,7 @@ ion-header {
         @include f.title;
 
         color: var(--color-ink);
+        flex: 1 1 100%;
       }
 
       .header-description{

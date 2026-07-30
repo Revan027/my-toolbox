@@ -75,15 +75,60 @@ ion-button.button--main {
     --border-radius: 10px;
     --border-style: none;
 
-    --box-shadow: 0 8px 20px rgba(107, 63, 247, 0.28);
+    --box-shadow: var(--color-box-shadow);
 
     --padding-start: 50px;
     --padding-end: 50px;
     --padding-top: 20px;
     --padding-bottom: 20px;
-    text-transform: none
+    text-transform: none; 
 }
 
+.button--dashboard {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 0 16px 16px 0;
+
+  background: var(--color-linear);
+  color: white;
+  --background: var(--color-linear);
+  --box-shadow: var(--color-box-shadow);
+
+  ion-icon { font-size: 20px; }
+}
+
+//FAB BUTTON
+ion-fab-button{
+    &.button--create{
+      --background: var(--color-main);
+    }
+}
+
+ion-fab{
+  display: flex;
+  bottom: 20px;
+
+  ion-fab-button{
+    &.button--filters,
+    &.button--sorts {
+      --background: var(--color-linear);
+      --box-shadow: var(--color-box-shadow);
+    }
+
+  }
+}
 
 // LABEL
 ion-label{

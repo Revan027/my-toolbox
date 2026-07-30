@@ -22,7 +22,7 @@
   font-family: var(--font-ui);
   font-weight:600; 
   letter-spacing:-.03em; 
-  line-height:1 
+  line-height:1 ;
 }
 
 @mixin figure { 
@@ -30,7 +30,7 @@
   font-size:var( --font-size-2xl);  
   font-weight:600; 
   letter-spacing:-.02em;
-  line-height:1 
+  line-height:1 ;
 }
 
 @mixin title  {  
@@ -43,13 +43,13 @@
 @mixin field  { 
   font-family: var(--font-ui);
   font-size:var( --font-size-lg);   
-  font-weight:400 
+  font-weight:400; 
 }
 
 @mixin block  { 
   font-family: var(--font-ui);
   font-size:var(--text-block);   
-  font-weight:600 
+  font-weight:600 ;
 }
 
 @mixin card   { 
@@ -57,7 +57,7 @@
   font-size:var(--text-card);    
   font-weight:600; 
   letter-spacing:-.01em; 
-  line-height:1.25 
+  line-height:1.25; 
 }
 
 @mixin label  { 
@@ -70,25 +70,11 @@
   font-family: var(--text-meta);
   font-size:var(--font-size-xs);    
   font-weight:400; 
-  line-height:1.4 
-}
-
-@mixin tab    { 
-  font-family: var(--font-ui);
-  font-size:var(--text-tab);     
-  font-weight:500 
-}
-
-@mixin over   { 
-  font-family: var(--font-ui);
-  font-size:var(--text-tab);     
-  font-weight:500; 
-  text-transform:uppercase; 
-  letter-spacing:.12em 
+  line-height:1.4; 
 }
 
 @mixin num    { 
   font-family:var(--font-mono);  
-  font-size:var(--text-num); 
-  font-weight:500 
+  font-size:var(--font-size-xs); 
+  font-weight:500; 
 }
