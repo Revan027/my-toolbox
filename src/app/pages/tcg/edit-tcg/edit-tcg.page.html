@@ -39,11 +39,9 @@
                            <img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)" (click)="initZoom($event)">
                         }   
                      }
-                  
-                     @if(card.serie.srcLogo){
-                        <div class="serie-logo ion-margin-top">
-                           <img [src]="'../../../../' + card.serie.srcLogo" alt="">
-                        </div>
+                     
+                     @if(card.serie){
+                        <span class="card-serie">{{card.serie.name}}</span>
                      }   
                   </ion-col>
 

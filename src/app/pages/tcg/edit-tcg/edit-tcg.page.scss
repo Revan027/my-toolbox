@@ -1,3 +1,5 @@
+@use '../../../../assets/css/font' as f; 
+
 ion-content {
   --padding-bottom: 80px;
 }
@@ -33,4 +35,9 @@ ion-grid{
 
 .card-image--placeholder {
   opacity: 0.7;
+}
+
+.card-serie{
+  color: var(--color-meta);
+  @include f.meta;
 }
