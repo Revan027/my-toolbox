@@ -72,7 +72,7 @@ ion-button.button--empty.button--main-small  {
 }
 
 ion-button.button--main {
-    @include f.field;
+    @include f.block;
     --background: var(--color-main);
     --background-hover: var(--color-secondary);
     --background-activated: var(--color-main);
@@ -195,9 +195,26 @@ ion-input.input-fill-outline[type=number]{
     }
 }
 
+// SEARCH BARRE
+ion-searchbar.sc-ion-searchbar-md-h{ 
+    @include f.field; 
+    --box-shadow: none;
+    --background: #fff;
+    --icon-color: var(--color-muted);
+    --color: var(--color-ink);
+    --placeholder-color: var(--color-muted); 
+    min-height: 46px;
+
+    .searchbar-input-container input{
+        border-color: var(--color-border);
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 12px;
+    }
+}
+
 // SELECT
-ion-select,
-ion-searchbar {
+ion-select {
     --background: white!important;
     --color: var(--color-ink)!important;
     @include f.field;

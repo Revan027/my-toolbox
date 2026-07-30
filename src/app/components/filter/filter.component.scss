@@ -1,8 +1,9 @@
+@use '../../../assets/css/font' as f; 
 
 ion-title{
-    font-weight: bold;
+  @include f.title;
+  color: var(--color-ink);
 }
-
 
 .filter-generation {
   overflow: auto;
@@ -13,9 +14,5 @@ ion-title{
 
   ion-row{
     flex-wrap: nowrap;
-  }
-
-   ion-button.active {
-    --background: red
   }
 }

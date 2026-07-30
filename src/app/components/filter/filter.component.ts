@@ -42,7 +42,6 @@ export class FilterComponent implements OnInit {
     }
 
     hasGenerationSelected(generationID: number) {
-        console.log(this.generationsIDs());
         return this.generationsIDs().some((id) => {
             return generationID == id
         });

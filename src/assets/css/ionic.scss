@@ -49,7 +49,6 @@ ion-header {
 
       .header-title{
         @include f.title;
-
         color: var(--color-ink);
         flex: 1 1 100%;
       }
