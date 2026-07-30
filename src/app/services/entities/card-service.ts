@@ -119,7 +119,7 @@ export class CardService {
         let result = await this.storageService.getDb().query(`
             SELECT 
                 card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, 
-                serie.srcLogo As serie_src_logo
+                serie.srcLogo as serie_src_logo, serie.name as serie_name
             FROM ${tableName.card} AS card 
             ${this.getQuerySearch(this.cardFilter())}
             ORDER BY card.generationID ${this.getSortDirection(this.cardSort().generationAscending)}, card.name COLLATE NOCASE ${this.getSortDirection(this.cardSort().nameAscending)}

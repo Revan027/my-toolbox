@@ -18,10 +18,9 @@ ion-header::after {
 ion-header {
   box-shadow: none!important;
   border-bottom: 1px solid var(--color-border);
-  background-color: white;
-  padding-left: 10px;
 
-  ion-toolbar {
+  ion-toolbar {   
+    padding-left: 10px;
     --min-height: 70px;
 
     .header-content {
