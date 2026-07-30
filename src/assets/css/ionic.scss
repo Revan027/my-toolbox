@@ -62,6 +62,13 @@ ion-card-title {
   font-size: var(--ion-font-size-sm);
 }
 
+// ALERTE
+.alert{
+  &.alert-danger{
+    @include f.label;
+  }
+}
+
 /* STRUCTURE */
 ion-row {
   height: 100%;
@@ -90,30 +97,6 @@ ion-card {
   position: relative;
 }
 
-/* INPUTS */
-ion-input,
-ion-select,
-ion-searchbar {
-  --background: var(--app-input-bg) !important;
-  --color: var(--app-text-color);
-  --placeholder-color: var(--app-text-muted);
-}
-
-ion-input .label-text {
-  line-height: 1.2!important;
-}
-
-ion-searchbar{
---border-radius: 4px!important;;
-}
-
-ion-select::part(label) {
-  color: var(--app-label-color);
-}
-
-ion-input .label-text {
-  color: var(--app-label-color);
-}
 
 
 

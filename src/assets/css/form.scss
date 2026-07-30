@@ -1,5 +1,22 @@
 @use './font' as f; 
 
+// STRUCTURE
+form{
+    ion-row{
+        gap: 9px;
+
+        ion-col{
+            padding: 0;
+        }
+    }
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: end;
+  gap: 5px;
+}
+
 // BACK BUTTONS 
 ion-back-button {
   --border-color: var(--color-border);
@@ -22,7 +39,7 @@ ion-back-button::part(icon) {
 }
 
 // BUTTONS 
-ion-button {
+ion-button.button--empty {
     --color: var(--color-ink);
     --border-width: 1px;
     --border-color:  var(--color-border);
@@ -36,18 +53,135 @@ ion-button {
     --padding-bottom: 10px;
 }
 
-ion-button {
+ion-button.button--empty {
     ion-icon{
         color: var(--color-main);
     }
 }
 
-ion-button ion-label {
+ion-button.button--empty ion-label {
     width: 100%;
 }
+
+ion-button.button--main {
+    @include f.field;
+    --background: var(--color-main);
+    --background-hover: var(--color-secondary);
+    --background-activated: var(--color-main);
+    --background-focused: var(--color-main);
+
+    --color: white;
+
+    --border-radius: 10px;
+    --border-style: none;
+
+    --box-shadow: 0 8px 20px rgba(107, 63, 247, 0.28);
+
+    --padding-start: 50px;
+    --padding-end: 50px;
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+    text-transform: none
+}
+
 
 // LABEL
 ion-label{
     @include f.label;
     color: var(--color-meta);
+}
+
+// INPUTS
+input[type=text]{
+    background: white;
+    color: var(--color-ink);
+    @include f.field;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    min-height: 46px;   
+    width: 100%; 
+    transition: border-color 0.2s ease-out;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+input[type=text]:focus{
+   outline: none;
+   border-color: var(--color-main);
+}
+
+
+ion-input.input-fill-outline[type=number]{ 
+    @include f.field;
+    --border-color: var(--color-border);
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 12px;
+
+    --highlight-color-focused: var(--color-main);
+    --highlight-color: var(--color-main);
+
+    --background: #fff;
+    --color: var(--color-ink);
+    --placeholder-color: var(--color-muted);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    min-height: 46px;
+
+    &:hover {
+        --border-color: var(--color-main);
+    }
+
+    &.has-focus {
+        --highlight-height: 1px;
+    }
+
+    ion-icon{
+        color: var(--color-muted);
+        @include f.label;
+    }
+}
+
+// SELECT
+ion-select,
+ion-searchbar {
+    --background: white!important;
+    --color: var(--color-ink)!important;
+    @include f.field;
+     --border-color:  var(--color-border);
+    --placeholder-color: var(--color-muted)!important;
+    --border-radius: 10px!important;
+    min-height: 46px!important;
+}
+
+ion-select::part(icon) {
+    color: var(--color-muted);
+    position: absolute;
+    right: 15px;   
+}
+
+ion-select-popover ion-item{
+    @include f.field;
+}
+
+ion-searchbar{
+--border-radius: 4px!important;
+}
+
+
+//TOGGLE
+ion-toggle{
+    width: 100%;
+    @include f.field;background: white;
+    border: 1px solid var(--color-border); 
+    border-radius: 10px;
+    padding: 16px;
+    --handle-background: var(--color-main);  
+    --handle-background-checked: var(--color-main);  
+    --track-background-checked: var(--color-secondary);
+}
+
+ion-toggle::part(track){
+    width: 50px;
+    height: 28px;
 }
