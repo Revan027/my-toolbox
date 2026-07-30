@@ -14,6 +14,17 @@ ion-card {
     padding: 10px 10px 0 10px;
   }
 
+  ion-card-content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-image {
+    opacity: 0.9;
+  }
+
   .card-acquired{  
     position: absolute;
     z-index: 1;
@@ -36,7 +47,7 @@ ion-card {
   .card-meta{
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
+    gap: 5px;
 
     .card-price{
       @include f.num;

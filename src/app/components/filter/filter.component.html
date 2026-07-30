@@ -1,11 +1,11 @@
-  <ion-modal #modalFilters class="modal-filters" trigger="btn-modal-filters" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  <ion-modal #modalFilters class="modal-filters" trigger="btn-modal-filters" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.25, 0.5, 0.75]">
     <ng-template>
         <ion-content>        
             <ion-title class="ion-margin ion-text-center"> Filtrer </ion-title>   
 
             <form [formGroup]="formGroup" novalidate>             
                 <ion-grid>
-                <ion-row>
+                    <ion-row>
                         <ion-col>
                             <ion-input label="Rechercher par nom de carte" formControlName="searchText" label-placement="stacked" fill="outline"></ion-input>
                         </ion-col>
@@ -19,8 +19,10 @@
                                 <ion-row>
                                     @for (item of generations; track item.id) 
                                     {
-                                        <ion-col>
-                                            <ion-button size="small" [color]="initGenerationColor(item.id)" (click)="onGenerationChanged(item.id, $event)">{{item.libelle}}</ion-button>
+                                        <ion-col size="3">
+                                            <ion-button [class.button--main-small]="hasGenerationSelected(item.id)" [class.button--empty]="true" (click)="onGenerationChanged(item.id, $event)" fill="outline">
+                                                Gen {{item.id}}
+                                            </ion-button>
                                         </ion-col>
                                     } 
                                     @empty {
@@ -46,7 +48,7 @@
                             </ion-select> 
                         </ion-col>
 
-                        <ion-col size="6">
+                        <ion-col >
                             <ion-label>
                                 Prix minimun
                             </ion-label>
@@ -54,7 +56,7 @@
                             <ion-input class="ion-margin-bottom" formControlName="minPrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline"></ion-input>
                         </ion-col>
 
-                        <ion-col size="6">
+                        <ion-col>
                             <ion-label>
                                 Prix maximun
                             </ion-label>
@@ -62,7 +64,7 @@
                             <ion-input class="ion-margin-bottom" formControlName="maxPrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline"></ion-input>
                         </ion-col>
 
-                        <ion-col size="6">                    
+                        <ion-col size="12">                    
                             <div class="ion-display-flex ion-justify-content-between">
                                 <ion-toggle formControlName="isAcquired">Acquise</ion-toggle>
                             </div> 

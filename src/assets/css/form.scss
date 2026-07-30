@@ -63,6 +63,14 @@ ion-button.button--empty ion-label {
     width: 100%;
 }
 
+ion-button.button--empty.button--main-small  {
+    --background: var(--color-main);
+    --background-hover: var(--color-secondary);
+    --background-activated: var(--color-main);
+    --background-focused: var(--color-main);
+    --color: white;
+}
+
 ion-button.button--main {
     @include f.field;
     --background: var(--color-main);

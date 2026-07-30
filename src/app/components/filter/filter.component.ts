@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, WritableSignal } from '@angular/core';
+import { Component, OnInit, ViewChild, WritableSignal, signal, Renderer2, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { CardFilter } from 'src/app/models/CardFilter';
@@ -19,15 +19,18 @@ export class FilterComponent implements OnInit {
 
     private cardFilter: WritableSignal<CardFilter> = this.cardService.cardFilter;
 
-    generations: Generation[] = [];
-    generationsIDs: number[] = [];
+    generationsIDs = signal<number[]>([]);
+
+    generations: Generation[] = []; 
     series: Serie[] = [];
     formGroup!: FormGroup;
 
     constructor(
         private formBuilder: FormBuilder, 
         private cardService: CardService, 
-        private generationService: GenerationService, 
+        private generationService: GenerationService,   
+        private renderer: Renderer2, 
+        private el: ElementRef,
         private serieService: SerieService){       
     }
 
@@ -38,12 +41,11 @@ export class FilterComponent implements OnInit {
         this.createForm();
     }
 
-    initGenerationColor(generationID: number) {
-        const result = this.generationsIDs.some((id) => {
+    hasGenerationSelected(generationID: number) {
+        console.log(this.generationsIDs());
+        return this.generationsIDs().some((id) => {
             return generationID == id
         });
-
-        return result ? "tcg" : "light";
     }
 
     private createForm() {
@@ -58,7 +60,7 @@ export class FilterComponent implements OnInit {
 
     onSubmit(datas: CardFilter) {
         let cardFilter = new CardFilter();//on recréer une isntance sinon les méthodes ne sont pas passées et de plus le signal n'méttra qu'une fois le set
-        cardFilter.generationIDs = this.generationsIDs;
+        cardFilter.generationIDs = this.generationsIDs();
         cardFilter.searchText = datas.searchText;
         cardFilter.isAcquired = datas.isAcquired;
         cardFilter.minPrice = datas.minPrice;
@@ -72,29 +74,21 @@ export class FilterComponent implements OnInit {
 
     onReset() {     
         this.cardService.setCardFilter(new CardFilter());
-        this.generationsIDs = [];
+        this.generationsIDs.set([]);
         this.createForm();
 
         this.modalFilters.dismiss();
     }
 
     async onGenerationChanged(generationID: number, event: any) {
-        let input = event.srcElement;
-        const color = this.initGenerationColor(generationID);
+        if(!this.generationsIDs().includes(generationID)){
+            let generationsIDs = this.generationsIDs();
+            generationsIDs.push(generationID);
 
-        // On ajoute au tableaux les ids de générations pokémon filtrés
-        if (input.getAttribute('color') == 'tcg') {
-
-            this.generationsIDs = this.generationsIDs.filter(
-                function (value, index, array) {
-                    return generationID != value;
-                },
-            );
-        } 
-        else {
-            this.generationsIDs.push(generationID);
+            this.generationsIDs.set(generationsIDs);
+        }else{
+            let generationsIDs = this.generationsIDs().filter((item: number) => item !== generationID);
+            this.generationsIDs.set(generationsIDs);
         }
-
-        input.setAttribute('color', color);
     }
 }
