@@ -48,13 +48,13 @@
 
 @mixin block  { 
   font-family: var(--font-ui);
-  font-size:var(--text-block);   
+  font-size:var(--font-size-lg);   
   font-weight:600 ;
 }
 
 @mixin card   { 
   font-family: var(--font-ui);
-  font-size:var(--text-card);    
+  font-size:var(--font-size-md);    
   font-weight:600; 
   letter-spacing:-.01em; 
   line-height:1.25; 
@@ -67,7 +67,7 @@
 }
 
 @mixin meta   { 
-  font-family: var(--text-meta);
+  font-family: var(--font-ui);
   font-size:var(--font-size-xs);    
   font-weight:400; 
   line-height:1.4; 
