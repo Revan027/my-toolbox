@@ -1,14 +1,9 @@
 @use '../../../../assets/css/font' as f; 
 
-:host {
-  --app-page-theme-color: var(--ion-color-tcg);
-}
-
 
 ion-grid.grid-cards{
   --ion-grid-padding: 0;
 }
-
 
 .resume-search{
   display: flex;

@@ -1,4 +1,4 @@
- @use './font' as f; 
+@use './font' as f; 
 
 :host ion-content {
   --keyboard-offset: 0px !important;
@@ -9,12 +9,6 @@ ion-header::after {
   display: none;
 }
 
-/*ion-header {
-  background: var(--app-header-bg);
-  border-radius: 0 0 50% 50% / 0 0 30px 30px;
-  overflow: hidden;
-}
-*/
 ion-header {
   box-shadow: none!important;
   border-bottom: 1px solid var(--color-border);
@@ -92,19 +86,6 @@ ion-content {
 ion-content::part(scroll) {
   scroll-behavior: smooth;
 }
-
-
-/* WHITE CARD */
-ion-card {
-  --background: var(--app-card-bg);
-  border-radius: var(--app-card-radius);
-  --color: var(--app-text-color);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  padding: 8px;
-  overflow: hidden;
-  position: relative;
-}
-
 
 
 

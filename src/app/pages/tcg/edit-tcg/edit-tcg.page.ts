@@ -115,7 +115,7 @@ export class EditTCGPage implements OnDestroy {
             id: [this.card?.id],
             name: [this.card?.name, Validators.compose([Validators.required])],
             srcPicture: [this.card?.srcPicture, Validators.required],
-            averagePrice: [this.card?.averagePrice == 0 ? undefined : this.card?.averagePrice, null],
+            averagePrice: [this.card?.averagePrice, null],
             isAcquired: [this.card?.isAcquired, null],
             serieID: [this.card?.serieID, Validators.required],
             generationID: [this.card?.generationID, Validators.required],

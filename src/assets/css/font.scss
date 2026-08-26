@@ -78,3 +78,15 @@
   font-size:var(--font-size-xs); 
   font-weight:500; 
 }
+
+@mixin menu-selected    { 
+  font-family:var(--font-ui);  
+  font-size:var(--font-size-xxs); 
+  font-weight:600; 
+}
+
+@mixin menu    { 
+  font-family:var(--font-ui);  
+  font-size:var(--font-size-xxs); 
+  font-weight:500; 
+}

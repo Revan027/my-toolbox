@@ -24,7 +24,9 @@
          </div>
 
          <div class="card-price">
-            {{ card.averagePrice | currency:'EUR':'symbol' }}
+            @if(card.averagePrice){
+               {{ card.averagePrice | currency:'EUR':'symbol' }}
+            }        
          </div>
       </div>
 

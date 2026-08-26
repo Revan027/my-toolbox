@@ -18,7 +18,7 @@ export class CardService {
     private cardsChanged$ = new Subject<void>();
     readonly cardsChanged = this.cardsChanged$.asObservable();
 
-    readonly offsetBase: number = 15;
+    readonly offsetBase: number = 16;
      
     constructor(private storageService: StorageService) {}
 
@@ -34,11 +34,14 @@ export class CardService {
 
     async update(card: Card) {
         const sql = `
-            UPDATE ${tableName.card} 
-            SET name = "${card.name}", srcPicture = "${card.srcPicture}", averagePrice = "${card.averagePrice}", isAcquired = ${card.isAcquired}, serieID = "${card.serieID}", generationID = "${card.generationID}", picture = "${card.picture}" 
-            WHERE id = "${card.id}"`;
+            UPDATE ${tableName.card}
+            SET name = ?, srcPicture = ?, averagePrice = ?, isAcquired = ?, serieID = ?, generationID = ?, picture = ?
+            WHERE id = ?`;
 
-        return await this.storageService.getDb().execute(sql);
+        return await this.storageService.getDb().run(sql, [
+            card.name, card.srcPicture, card.averagePrice, card.isAcquired,
+            card.serieID, card.generationID, card.picture, card.id
+        ]);
     }
 
     async updatePicture(card: Card) {

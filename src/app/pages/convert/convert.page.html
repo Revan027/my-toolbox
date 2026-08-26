@@ -1,73 +1,82 @@
 <ion-header [translucent]="true">
    <ion-toolbar>
-      <ion-title>
-         <div class="header-title">
-            <ion-icon name="cash-outline"></ion-icon>
-            <span>Convertisseur</span>
+      <div class="header-content">
+         <div class="hearder-icon">
+           <ion-icon name="cash-outline"></ion-icon>
          </div>
-      </ion-title>
-   </ion-toolbar>
+
+        <div class="header-text">
+            <span class="header-title">Convertisseur</span> 
+         
+            <span class="header-description">
+               Convertir des devises
+            </span> 
+         </div>              
+      </div>
+   </ion-toolbar>  
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
    <ion-row class="ion-align-items-center">
       <ion-col>
-         <ion-card class="form-card">
-            <ion-card-content>
-               @if(loaded){
-                  <form [formGroup]="formGroup" novalidate>
-                     <ion-input class="ion-margin-bottom" label="Montant" formControlName="amount" type="number" inputmode="decimal" placeholder="00.00" label-placement="floating" fill="outline">
-                        <ion-icon slot="start" name="cash-outline"></ion-icon>
-                     </ion-input>
+         @if(loaded){
+            <form [formGroup]="formGroup" novalidate>
+               <ion-label>
+                  Montant
+               </ion-label>
 
-                     @if(formGroup.controls['amount'].invalid && (formGroup.controls['amount'].dirty || formGroup.controls['amount'].touched)){
-                        <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">Montant requis</p></ion-text>
-                     }
+               <ion-input class="ion-margin-bottom" formControlName="amount" type="number" inputmode="decimal" placeholder="00.00" fill="outline">
+                  <ion-icon slot="end" name="logo-euro"></ion-icon>
+               </ion-input>
+               
+               @if(formGroup.controls['amount'].invalid && (formGroup.controls['amount'].dirty || formGroup.controls['amount'].touched)){
+                  <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">Montant requis</p></ion-text>
+               }
 
-                     <ion-select class="ion-margin-bottom" label="Devise d'origine" formControlName="originalCurrency" interface="popover" placeholder="-" fill="outline">
-                        @for (item of currencies; track item) {
-                           <ion-select-option value="{{item.symbol}}">{{item.name}}</ion-select-option>
-                        }
-                     </ion-select>
+               <ion-select class="ion-margin-bottom" formControlName="originalCurrency"interface="popover" placeholder="-" fill="outline">
+                  @for (item of currencies; track item) {
+                     <ion-select-option value="{{item.symbol}}">{{item.name}}</ion-select-option>
+                  }
+               </ion-select>
 
-                     <div class="ion-text-center ion-margin-bottom">
-                        <ion-icon name="swap-vertical-outline" class="swap-icon" size="large"></ion-icon>
-                     </div>
+               <div class="ion-text-center ion-margin-bottom">
+                  <ion-icon name="swap-vertical-outline" class="swap-icon" size="large"></ion-icon>
+               </div>
 
-                     <ion-select class="ion-margin-bottom" label="Devise souhaitée" formControlName="targetCurrency" interface="popover" placeholder="-" fill="outline">
-                        @for (item of currencies; track item) {
-                           <ion-select-option value="{{item.symbol}}">{{item.name}}</ion-select-option>
-                        }
-                     </ion-select>
+               <ion-select class="ion-margin-bottom"  formControlName="targetCurrency" interface="popover" placeholder="-" fill="outline">
+                  @for (item of currencies; track item) {
+                     <ion-select-option value="{{item.symbol}}">{{item.name}}</ion-select-option>
+                  }
+               </ion-select>
 
-                     @if(convertResult > 0) {
-                        <ion-grid class="result-box ion-text-center ion-padding ion-margin-bottom">
-                           <ion-row>
-                              <ion-col>
-                                 <span class="text-xs result-label">Résultat</span>
-                              </ion-col>
-                           </ion-row>
-                           <ion-row>
-                              <ion-col>
-                                 <span class="text-2xl bold">{{convertResult | number:'1.2-2'}} {{formGroup.controls['targetCurrency'].value}}</span>
-                              </ion-col>
-                           </ion-row>
-                        </ion-grid>
-                     }
+               @if(convertResult > 0) {
+                  <ion-grid class="result-box ion-text-center ion-padding ion-margin-bottom">
+                     <ion-row>
+                        <ion-col>
+                           <span class="text-xs result-label">Résultat</span>
+                        </ion-col>
+                     </ion-row>
+                     <ion-row>
+                        <ion-col>
+                           <span class="text-2xl bold">{{convertResult | number:'1.2-2'}} {{formGroup.controls['targetCurrency'].value}}</span>
+                        </ion-col>
+                     </ion-row>
+                  </ion-grid>
+               }
 
-                     <ion-button (click)="submit(formGroup.value)" [strong]="true" [disabled]="formGroup.invalid" expand="block" shape="round">
-                        <ion-icon slot="start" name="repeat-outline"></ion-icon>
-                        Convertir
-                     </ion-button>
-                  </form>   
-               }  
-               @else{
-                  <div class="loader-center">
-                     <ion-spinner name="dots"></ion-spinner>
-                  </div>
-               }           
-            </ion-card-content>
-         </ion-card>
+               <div class="ion-text-center">
+                  <ion-button (click)="submit(formGroup.value)" [strong]="true" [disabled]="formGroup.invalid" class="button--main">
+                     <ion-icon slot="start" name="repeat-outline"></ion-icon>
+                     Convertir
+                  </ion-button>
+               </div>
+            </form>   
+         }  
+         @else{
+            <div class="loader-center">
+               <ion-spinner name="dots"></ion-spinner>
+            </div>
+         }  
       </ion-col>
    </ion-row>
 </ion-content>
