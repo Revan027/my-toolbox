@@ -1,15 +1,11 @@
- @if(card.isAcquired){
-   <ion-icon class="acquired" name="checkmark-circle"></ion-icon>
- }
+<ion-card> 
+   <ion-card-header> 
+      @if(card.isAcquired){
+         <div class="card-acquired">
+            <ion-icon name="checkmark-sharp"></ion-icon>
+         </div>
+     }
 
- <ion-card> 
-   <ion-card-header>
-      <div class="card-title-wrapper ion-align-items-center ion-align-content-center">
-         <ion-card-title class="ion-text-center">
-            {{ card.name }}
-         </ion-card-title> 
-      </div>
-     
       <div>
          @if (card.srcPicture) {
             <img class="card-image" [alt]="card.name" [src]="getSrc(card.srcPicture)"/>
@@ -18,10 +14,20 @@
    </ion-card-header>
 
    <ion-card-content select="[body]">
-      <div class="serie-logo">
-         <ion-thumbnail>
-            <img [src]="'../../../../' + card.serie.srcLogo" alt=""/>
-         </ion-thumbnail>
+      <div class="card-name ion-margin-bottom">
+         {{ card.name }}
+      </div>
+
+      <div class="card-meta">
+         <div class="card-serie">
+            {{ card.serie.name }}
+         </div>
+
+         <div class="card-price">
+            @if(card.averagePrice){
+               {{ card.averagePrice | currency:'EUR':'symbol' }}
+            }        
+         </div>
       </div>
 
       <ng-content></ng-content>

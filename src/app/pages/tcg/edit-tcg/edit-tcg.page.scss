@@ -1,19 +1,4 @@
-:root {
-  --ion-color-primary: #006600;
-  --ion-color-primary-rgb: 0, 102, 0;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #005a00;
-  --ion-color-primary-tint: #1a751a;
-}
-
-:host {
-  --app-page-theme-color: linear-gradient(135deg, #3b1f6e 0%, #7c3aed 100%);
-}
-
-ion-header {
-  background: var(--app-page-theme-color);
-}
+@use '../../../../assets/css/font' as f; 
 
 ion-content {
   --padding-bottom: 80px;
@@ -21,11 +6,6 @@ ion-content {
 
 ion-grid{
   --ion-grid-padding: 0;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: space-between;
 }
 
 .serie-logo {
@@ -45,4 +25,19 @@ ion-grid{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card-image-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-image--placeholder {
+  opacity: 0.7;
+}
+
+.card-serie{
+  color: var(--color-meta);
+  @include f.meta;
 }

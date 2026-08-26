@@ -1,3 +1,9 @@
+/* Custom — @use doit précéder toute autre règle (contrainte Sass) */
+@use "assets/css/color";
+@use "assets/css/font";
+@use "assets/css/form";
+@use "assets/css/ionic";
+
 @import "@fontsource/nunito/400.css";
 @import "@fontsource/nunito/600.css";
 @import "@fontsource/nunito/700.css";
@@ -41,5 +47,3 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 /*@import "@ionic/angular/css/palettes/dark.system.css";*/
 /*@import '@ionic/angular/css/palettes/high-contrast.always.css';*/
-/* Custom */
-@import "assets/css/ionic.scss";

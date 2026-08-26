@@ -1,39 +1,39 @@
 <ion-header [translucent]="true">
    <ion-toolbar>
-      <ion-title>
-         <div class="header-title">
-            <ion-icon name="server-outline"></ion-icon>
-            <span>Sauvegarde</span>
+      <div class="header-content">
+         <div class="hearder-icon">
+           <ion-icon name="server-outline"></ion-icon>
          </div>
-      </ion-title>
-   </ion-toolbar>
+
+        <div class="header-text">
+            <span class="header-title">Backup</span> 
+         
+            <span class="header-description">
+               Sauvegarder les données
+            </span> 
+         </div>              
+      </div>
+   </ion-toolbar>  
 </ion-header>
 
-<ion-content class="ion-padding" [fullscreen]="true">
+<ion-content class="ion-padding-top" [fullscreen]="true">
    <ion-row class="ion-align-items-center">
-      <ion-col>
-         <ion-card class="form-card">
-            <ion-card-content>
+      <ion-col>     
+         <div class="ion-text-center">
+            <input #inputFile type="file" hidden  (change)="import($event)" />
 
-               <div class="ion-margin-bottom">
-                  <ion-button (click)="export()" [strong]="true" expand="block" shape="round">
-                     <ion-icon slot="start" name="download-outline"></ion-icon>
-                     <ion-spinner [class]="showExportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
-                     <ion-label>Exporter la base</ion-label>
-                  </ion-button>
-               </div>
+            <ion-button (click)="export()" [strong]="true" class="button--main">
+               <ion-icon slot="start" name="download-outline"></ion-icon>
+               <ion-spinner [class]="showExportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
+               Exporter la base
+            </ion-button>
 
-               <div>
-                   <input #inputFile type="file" hidden  (change)="import($event)" />
-                      
-                  <ion-button (click)="openFileSelector()" [strong]="true" expand="block" shape="round" color="secondary">
-                     <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
-                     <ion-spinner [class]="showImportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
-                     <ion-label>Importer une sauvegarde</ion-label>
-                  </ion-button>
-               </div>
-            </ion-card-content>
-         </ion-card>
+            <ion-button (click)="openFileSelector()" [strong]="true" class="button--main">
+               <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+               <ion-spinner [class]="showImportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
+               Importer une sauvegarde
+            </ion-button>
+         </div>
       </ion-col>
    </ion-row>
 </ion-content>

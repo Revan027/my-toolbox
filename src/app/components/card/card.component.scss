@@ -1,3 +1,5 @@
+@use '../../../assets/css/font' as f; 
+
 ion-card {
   margin: 0;
   height: 100%;
@@ -5,51 +7,55 @@ ion-card {
   flex-direction: column;
   justify-content: space-around;
   padding: 0px;
-}
+  box-shadow: none;
+  border: 1px solid var(--color-border);
 
-ion-card-header{
-  padding: 0 5px;
-}
+  ion-card-header{
+    padding: 10px 10px 0 10px;
+  }
 
-.card-title-wrapper{
-  height: 40px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+  ion-card-content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-ion-card-title{
-  font-weight: bold;
-  padding: 5px 0;
-}
+  .card-image {
+    opacity: 0.9;
+  }
 
-ion-card-content{
-  padding: 0px;
-}
+  .card-acquired{  
+    position: absolute;
+    z-index: 1;
+    right: 20px;
+    top: 15px;
+    padding: 5px;
+    background-color: var(--color-success-badge);
+    border-radius: 50%;
+    display: flex;
 
-ion-label, 
-ion-badge{
-  font-size: 10px!important;
-}
+    ion-icon {    
+      color: var(--ion-color-success);
+    }
+  }
 
-ion-list {
-  padding: 0px;
-}
+  .card-name{
+    @include f.block;
+  }
 
-ion-item {
-  --min-height: 0px;
-}
+  .card-meta{
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
 
-.serie-logo {
-  display: flex;
-  justify-content: center;
-}
+    .card-price{
+      @include f.num;
+    }
 
-ion-icon.acquired {
-  position: absolute;
-  z-index: 1;
-  right: 10px;
-  top: 5px;
-  color: #3b1f6e;
+    .card-serie{
+      color: var(--color-meta);
+      @include f.meta;
+    }
+  }
 }

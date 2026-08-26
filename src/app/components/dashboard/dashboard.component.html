@@ -1,14 +1,13 @@
-<button class="btn-dashboard" type="button" aria-label="Afficher le dashboard" (click)="onDisplayDashboard()">
+<button class="button--dashboard" type="button" aria-label="Afficher le dashboard" (click)="onDisplayDashboard()">
    <ion-icon name="stats-chart-outline"></ion-icon>
 </button>
-
 
 <div class="dashboard-panel ion-margin-bottom" [class.open]="displayDashboard == true" [class.close]="displayDashboard === false" (animationend)="onAnimationDone($event)">
    <div class="metric-banner">
       <ion-icon class="metric-banner__icon" name="diamond-outline"></ion-icon>
 
       <p class="metric-banner__title">
-         Valeur de la collection
+         Valeur estimée
       </p>
 
       <p class="metric-banner__amount">

@@ -7,7 +7,7 @@ export class Card {
     id: number = 0;
     name!: string;
     srcPicture!: string;
-    averagePrice: number = 0;
+    averagePrice!: number;
     isAcquired: boolean = false;
     serieID!: number;
     serie: Serie = new Serie();

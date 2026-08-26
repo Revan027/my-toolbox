@@ -1,3 +1,5 @@
+@use '../../assets/css/font.scss' as f; 
+
 ion-tab-bar {
   --background: #ffffff;
   border-top: 1px solid #e5e5e5;
@@ -6,46 +8,28 @@ ion-tab-bar {
 }
 
 ion-tab-button {
-  --color: #9ca3af;
-  --color-selected: #2563eb;
-}
+  --color-selected: var(--color-muted); 
+  @include f.menu;
 
-ion-tab-button[tab="backup"] {
-  --color-selected: #dc2626;
-}
+  ion-label{
+    color: var(--color-muted); 
+    @include f.menu;
+  }
 
-ion-tab-button[tab="tcg"] {
-  --color-selected: #7c3aed ;
-}
+  &.tab-selected{
+    --color-selected: var(--color-main); 
+    @include f.menu-selected;
 
-
-ion-tab-button[tab="convertisseur"] {
-  --color-selected: #2563eb;
-}
-
-
-ion-tab-button.tab-selected ion-icon {
-  padding: 6px 18px;
-  border-radius: 20px;
-  display: inline-flex;
-}
-
-ion-tab-button.tab-selected ion-icon {
-  background: #eff6ff;
-}
-
-
-ion-tab-button ion-label {
-  font-size: 10px;
-}
-
-ion-tab-button.tab-selected ion-label {
-  font-weight: 600;
+    ion-label{
+      color: var(--color-main); 
+      @include f.menu-selected;
+    }
+  }
 }
 
 .app-version{
   position: absolute;
   bottom: 5px;
-  right: 5px;
-  font-size: var(--ion-font-size-xxs);
+  right: 10px;
+  font-size: var(--font-size-xxs);
 }

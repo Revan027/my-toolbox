@@ -1,50 +1,16 @@
-:host {
-  --app-page-theme-color: var(--ion-color-tcg);
-}
+@use '../../../../assets/css/font' as f; 
 
-ion-header {
-  background: var(--app-page-theme-color);
-
-  ion-fab-button{
-    &.btn-add{
-      --background: var(--app-page-theme-color);
-    }
-  }
-}
- 
-ion-icon.filters{
-  --color: var(--app-page-theme-color);
-}
-
-ion-badge {
- --background: var(--app-page-theme-color);
-}
 
 ion-grid.grid-cards{
   --ion-grid-padding: 0;
 }
 
-ion-fab{
-  display: flex;
-  bottom: 20px;
-
-  ion-fab-button{
-    &.btn-filters{
-      --background: var(--app-page-theme-color);
-    }
-
-     &.btn-sorts{
-      --background: var(--app-page-theme-color);
-    }
-  }
-}
-
 .resume-search{
   display: flex;
   align-items: stretch;
-  background: var(--app-card-bg);
-  border-radius: var(--app-card-radius);
-  box-shadow: var(--app-card-shadow);
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
   padding: 8px 4px;
   margin-bottom: 12px;
 }
@@ -57,14 +23,13 @@ ion-fab{
 
 .resume-search__section-value{
   margin: 0; 
-  font-size: var(--ion-font-size-base); 
-  font-weight: 800; color: 
-  var(--app-text-color);
+  color: var(--color-ink);
+  @include f.block;
 }
 
 .resume-search__section-result{
-  font-size: 11px; 
-  color: var(--app-text-muted);
+  color: var(--color-meta);
+  @include f.label;
 }
 
 .resume-search__section-value--indigo {
@@ -75,8 +40,4 @@ ion-fab{
   width: 1px; 
   background: var(--app-border-color, #e0e0e0); 
   margin: 4px 0;
-}
-
-.resume-search__section-result--muted{
-
 }

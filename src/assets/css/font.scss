@@ -1,0 +1,92 @@
+@font-face { font-family:'Outfit'; src:url('../fonts/Outfit/static/Outfit-Regular.ttf') format('truetype');  font-weight:400; font-display:swap; }
+@font-face { font-family:'Outfit'; src:url('../fonts/Outfit/static/Outfit-Medium.ttf') format('truetype');   font-weight:500; font-display:swap; }
+@font-face { font-family:'Outfit'; src:url('../fonts/Outfit/static/Outfit-SemiBold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+@font-face { font-family:'JetBrains Mono'; src:url('../fonts/JetBrains_Mono/static/JetBrainsMono-Medium.ttf') format('truetype'); font-weight:500; font-display:swap; }
+
+:root {
+  --font-size-xxs:  0.6875rem; 
+  --font-size-xs:   0.719rem;
+  --font-size-sm:   0.781rem;
+  --font-size-md:   0.8125rem;
+  --font-size-lg:   0.9375rem;
+  --font-size-xl:   1.125rem;
+  --font-size-2xl:  1.625rem;
+  --font-size-3xl:  2.375rem;
+
+  --font-ui: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+@mixin display{ 
+  font-size:var(--font-size-3xl); 
+  font-family: var(--font-ui);
+  font-weight:600; 
+  letter-spacing:-.03em; 
+  line-height:1 ;
+}
+
+@mixin figure { 
+  font-family: var(--font-ui);
+  font-size:var( --font-size-2xl);  
+  font-weight:600; 
+  letter-spacing:-.02em;
+  line-height:1 ;
+}
+
+@mixin title  {  
+  font-family: var(--font-ui);
+  font-size:var(--font-size-xl);   
+  font-weight:600; 
+  letter-spacing:-.01em 
+}
+
+@mixin field  { 
+  font-family: var(--font-ui);
+  font-size:var( --font-size-lg);   
+  font-weight:400; 
+}
+
+@mixin block  { 
+  font-family: var(--font-ui);
+  font-size:var(--font-size-lg);   
+  font-weight:600 ;
+}
+
+@mixin card   { 
+  font-family: var(--font-ui);
+  font-size:var(--font-size-md);    
+  font-weight:600; 
+  letter-spacing:-.01em; 
+  line-height:1.25; 
+}
+
+@mixin label  { 
+  font-family: var(--font-ui);
+  font-size: var(--font-size-sm);   
+  font-weight:500; 
+}
+
+@mixin meta   { 
+  font-family: var(--font-ui);
+  font-size:var(--font-size-xs);    
+  font-weight:400; 
+  line-height:1.4; 
+}
+
+@mixin num    { 
+  font-family:var(--font-mono);  
+  font-size:var(--font-size-xs); 
+  font-weight:500; 
+}
+
+@mixin menu-selected    { 
+  font-family:var(--font-ui);  
+  font-size:var(--font-size-xxs); 
+  font-weight:600; 
+}
+
+@mixin menu    { 
+  font-family:var(--font-ui);  
+  font-size:var(--font-size-xxs); 
+  font-weight:500; 
+}
