@@ -1,12 +1,38 @@
 import { tableName } from './table-names';
 
 export const DB_NAME = 'todo_list_db';
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
+
+export const version4: string[] = [
+`INSERT INTO ${tableName.serie} (name, srcLogo) VALUES
+  ('Chaos Rising',      'assets/images/tcg-logos/me4.png'),
+  ('Pitch Black',       'assets/images/tcg-logos/me5.png'),
+  ('30th Celebration',  'assets/images/tcg-logos/cel30.png'),
+  ('Delta Reign',       'assets/images/tcg-logos/me6.png');`
+  ,
+  `CREATE TABLE IF NOT EXISTS ${tableName.cardCondition} (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    libelle TEXT NOT NULL,
+    abbreviation TEXT NOT NULL
+  );`
+  ,
+  `INSERT INTO ${tableName.cardCondition} (libelle, abbreviation) VALUES
+  ('Mint','MT'),
+  ('Near Mint','NM'),
+  ('Excellent','EXC'),
+  ('Très bon état','TBE'),
+  ('Light Played','LP'),
+  ('Played','PL'),
+  ('Damaged ','DMG');`
+  ,
+  `ALTER TABLE ${tableName.card} ADD COLUMN isLegendary BOOLEAN DEFAULT 0;`,
+  `ALTER TABLE ${tableName.card} ADD COLUMN conditionID INTEGER NULL;`,
+  `ALTER TABLE ${tableName.card} ADD COLUMN dateAcquired TEXT NULL;`
+];
 
 export const version3: string[] = [
 `ALTER TABLE ${tableName.card} DROP COLUMN isPriority;`
 ];
-
 
 export const version2: string[] = [
 `INSERT INTO ${tableName.serie} (name, srcLogo) VALUES
@@ -212,4 +238,9 @@ export const version1: string[] = [
   `,
 ];
 
-export const DB_UPGRADES = [{ toVersion: DB_VERSION, statements: version3 }];
+export const DB_UPGRADES = [
+  { toVersion: 1, statements: version1 },
+  { toVersion: 2, statements: version2 },
+  { toVersion: 3, statements: version3 },
+  { toVersion: 4, statements: version4 },
+];

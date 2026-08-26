@@ -1,7 +1,7 @@
 import { Component, computed, DestroyRef, inject, OnInit, Signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CardService } from 'src/app/services/entities/card-service';
-import { DashboardService } from 'src/app/services/entities/dashboard-service';
+import { CardService } from 'src/app/services/card.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
 
 @Component({
     standalone: false,

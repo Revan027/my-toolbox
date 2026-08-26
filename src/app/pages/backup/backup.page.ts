@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { folder } from 'src/app/constants/folder';
-import { CardService } from 'src/app/services/entities/card-service';
+import { CardService } from 'src/app/services/card.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 import { MessageEnum } from 'src/app/services/services.common/enum/MessageEnum';
 import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
@@ -28,7 +28,7 @@ export class BackupPage implements OnInit {
 
     async ngOnInit() {}
 
-    async export() {
+    async export() {   // méthode récursive qui va lire et extraire en base apr paquet de 100 cartes. chaque itération enregistre dans un fichier json dédié. faire un répertorie bazckuo dédieé
         this.showExportSpinner = true;
 
         // On exporte la base
@@ -43,6 +43,7 @@ export class BackupPage implements OnInit {
     }
 
     async import(event: any) {
+        // méthode récurisive qui va lire chauqe fichier de backup itéré par le nom et incrémenté. Chaque ietration insère et en base et créer lers images sur le téléphone
         const file: File = event.target.files[0];
 
         this.showImportSpinner = true;

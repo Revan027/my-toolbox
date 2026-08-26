@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Card } from 'src/app/models/Card';
 import { tableName } from 'src/app/constants/table-names';
-import { StorageService } from '../storage.services.common/storage-service';
+import { StorageService } from './storage.services.common/storage-service';
 import { CardFilter } from 'src/app/models/CardFilter';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardSort } from 'src/app/models/CardSort';

@@ -3,7 +3,7 @@ import { tableName } from 'src/app/constants/table-names';
 import { Generation } from 'src/app/models/Generation';
 import { Capacitor } from '@capacitor/core';
 import { MOCK_GENERATIONS } from 'src/app/constants/mock-data';
-import { StorageService } from '../storage.services.common/storage-service';
+import { StorageService } from './storage.services.common/storage-service';
 
 @Injectable({
     providedIn: 'root',

@@ -40,6 +40,21 @@ ion-card {
     }
   }
 
+  .card-legendary{  
+    position: absolute;
+    z-index: 1;
+    left: 20px;
+    top: 15px;
+    padding: 5px;
+    background-color: var(--color-background);
+    border-radius: 50%;
+    display: flex;
+
+    ion-icon {    
+      color: var(--color-main);
+    }
+  }
+
   .card-name{
     @include f.block;
   }

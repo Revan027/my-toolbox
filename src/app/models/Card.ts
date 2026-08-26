@@ -1,5 +1,6 @@
 import { Generation } from "./Generation";
 import { Serie } from "./Serie";
+import { CardCondition } from "./CardCondition";
 
 export class Card {
     constructor() {}
@@ -14,7 +15,11 @@ export class Card {
     generationID!: number;
     generation: Generation = new Generation();
     picture?: string;
-    
+    isLegendary: boolean= false;
+    condition?: CardCondition;
+    conditionID?: number;
+    dateAcquired?: Date;
+
     static fromSQL(data: any): Card {
         const card = new Card();
         card.id = data.id;

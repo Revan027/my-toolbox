@@ -4,9 +4,9 @@ import { IonModal } from '@ionic/angular';
 import { CardFilter } from 'src/app/models/CardFilter';
 import { Generation } from 'src/app/models/Generation';
 import { Serie } from 'src/app/models/Serie';
-import { CardService } from 'src/app/services/entities/card-service';
-import { GenerationService } from 'src/app/services/entities/generation-service';
-import { SerieService } from 'src/app/services/entities/serie-service';
+import { CardService } from 'src/app/services/card.service';
+import { GenerationService } from 'src/app/services/generation.service';
+import { SerieService } from 'src/app/services/serie.service';
 
 @Component({
     standalone: false,

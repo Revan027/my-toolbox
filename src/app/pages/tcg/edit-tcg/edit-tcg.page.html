@@ -97,7 +97,7 @@
                   </ion-input>
 
                   @if(formGroup.controls['averagePrice'].invalid && (formGroup.controls['averagePrice'].dirty || formGroup.controls['averagePrice'].touched)){
-                     <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">Montant requis</p></ion-text>
+                     <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">Montant requis</p></ion-text>
                   }
                </ion-col>
 
@@ -115,11 +115,53 @@
                   </ion-select>
 
                   @if(formGroup.controls['serieID'].invalid && (formGroup.controls['serieID'].dirty)){
-                     <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">La génération est requise</p></ion-text>
+                     <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">La génération est requise</p></ion-text>
                   }   
                </ion-col>
+            </ion-row>     
+         </div>
+
+         <div>    
+            <ion-row>
+               <ion-col>
+                  <ion-label>
+                     Etat
+                  </ion-label>
+
+                  <ion-select class="ion-margin-bottom"  formControlName="cardConditionID" interface="popover" placeholder="-" fill="outline">
+                     @for(item of cardConditions; track item.id ){
+                        <ion-select-option [value]="item.id"> 
+                           {{item.libelle}}
+                        </ion-select-option>
+                     }
+                  </ion-select>  
+               </ion-col>
+
+               <ion-col>
+                  <ion-label>
+                     Date d'acquisition
+                  </ion-label>
+
+                  <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+                  <ion-modal [keepContentsMounted]="true">
+                     <ng-template>
+                        <ion-datetime
+                           formControlName="dateAcquired"
+                           id="datetime"
+                           presentation="month-year"
+
+                           [formatOptions]="{
+                              date: {
+                                 month: '2-digit',
+                                 year: 'numeric',
+                              },
+                           }"
+                        ></ion-datetime>
+                     </ng-template>
+                  </ion-modal>
+               </ion-col>
             </ion-row>
-            
          </div>
 
          <div class="ion-margin-bottom">
@@ -136,7 +178,7 @@
             </ion-select>
 
             @if(formGroup.controls['serieID'].invalid && (formGroup.controls['serieID'].dirty)){
-               <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom text-xs ion-padding-start">La série est requise</p></ion-text>
+               <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">La série est requise</p></ion-text>
             }
          </div>
 
@@ -146,6 +188,15 @@
                helperText="Déjà dans la collection"
                justify="space-between">
                Acquise
+            </ion-toggle>
+         </div>
+
+         <div class="ion-display-flex ion-justify-content-between ion-margin-top ion-margin-bottom">           
+            <ion-toggle
+               formControlName="isLegendary"
+               helperText="Le pokémon est un légendaire"
+               justify="space-between">
+               Légendaire
             </ion-toggle>
          </div>
 

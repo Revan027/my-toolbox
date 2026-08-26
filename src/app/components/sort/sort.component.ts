@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { SortEnum } from 'src/app/constants/SortEnum';
 import { CardSort } from 'src/app/models/CardSort';
-import { CardService } from 'src/app/services/entities/card-service';
+import { CardService } from 'src/app/services/card.service';
 
 @Component({
     standalone: false,

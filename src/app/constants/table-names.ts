@@ -4,4 +4,5 @@ export const tableName = {
     generation: 'Generation',
     serie: 'Serie',
     card: 'Card',
+    cardCondition: 'CardCondition',
 };
