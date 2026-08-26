@@ -15,7 +15,7 @@
       </div>
 
       <ion-buttons slot="end">
-         <ion-fab-button class="button--create" size="small" [routerLink]="['creation']" routerDirection="forward" [routerAnimation]="slideForward">
+         <ion-fab-button class="button--create" size="small" [routerLink]="['creation']" routerDirection="forward" [routerAnimation]="pageTransition">
             <ion-icon name="add"></ion-icon>
          </ion-fab-button>
       </ion-buttons>
@@ -60,7 +60,7 @@
             @for (item of pagedCardResult().cards; track item.id) 
             {
                <ion-col size="6">
-                  <app-card [card]="item" [routerLink]="['detail', item.id]" routerDirection="forward" [routerAnimation]="slideForward">
+                  <app-card [card]="item" [routerLink]="['detail', item.id]" routerDirection="forward" [routerAnimation]="pageTransition">
                      <!-- <p body>Injecte du contenu dans la partie body du composant</p> -->
                   </app-card>
                </ion-col>
