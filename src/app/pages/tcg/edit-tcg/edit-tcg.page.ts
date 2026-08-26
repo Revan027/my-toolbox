@@ -123,9 +123,9 @@ export class EditTCGPage implements OnDestroy {
             serieID: [this.card?.serieID, Validators.required],
             generationID: [this.card?.generationID, Validators.required],
             picture: [this.card?.picture, Validators.required],
-            cardConditionID: [this.card?.conditionID, null],
+            conditionID: [this.card?.conditionID, null],
             isLegendary: [this.card?.isLegendary, Validators.required],
-            dateAcquired: [this.card?.dateAcquired, Validators.required],
+            dateAcquired: [this.card?.dateAcquired ?? (new Date()).toISOString(), null],
         });
     }
 
@@ -144,6 +144,8 @@ export class EditTCGPage implements OnDestroy {
     }
 
     async onSubmit(card: Card) {
+        card.dateAcquired = Card.getPeriod(new Date(card.dateAcquired ?? ""));
+
         let result = this.card.id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
         isSuccess = (result.changes?.changes ?? 0) > 0;
 
@@ -221,13 +223,6 @@ export class EditTCGPage implements OnDestroy {
         this.formGroup.get("picture")?.setValue(await this.fileService.fileToBase64(file), { emitEvent: false },);
 
         this.lastSrcPicture = path;
-
-        /*-- TEST base 64--*/
-        // On lit le fichier image en base 64
-        //const stream = await this.fileService.readFile(path);
-
-        // On set la preview
-        //const testSrc64 =`data:${file.type};base64,${stream.data}`;
     }
 
     async onSerieChanged(event: CustomEvent) {

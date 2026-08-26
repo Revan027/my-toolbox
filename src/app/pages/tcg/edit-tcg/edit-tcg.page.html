@@ -128,7 +128,7 @@
                      Etat
                   </ion-label>
 
-                  <ion-select class="ion-margin-bottom"  formControlName="cardConditionID" interface="popover" placeholder="-" fill="outline">
+                  <ion-select class="ion-margin-bottom"  formControlName="conditionID" interface="popover" placeholder="-" fill="outline">
                      @for(item of cardConditions; track item.id ){
                         <ion-select-option [value]="item.id"> 
                            {{item.libelle}}

@@ -24,10 +24,22 @@ export class CardService {
 
     async create(card: Card) {
         const sql = `
-            INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isAcquired, serieID, generationID, picture) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+            INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isAcquired, serieID, generationID, picture, isLegendary, conditionID, dateAcquired) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-        const result = await this.storageService.getDb().run(sql, [card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, card.generationID, card.picture]);
+        const result = await this.storageService.getDb().run(sql, 
+            [
+                card.name, 
+                card.srcPicture, 
+                card.averagePrice, 
+                card.isAcquired, 
+                card.serieID, 
+                card.generationID, 
+                card.picture,
+                card.isLegendary, 
+                card.conditionID, 
+                card.dateAcquired,
+            ]);
 
         return result;
     }
@@ -35,12 +47,22 @@ export class CardService {
     async update(card: Card) {
         const sql = `
             UPDATE ${tableName.card}
-            SET name = ?, srcPicture = ?, averagePrice = ?, isAcquired = ?, serieID = ?, generationID = ?, picture = ?
+            SET name = ?, srcPicture = ?, averagePrice = ?, isAcquired = ?, serieID = ?, generationID = ?, picture = ?, isLegendary = ?, conditionID = ?, dateAcquired = ?
             WHERE id = ?`;
 
-        return await this.storageService.getDb().run(sql, [
-            card.name, card.srcPicture, card.averagePrice, card.isAcquired,
-            card.serieID, card.generationID, card.picture, card.id
+        return await this.storageService.getDb().run(sql, 
+            [
+            card.name, 
+            card.srcPicture, 
+            card.averagePrice, 
+            card.isAcquired,
+            card.serieID, 
+            card.generationID, 
+            card.picture, 
+            card.isLegendary, 
+            card.conditionID, 
+            card.dateAcquired,
+            card.id,
         ]);
     }
 
@@ -73,7 +95,7 @@ export class CardService {
         let result = await this.storageService.getDb().query(`
             SELECT 
             generation.id AS generationID, generation.libelle AS generation_libelle, 
-            card.id, card.name, card.srcPicture, card.picture, card.isAcquired, card.averagePrice, card.serieID, 
+            card.id, card.name, card.srcPicture, card.picture, card.isAcquired, card.averagePrice, card.serieID, card.isLegendary, card.conditionID, card.dateAcquired, 
             serie.name AS serie_name, serie.srcLogo As serie_src_logo
             FROM ${tableName.card} AS card 
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
@@ -121,7 +143,7 @@ export class CardService {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
             SELECT 
-                card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, 
+                card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, card.isLegendary,
                 serie.srcLogo as serie_src_logo, serie.name as serie_name
             FROM ${tableName.card} AS card 
             ${this.getQuerySearch(this.cardFilter())}

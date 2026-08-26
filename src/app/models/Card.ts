@@ -18,7 +18,7 @@ export class Card {
     isLegendary: boolean= false;
     condition?: CardCondition;
     conditionID?: number;
-    dateAcquired?: Date;
+    dateAcquired?: string;
 
     static fromSQL(data: any): Card {
         const card = new Card();
@@ -28,6 +28,9 @@ export class Card {
         card.picture = data.picture;
         card.isAcquired = data.isAcquired;
         card.averagePrice = data.averagePrice;
+        card.conditionID = data.conditionID;
+        card.isLegendary = data.isLegendary;
+        card.dateAcquired = data.dateAcquired;
         card.serieID = data.serieID;
         card.serie = new Serie();
         card.serie.name = data.serie_name;
@@ -37,5 +40,9 @@ export class Card {
         card.generation.libelle = data.generation_libelle;
 
         return card;
+    }
+
+    static getPeriod(date: Date){
+        return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}`
     }
 }
