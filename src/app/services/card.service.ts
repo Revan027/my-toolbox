@@ -6,14 +6,18 @@ import { CardFilter } from 'src/app/models/CardFilter';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardSort } from 'src/app/models/CardSort';
 import { SortEnum } from 'src/app/constants/SortEnum';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CardService {    
-    cardSort = signal<CardSort>(new CardSort());
-    cardFilter = signal<CardFilter>(new CardFilter());
+    private _cardFilter = signal<CardFilter>(new CardFilter());
+    private _cardSort = signal<CardSort>(new CardSort());
+    
+    readonly cardFilter = this._cardFilter.asReadonly();
+    readonly cardSort = this._cardSort.asReadonly();
+
     pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
     private cardsChanged$ = new Subject<void>();
     readonly cardsChanged = this.cardsChanged$.asObservable();
@@ -200,12 +204,12 @@ export class CardService {
         this.pagedCardResult.set(pagedCardResult);
     }
 
-    setCardSort(cardSort: CardSort) {
-        this.cardSort.set(cardSort);
+    loadCardSort(cardSort: CardSort) {
+        this._cardSort.set(cardSort);
     }
 
-    setCardFilter(cardFilter: CardFilter) {
-        this.cardFilter.set(cardFilter);
+    loadCardFilter(cardFilter: CardFilter) {
+        this._cardFilter.set(cardFilter);
     }
 
     notifyCardsChanged() {

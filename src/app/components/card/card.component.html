@@ -1,37 +1,37 @@
 <ion-card> 
    <ion-card-header> 
-      @if(card.isLegendary){
+      @if(card().isLegendary){
          <div class="card-legendary">
            <ion-icon name="sparkles"></ion-icon>
          </div>
       }
 
-      @if(card.isAcquired){
+      @if(card().isAcquired){
          <div class="card-acquired">
             <ion-icon name="checkmark-sharp"></ion-icon>
          </div>
       }
 
       <div>
-         @if (card.srcPicture) {
-            <img class="card-image" [alt]="card.name" [src]="getSrc(card.srcPicture)"/>
+         @if (card().srcPicture) {
+            <img class="card-image" [alt]="card().name" [src]="getSrc(card().srcPicture)"/>
          }
       </div>
    </ion-card-header>
 
    <ion-card-content select="[body]">
       <div class="card-name ion-margin-bottom">
-         {{ card.name }}
+         {{ card().name }}
       </div>
 
       <div class="card-meta">
          <div class="card-serie">
-            {{ card.serie.name }}
+            {{ card().serie.name }}
          </div>
 
          <div class="card-price">
-            @if(card.averagePrice){
-               {{ card.averagePrice | currency:'EUR':'symbol' }}
+            @if(card().averagePrice){
+               {{ card().averagePrice | currency:'EUR':'symbol' }}
             }        
          </div>
       </div>

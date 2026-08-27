@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, WritableSignal, signal, Renderer2, ElementRef, Signal } from '@angular/core';
+import { Component, OnInit, signal, Signal, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { CardCondition } from 'src/app/models/CardCondition';
@@ -17,29 +17,28 @@ import { SerieService } from 'src/app/services/serie.service';
     styleUrls: ['./filter.component.scss'],
 })
 export class FilterComponent implements OnInit {
-    @ViewChild('modalFilters') modalFilters!: IonModal;
+    modalFilters = viewChild<IonModal>('modalFilters');
 
-    private cardFilter: WritableSignal<CardFilter> = this.cardService.cardFilter;
+    readonly cardFilter: Signal<CardFilter>; 
     readonly generations: Signal<Generation[]>; 
     readonly series: Signal<Serie[]>;
     readonly cardConditions: Signal<CardCondition[]>;
 
-    generationsIDs = signal<number[]>([]);
+    protected generationsIDs = signal<number[]>([]);
 
     formGroup!: FormGroup;
 
     constructor(
         private formBuilder: FormBuilder, 
         private cardService: CardService, 
-        private generationService: GenerationService,   
-        private renderer: Renderer2, 
-        private el: ElementRef,
+        private generationService: GenerationService,
         private cardConditionService: CardConditionService,
         private serieService: SerieService)
     {       
-       this.generations = this.generationService.generations; 
-       this.series = this.serieService.series; 
-       this.cardConditions = this.cardConditionService.cardConditions; 
+        this.cardFilter = this.cardService.cardFilter;
+        this.generations = this.generationService.generations; 
+        this.series = this.serieService.series; 
+        this.cardConditions = this.cardConditionService.cardConditions; 
     }
 
     async ngOnInit() {
@@ -75,17 +74,16 @@ export class FilterComponent implements OnInit {
         cardFilter.maxPrice = datas.maxPrice;
         cardFilter.serieIDs = datas.serieIDs;
 
-        this.modalFilters.dismiss();
+        this.modalFilters()?.dismiss();
 
-        this.cardService.setCardFilter(cardFilter);
+        this.cardService.loadCardFilter(cardFilter);
     }
 
     onReset() {     
-        this.cardService.setCardFilter(new CardFilter());
+        this.cardService.loadCardFilter(new CardFilter());
         this.generationsIDs.set([]);
         this.createForm();
-
-        this.modalFilters.dismiss();
+        this.modalFilters()?.dismiss();
     }
 
     async onGenerationChanged(generationID: number, event: any) {

@@ -85,6 +85,9 @@ export class EditTCGPage implements OnDestroy {
 
     ngOnDestroy() {
         clearTimeout(this.debounceTimer);
+        
+        this.panzoom?.destroy();
+        this.panzoom = undefined
     }
 
     initZoom(event: any){  

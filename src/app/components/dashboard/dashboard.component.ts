@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, OnInit, Signal, WritableSignal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CardService } from 'src/app/services/card.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -12,6 +12,7 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 export class DashboardComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
+  // todo : avec l'arrivé d'une page dédie, des signaux seront nécéssaire pour recalculer le tout après une modif de liste
   displayDashboard: boolean | undefined = true;
   totalValue: number = 0;
   totalCard: number = 0;

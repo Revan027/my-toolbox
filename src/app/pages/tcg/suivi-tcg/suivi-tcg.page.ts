@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, untracked } from '@angular/core';
+import { Component, DestroyRef, effect, inject, Signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Capacitor } from '@capacitor/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
@@ -20,15 +20,19 @@ export class SuiviTCGPage {
 
     protected readonly pageTransition = pageTransition;
 
+    totalCard: Signal<number>;
+    totalValue: Signal<number>;
+
     pagedCardResult = this.cardService.pagedCardResult;
 
     loaded: boolean = false;
-    totalCard: number = 0;
-    totalValue: number = 0;
     percentageCompletion: number = 0;
 
     constructor(private cardService: CardService, private fileService: FileService, private resumeService: ResumeService) 
     {
+        this.totalCard = this.resumeService.totalCard;
+        this.totalValue = this.resumeService.totalValue;
+
         this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
             this.search();
         });
@@ -39,15 +43,6 @@ export class SuiviTCGPage {
 
             untracked(async () => await this.search()) // on track pas les interactions avec d'autre signaux faites dedans pour ne pas réveiller le effect          
         });
-    }
-
-    private async initResumeSearch(){
-        const promises = await Promise.all([
-            this.resumeService.countTotalCard(),
-            this.resumeService.countTotalValue(),
-        ]);
-        this.totalCard = promises[0];
-        this.totalValue = promises[1];
     }
 
     getSrc(uri: string){  
@@ -65,7 +60,7 @@ export class SuiviTCGPage {
         else{
             this.loaded = true;
 
-            this.initResumeSearch();
+            this.resumeService.loadResume();
 
             this.cardService.resetPagedCardResult();
 
