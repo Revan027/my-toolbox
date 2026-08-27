@@ -126,7 +126,7 @@ ion-fab-button{
 
 ion-fab{
   display: flex;
-  bottom: 20px;
+  bottom: 0px;
 
   ion-fab-button{
     &.button--filters,
@@ -134,7 +134,6 @@ ion-fab{
       --background: var(--color-linear);
       --box-shadow: var(--color-box-shadow);
     }
-
   }
 }
 

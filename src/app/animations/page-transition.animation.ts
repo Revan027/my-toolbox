@@ -12,25 +12,25 @@ export const pageTransition = (baseEl: HTMLElement, opts?: any) => {
             .create()
             .addElement(leavingEl)
             .fromTo('transform', 'translateX(0)', 'translateX(-100%)')
-            .fromTo('opacity', '1', '0');
+            .fromTo('opacity', '1', '1');
 
         enteringAnimation = animCtrl
             .create()
             .addElement(enteringEl)
             .fromTo('transform', 'translateX(100%)', 'translateX(0)')
-            .fromTo('opacity', '0', '1');
+            .fromTo('opacity', '1', '1');
     }else{
         leavingAnimation = animCtrl
             .create()
             .addElement(leavingEl)
             .fromTo('transform', 'translateX(0)', 'translateX(100%)')
-            .fromTo('opacity', '1', '0');
+            .fromTo('opacity', '1', '1');
 
         enteringAnimation = animCtrl
             .create()
             .addElement(enteringEl)
             .fromTo('transform', 'translateX(-100%)', 'translateX(0)')
-            .fromTo('opacity', '0', '1');
+            .fromTo('opacity', '1', '1');
     }
     return animCtrl
         .create()

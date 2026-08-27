@@ -57,6 +57,7 @@ ion-card {
 
   .card-name{
     @include f.block;
+    color: var(--color-ink);
   }
 
   .card-meta{
@@ -66,6 +67,7 @@ ion-card {
 
     .card-price{
       @include f.num;
+      color: var(--color-ink);
     }
 
     .card-serie{

@@ -128,11 +128,21 @@ export class CardService {
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
             WHERE
                 (${cardFilter.searchText.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.searchText.toLowerCase()}%') AND
-                (${cardFilter.isAcquired != undefined ? 'FALSE' : 'TRUE'} OR card.isAcquired IS ${cardFilter.isAcquired || false}) AND 
+                (${!cardFilter.isAcquired ? 'TRUE' : 'FALSE'} OR card.isAcquired IS ${cardFilter.isAcquired || false}) AND 
+                (${!cardFilter.isLegendary ? 'TRUE' : 'FALSE'} OR card.isLegendary IS ${cardFilter.isLegendary || false}) AND  
                 (${cardFilter.minPrice != undefined ? 'FALSE' : 'TRUE'} OR card.averagePrice >= ${cardFilter.minPrice || 0}) AND 
                 (${cardFilter.maxPrice != undefined  ? 'FALSE' : 'TRUE'} OR card.averagePrice <= ${cardFilter.maxPrice || 0}) AND 
                 (${cardFilter.serieIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.serieID IN (${cardFilter.serieIDs})) AND  
+                (${cardFilter.conditionIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.conditionID IN (${cardFilter.conditionIDs})) AND                
                 (${cardFilter.generationIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
+    }
+
+    private getQuerySort(cardSort: CardSort){
+        return`
+            ORDER BY 
+                ${this.cardSort().generationAscending == undefined ? "TRUE" : `card.generationID ${this.getSortDirection(this.cardSort().generationAscending as boolean)}`},
+                ${this.cardSort().nameAscending == undefined ? "TRUE" : `card.name COLLATE NOCASE ${this.getSortDirection(this.cardSort().nameAscending as boolean)}`},
+                ${this.cardSort().priceAscending === true ? `card.averagePrice ${SortEnum.DESC} NULLS LAST` : "TRUE"}`;
     }
 
     getSortDirection(checked: boolean): string{
@@ -147,9 +157,9 @@ export class CardService {
                 serie.srcLogo as serie_src_logo, serie.name as serie_name
             FROM ${tableName.card} AS card 
             ${this.getQuerySearch(this.cardFilter())}
-            ORDER BY card.generationID ${this.getSortDirection(this.cardSort().generationAscending)}, card.name COLLATE NOCASE ${this.getSortDirection(this.cardSort().nameAscending)}
+            ${this.getQuerySort(this.cardSort())}          
             LIMIT ${this.offsetBase} OFFSET ${offset}`);
-        
+
         const cards: Card[] = result.values?.map((data: any)=>{
             return Card.fromSQL(data);
         })|| [];   

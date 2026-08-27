@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, WritableSignal, signal, Renderer2, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
+import { CardCondition } from 'src/app/models/CardCondition';
 import { CardFilter } from 'src/app/models/CardFilter';
 import { Generation } from 'src/app/models/Generation';
 import { Serie } from 'src/app/models/Serie';
+import { CardConditionService } from 'src/app/services/card-condition.service';
 import { CardService } from 'src/app/services/card.service';
 import { GenerationService } from 'src/app/services/generation.service';
 import { SerieService } from 'src/app/services/serie.service';
@@ -23,6 +25,7 @@ export class FilterComponent implements OnInit {
 
     generations: Generation[] = []; 
     series: Serie[] = [];
+    cardConditions: CardCondition[] = [];
     formGroup!: FormGroup;
 
     constructor(
@@ -31,12 +34,14 @@ export class FilterComponent implements OnInit {
         private generationService: GenerationService,   
         private renderer: Renderer2, 
         private el: ElementRef,
+        private cardConditionService: CardConditionService,
         private serieService: SerieService){       
     }
 
     async ngOnInit() {
         this.generations = await this.generationService.getAll();
         this.series = await this.serieService.getAll();
+        this.cardConditions = await this.cardConditionService.getAll();
 
         this.createForm();
     }
@@ -52,8 +57,10 @@ export class FilterComponent implements OnInit {
             searchText: [this.cardFilter().searchText],
             isAcquired: [this.cardFilter().isAcquired],
             serieIDs: [this.cardFilter().serieIDs],
-            minPrice:  [this.cardFilter().minPrice],
-            maxPrice:  [this.cardFilter().maxPrice],
+            isLegendary: [this.cardFilter().isLegendary],
+            conditionIDs: [this.cardFilter().conditionIDs],
+            minPrice: [this.cardFilter().minPrice],
+            maxPrice: [this.cardFilter().maxPrice],
         });
     }
 
@@ -62,6 +69,8 @@ export class FilterComponent implements OnInit {
         cardFilter.generationIDs = this.generationsIDs();
         cardFilter.searchText = datas.searchText;
         cardFilter.isAcquired = datas.isAcquired;
+        cardFilter.isLegendary = datas.isLegendary;
+        cardFilter.conditionIDs = datas.conditionIDs;
         cardFilter.minPrice = datas.minPrice;
         cardFilter.maxPrice = datas.maxPrice;
         cardFilter.serieIDs = datas.serieIDs;

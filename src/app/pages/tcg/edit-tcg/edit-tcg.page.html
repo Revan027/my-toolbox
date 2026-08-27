@@ -25,52 +25,50 @@
       <form [formGroup]="formGroup" novalidate >
          <input formControlName="id" type="text" hidden />
        
-         <div class="ion-margin-top ion-margin-bottom">
-            <ion-grid>
-               <ion-row>
-                  <ion-col>
-                     @if(!hasZoom){
-                        @if(!formGroup.get('srcPicture')?.value){
-                           <div class="ion-text-center">
-                              <img class="card-image card-image--placeholder" src="../../../../assets/card_empty.png" alt=""/>
-                           </div>
-                        }
-                        @else{
-                           <img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)" (click)="initZoom($event)">
-                        }   
+         <div class="ion-margin-top ion-margin-bottom">         
+            <ion-row>
+               <ion-col>
+                  @if(!hasZoom){
+                     @if(!formGroup.get('srcPicture')?.value){
+                        <div class="ion-text-center">
+                           <img class="card-image card-image--placeholder" src="../../../../assets/card_empty.png" alt=""/>
+                        </div>
                      }
-                     
-                     @if(card.serie){
-                        <span class="card-serie">{{card.serie.name}}</span>
+                     @else{
+                        <img class="card-image" [src]="getSrc(formGroup.get('srcPicture')?.value)" (click)="initZoom($event)">
                      }   
-                  </ion-col>
+                  }
+                  
+                  @if(card.serie){
+                     <span class="card-serie">{{card.serie.name}}</span>
+                  }   
+               </ion-col>
 
-                  <ion-col class="card-image-wrapper">
-                     <ion-label>
-                        IMAGE
-                     </ion-label>
+               <ion-col class="card-image-wrapper">
+                  <ion-label>
+                     IMAGE
+                  </ion-label>
 
-                     <input #inputFile type="file" hidden (change)="onFileChanged($event)" />
+                  <input #inputFile type="file" hidden (change)="onFileChanged($event)" />
 
-                     <ion-button class="button--empty" fill="outline" (click)="onFileSelector($event)">      
-                        <ion-icon name="image-outline" slot="start"></ion-icon> Choisir un fichier 
-                     </ion-button>
+                  <ion-button class="button--empty" fill="outline" (click)="onFileSelector($event)">      
+                     <ion-icon name="image-outline" slot="start"></ion-icon> Choisir un fichier 
+                  </ion-button>
 
-                     <ion-button class="button--empty" fill="outline" (click)="onCapturePhoto($event)">
-                        <ion-icon name="camera-outline" slot="start"></ion-icon> Prendre une photo
-                     </ion-button>
-                  </ion-col>
+                  <ion-button class="button--empty" fill="outline" (click)="onCapturePhoto($event)">
+                     <ion-icon name="camera-outline" slot="start"></ion-icon> Prendre une photo
+                  </ion-button>
+               </ion-col>
 
-                  <ion-col size="12">          
-                     <ion-input formControlName="srcPicture" class="d-none"></ion-input>
-                     <ion-input formControlName="picture" class="d-none"></ion-input>
+               <ion-col size="12">          
+                  <ion-input formControlName="srcPicture" class="d-none"></ion-input>
+                  <ion-input formControlName="picture" class="d-none"></ion-input>
 
-                     @if(formGroup.controls['srcPicture'].invalid && (formGroup.controls['srcPicture'].dirty || formGroup.controls['srcPicture'].touched)){
-                        <ion-text color="danger">L'image est requise</ion-text>
-                     }
-                  </ion-col>
-               </ion-row>
-            </ion-grid>
+                  @if(formGroup.controls['srcPicture'].invalid && (formGroup.controls['srcPicture'].dirty || formGroup.controls['srcPicture'].touched)){
+                     <ion-text color="danger">L'image est requise</ion-text>
+                  }
+               </ion-col>
+            </ion-row>        
          </div>
 
          <div class="ion-margin-bottom">
@@ -85,84 +83,80 @@
             }
          </div>
          
-         <div>    
-            <ion-row>
-               <ion-col>
-                  <ion-label>
-                     Montant
-                  </ion-label>
+         <ion-row>
+            <ion-col>
+               <ion-label>
+                  Montant
+               </ion-label>
 
-                  <ion-input class="ion-margin-bottom" formControlName="averagePrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline">
-                     <ion-icon slot="end" name="logo-euro"></ion-icon>
-                  </ion-input>
+               <ion-input class="ion-margin-bottom" formControlName="averagePrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline">
+                  <ion-icon slot="end" name="logo-euro"></ion-icon>
+               </ion-input>
 
-                  @if(formGroup.controls['averagePrice'].invalid && (formGroup.controls['averagePrice'].dirty || formGroup.controls['averagePrice'].touched)){
-                     <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">Montant requis</p></ion-text>
+               @if(formGroup.controls['averagePrice'].invalid && (formGroup.controls['averagePrice'].dirty || formGroup.controls['averagePrice'].touched)){
+                  <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">Montant requis</p></ion-text>
+               }
+            </ion-col>
+
+            <ion-col>
+               <ion-label>
+                  Génération
+               </ion-label>
+
+               <ion-select class="ion-margin-bottom"  formControlName="generationID" interface="popover" placeholder="-" fill="outline">
+                  @for(item of generations; track item.id ){
+                     <ion-select-option [value]="item.id"> 
+                        {{item.libelle}}
+                     </ion-select-option>
                   }
-               </ion-col>
+               </ion-select>
 
-               <ion-col>
-                  <ion-label>
-                     Génération
-                  </ion-label>
+               @if(formGroup.controls['serieID'].invalid && (formGroup.controls['serieID'].dirty)){
+                  <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">La génération est requise</p></ion-text>
+               }   
+            </ion-col>
+         </ion-row>     
 
-                  <ion-select class="ion-margin-bottom"  formControlName="generationID" interface="popover" placeholder="-" fill="outline">
-                     @for(item of generations; track item.id ){
-                        <ion-select-option [value]="item.id"> 
-                           {{item.libelle}}
-                        </ion-select-option>
-                     }
-                  </ion-select>
+         <ion-row>
+            <ion-col>
+               <ion-label>
+                  Etat
+               </ion-label>
 
-                  @if(formGroup.controls['serieID'].invalid && (formGroup.controls['serieID'].dirty)){
-                     <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">La génération est requise</p></ion-text>
-                  }   
-               </ion-col>
-            </ion-row>     
-         </div>
+               <ion-select class="ion-margin-bottom" formControlName="conditionID" interface="popover" placeholder="-" fill="outline">
+                  @for(item of cardConditions; track item.id ){
+                     <ion-select-option [value]="item.id"> 
+                        {{item.libelle}}
+                     </ion-select-option>
+                  }
+               </ion-select>  
+            </ion-col>
 
-         <div>    
-            <ion-row>
-               <ion-col>
-                  <ion-label>
-                     Etat
-                  </ion-label>
+            <ion-col>
+               <ion-label>
+                  Date d'acquisition
+               </ion-label>
 
-                  <ion-select class="ion-margin-bottom"  formControlName="conditionID" interface="popover" placeholder="-" fill="outline">
-                     @for(item of cardConditions; track item.id ){
-                        <ion-select-option [value]="item.id"> 
-                           {{item.libelle}}
-                        </ion-select-option>
-                     }
-                  </ion-select>  
-               </ion-col>
+               <ion-datetime-button datetime="datetime"></ion-datetime-button>
 
-               <ion-col>
-                  <ion-label>
-                     Date d'acquisition
-                  </ion-label>
+               <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                     <ion-datetime
+                        formControlName="dateAcquired"
+                        id="datetime"
+                        presentation="month-year"
 
-                  <ion-datetime-button datetime="datetime"></ion-datetime-button>
-
-                  <ion-modal [keepContentsMounted]="true">
-                     <ng-template>
-                        <ion-datetime
-                           formControlName="dateAcquired"
-                           id="datetime"
-                           presentation="month-year"
-
-                           [formatOptions]="{
-                              date: {
-                                 month: '2-digit',
-                                 year: 'numeric',
-                              },
-                           }"
-                        ></ion-datetime>
-                     </ng-template>
-                  </ion-modal>
-               </ion-col>
-            </ion-row>
-         </div>
+                        [formatOptions]="{
+                           date: {
+                              month: '2-digit',
+                              year: 'numeric',
+                           },
+                        }"
+                     ></ion-datetime>
+                  </ng-template>
+               </ion-modal>
+            </ion-col>
+         </ion-row>
 
          <div class="ion-margin-bottom">
             <ion-label>

@@ -1,8 +1,7 @@
-import { SortEnum } from "../constants/SortEnum";
-
 export class CardSort {
     constructor() {}
 
-    generationAscending: boolean = true;
-    nameAscending: boolean = true;
+    generationAscending?: boolean = true;
+    nameAscending?: boolean = true;
+    priceAscending: boolean = false;
 }
