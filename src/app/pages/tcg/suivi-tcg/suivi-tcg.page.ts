@@ -2,13 +2,12 @@ import { Component, DestroyRef, effect, inject, untracked } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Capacitor } from '@capacitor/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
-import { pageTransition } from 'src/app/animations/page-transition.animation';
 import { MOCK_CARDS } from 'src/app/constants/mock-data';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
-import { CardService } from 'src/app/services/entities/card-service';
-import { ResumeService } from 'src/app/services/entities/resume-service';
+import { CardService } from 'src/app/services/card.service';
+import { ResumeService } from 'src/app/services/resume.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
-
+import { pageTransition } from 'src/app/animations/page-transition.animation';
 
 @Component({
     standalone: false,
@@ -19,7 +18,7 @@ import { FileService } from 'src/app/services/file.services.common/file.service'
 export class SuiviTCGPage {
     private destroyRef = inject(DestroyRef);
 
-    slideForward = pageTransition;
+    protected readonly pageTransition = pageTransition;
 
     pagedCardResult = this.cardService.pagedCardResult;
 

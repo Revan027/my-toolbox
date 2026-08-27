@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { lastValueFrom, map } from 'rxjs';
 import { Currency, CurrencyResponse } from 'src/app/models/Currency';
 import { Rate } from 'src/app/models/Rate';
-import { CurrencyService } from './currency-service';
-import { RateService } from './rate-service';
+import { CurrencyService } from './currency.service';
+import { RateService } from './rate.service';
 import { Network } from '@capacitor/network';
 import { environment } from 'src/environments/environment';
-import { HttpService } from '../services.common/http-service';
+import { HttpService } from './services.common/http-service';
 
 @Injectable({
     providedIn: 'root',

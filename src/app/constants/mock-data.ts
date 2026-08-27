@@ -1,6 +1,7 @@
 import { Card } from '../models/Card';
 import { Generation } from '../models/Generation';
 import { Serie } from '../models/Serie';
+import { CardCondition } from '../models/CardCondition';
 
 export const MOCK_GENERATIONS: Generation[] = [
     { id: 1, libelle: 'Génération 1 - Kanto' },
@@ -12,6 +13,16 @@ export const MOCK_GENERATIONS: Generation[] = [
     { id: 7, libelle: 'Génération 7 - Alola' },
     { id: 8, libelle: 'Génération 8 - Galar' },
     { id: 9, libelle: 'Génération 9 - Paldea' },
+];
+
+export const MOCK_CARD_CONDITIONS: CardCondition[] = [
+    { id: 1, libelle: 'Mint',          abbreviation: 'MT' },
+    { id: 2, libelle: 'Near Mint',     abbreviation: 'NM' },
+    { id: 3, libelle: 'Excellent',     abbreviation: 'EXC' },
+    { id: 4, libelle: 'Très bon état', abbreviation: 'TBE' },
+    { id: 5, libelle: 'Light Played',  abbreviation: 'LP' },
+    { id: 6, libelle: 'Played',        abbreviation: 'PL' },
+    { id: 7, libelle: 'Damaged',       abbreviation: 'DMG' },
 ];
 
 export const MOCK_SERIES: Serie[] = [
@@ -163,10 +174,10 @@ export const MOCK_SERIES: Serie[] = [
 ];
 
 export const MOCK_CARDS: Card[] = [
-    { id: 1, name: 'Pikachu',    srcPicture: 'assets/card_empty.png', averagePrice: 5, isAcquired: false, serieID: 1,  serie: MOCK_SERIES[0],  generationID: 1, generation: MOCK_GENERATIONS[0] },
-    { id: 2, name: 'Dracaufeu', srcPicture: 'assets/card_empty.png', averagePrice: 150, isAcquired: false, serieID: 1,  serie: MOCK_SERIES[0],  generationID: 1, generation: MOCK_GENERATIONS[0] },
-    { id: 3, name: 'Mewtwo',    srcPicture: 'assets/card_empty.png', averagePrice: 80, isAcquired: false, serieID: 1,  serie: MOCK_SERIES[0],  generationID: 1, generation: MOCK_GENERATIONS[0] },
-    { id: 4, name: 'Lugia',     srcPicture: 'assets/card_empty.png', averagePrice: 60,  isAcquired: false, serieID: 10, serie: MOCK_SERIES[9],  generationID: 2, generation: MOCK_GENERATIONS[1] },
-    { id: 5, name: 'Amphinobi', srcPicture: 'assets/card_empty.png', averagePrice: 25, isAcquired: false, serieID: 74, serie: MOCK_SERIES[73], generationID: 6, generation: MOCK_GENERATIONS[5] },
-    { id: 6, name: 'Rayquaza',  srcPicture: 'assets/card_empty.png', averagePrice: 120, isAcquired: false, serieID: 17, serie: MOCK_SERIES[16], generationID: 3, generation: MOCK_GENERATIONS[2] },
+    { id: 1, name: 'Pikachu',    srcPicture: 'assets/card_empty.png', averagePrice: 5, isAcquired: false, serieID: 1,  serie: MOCK_SERIES[0],  generationID: 1, generation: MOCK_GENERATIONS[0], isLegendary: false },
+    { id: 2, name: 'Dracaufeu', srcPicture: 'assets/card_empty.png', averagePrice: 150, isAcquired: false, serieID: 1,  serie: MOCK_SERIES[0],  generationID: 1, generation: MOCK_GENERATIONS[0], isLegendary: false },
+    { id: 3, name: 'Mewtwo',    srcPicture: 'assets/card_empty.png', averagePrice: 80, isAcquired: false, serieID: 1,  serie: MOCK_SERIES[0],  generationID: 1, generation: MOCK_GENERATIONS[0], isLegendary: true },
+    { id: 4, name: 'Lugia',     srcPicture: 'assets/card_empty.png', averagePrice: 60,  isAcquired: false, serieID: 10, serie: MOCK_SERIES[9],  generationID: 2, generation: MOCK_GENERATIONS[1], isLegendary: true },
+    { id: 5, name: 'Amphinobi', srcPicture: 'assets/card_empty.png', averagePrice: 25, isAcquired: false, serieID: 74, serie: MOCK_SERIES[73], generationID: 6, generation: MOCK_GENERATIONS[5], isLegendary: false },
+    { id: 6, name: 'Rayquaza',  srcPicture: 'assets/card_empty.png', averagePrice: 120, isAcquired: false, serieID: 17, serie: MOCK_SERIES[16], generationID: 3, generation: MOCK_GENERATIONS[2], isLegendary: true },
 ];

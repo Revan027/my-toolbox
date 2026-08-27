@@ -7,13 +7,14 @@ import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
 import { folder } from 'src/app/constants/folder';
 import { Card } from 'src/app/models/Card';
 import { Generation } from 'src/app/models/Generation';
+import { CardCondition } from 'src/app/models/CardCondition';
 import { Serie } from 'src/app/models/Serie';
-import { CardService } from 'src/app/services/entities/card-service';
-import { GenerationService } from 'src/app/services/entities/generation-service';
-import { SerieService } from 'src/app/services/entities/serie-service';
+import { CardService } from 'src/app/services/card.service';
+import { GenerationService } from 'src/app/services/generation.service';
+import { CardConditionService } from 'src/app/services/card-condition.service';
+import { SerieService } from 'src/app/services/serie.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 import { MediaService } from 'src/app/services/media.services.common/media.service';
-import { AmountService } from 'src/app/services/services.common/amount.service';
 import { ConfirmationService } from 'src/app/services/services.common/confirmation.service';
 import { MessageEnum } from 'src/app/services/services.common/enum/MessageEnum';
 import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
@@ -36,6 +37,7 @@ export class EditTCGPage implements OnDestroy {
 
     generations: Generation[] = [];
     series: Serie[] = [];
+    cardConditions: CardCondition[] = [];
 
     private debounceTimer: any;
     lastSrcPicture: string = "";
@@ -48,9 +50,9 @@ export class EditTCGPage implements OnDestroy {
         private fileService: FileService,
         private mediaService: MediaService,
         private formBuilder: FormBuilder,
-        private amountService: AmountService,
         private serieService: SerieService,
         private cardService: CardService,
+        private cardConditionService: CardConditionService,
         private toastService: ToastService,
         private confirmationService: ConfirmationService,
         private router: Router,
@@ -62,7 +64,8 @@ export class EditTCGPage implements OnDestroy {
 
         this.generations = await this.generationService.getAll();
         this.series = await this.serieService.getAll();
-
+        this.cardConditions = await this.cardConditionService.getAll();
+        
         // Ecoute de l'event si l'url change. On ne repasse pas 2 fois dans un ngOnInit normalement
         this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (params) => {
             this.loaded = false;
@@ -120,6 +123,9 @@ export class EditTCGPage implements OnDestroy {
             serieID: [this.card?.serieID, Validators.required],
             generationID: [this.card?.generationID, Validators.required],
             picture: [this.card?.picture, Validators.required],
+            conditionID: [this.card?.conditionID, null],
+            isLegendary: [this.card?.isLegendary, Validators.required],
+            dateAcquired: [this.card?.dateAcquired ?? (new Date()).toISOString(), null],
         });
     }
 
@@ -138,6 +144,8 @@ export class EditTCGPage implements OnDestroy {
     }
 
     async onSubmit(card: Card) {
+        card.dateAcquired = Card.getPeriod(new Date(card.dateAcquired ?? ""));
+
         let result = this.card.id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
         isSuccess = (result.changes?.changes ?? 0) > 0;
 
@@ -215,13 +223,6 @@ export class EditTCGPage implements OnDestroy {
         this.formGroup.get("picture")?.setValue(await this.fileService.fileToBase64(file), { emitEvent: false },);
 
         this.lastSrcPicture = path;
-
-        /*-- TEST base 64--*/
-        // On lit le fichier image en base 64
-        //const stream = await this.fileService.readFile(path);
-
-        // On set la preview
-        //const testSrc64 =`data:${file.type};base64,${stream.data}`;
     }
 
     async onSerieChanged(event: CustomEvent) {

@@ -4,7 +4,7 @@
   --keyboard-offset: 0px !important;
 }
 
-/* HEADER */
+// HEADER 
 ion-header::after {
   display: none;
 }
@@ -60,9 +60,6 @@ ion-header[collapse="condense"] ion-toolbar {
   border-bottom: none;
 }
 
-ion-card-title {
-  font-size: var(--ion-font-size-sm);
-}
 
 // ALERTE
 .alert{
@@ -71,12 +68,11 @@ ion-card-title {
   }
 }
 
-/* STRUCTURE */
+// STRUCTURE
 ion-row {
   height: 100%;
 }
 
-/* MAIN CONTENT */
 ion-content {
   --background: var(--color-background);
   --padding-start: 10px;
@@ -87,65 +83,17 @@ ion-content::part(scroll) {
   scroll-behavior: smooth;
 }
 
-
-
 // POPPOVER
 ion-popover{
   --max-height: 300px;
 }
 
-/* SEPARATOR */
-hr { width: 90%; opacity: 0.4;
-    border: none;
-    height: 2px;
-    background: var(--app-page-theme-color);
-}
-
-/* FONT UTILITIES */
+// FONT UTILITIES
 .bold {
   font-weight: bold;
 }
 
-.text-xs {
-  font-size: var(--ion-font-size-xs);
-}
-
-.text-sm {
-  font-size: var(--ion-font-size-sm);
-}
-
-.text-base {
-  font-size: var(--ion-font-size-base);
-}
-
-.text-lg {
-  font-size: var(--ion-font-size-lg);
-}
-
-.text-xl {
-  font-size: var(--ion-font-size-xl);
-}
-
-.text-2xl {
-  font-size: var(--ion-font-size-2xl);
-}
-
-.text-3xl {
-  font-size: var(--ion-font-size-3xl);
-}
-
-/* COULEUR */
-
-.ion-color-tcg {
-	--ion-color-base: var(--ion-color-tcg);
-	--ion-color-base-rgb: var(--ion-color-tcg-rgb);
-	--ion-color-contrast: var(--ion-color-tcg-contrast);
-	--ion-color-contrast-rgb: var(--ion-color-tcg-contrast-rgb);
-	--ion-color-shade: var(--ion-color-tcg-shade);
-	--ion-color-tint: var(--ion-color-tcg-tint);
-}
- 
-/* CLASS UTILITIES */
+// CLASS UTILITIES
 .d-none{
   display: none;
 }
@@ -161,6 +109,7 @@ hr { width: 90%; opacity: 0.4;
   }
 }
 
+// CLASS ENTITE
 .card-image {
   aspect-ratio: 828 / 1147;
   object-fit: cover;

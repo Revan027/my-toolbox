@@ -3,75 +3,97 @@
         <ion-content>        
             <ion-title class="ion-margin ion-text-center"> Filtrer </ion-title>   
 
-            <form [formGroup]="formGroup" novalidate>             
-                <ion-grid>
-                    <ion-row>
-                        <ion-col>
-                             <ion-searchbar formControlName="searchText" placeholder="Rechercher une carte" search-icon="search-outline"></ion-searchbar>
-                        </ion-col>
+            <form [formGroup]="formGroup" novalidate>                      
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-searchbar formControlName="searchText" placeholder="Rechercher une carte" search-icon="search-outline"></ion-searchbar>
+                    </ion-col>
 
-                        <ion-col>
-                            <ion-label>
-                                Générations
-                            </ion-label>
+                    <ion-col size="12">
+                        <ion-label>
+                            Générations
+                        </ion-label>
 
-                            <ion-grid class="filter-generation">
-                                <ion-row>
-                                    @for (item of generations; track item.id) 
-                                    {
-                                        <ion-col size="3">
-                                            <ion-button [class.button--main-small]="hasGenerationSelected(item.id)" [class.button--empty]="true" (click)="onGenerationChanged(item.id, $event)" fill="outline">
-                                                Gen {{item.id}}
-                                            </ion-button>
-                                        </ion-col>
-                                    } 
-                                    @empty {
-                                        <ion-col>
-                                            <ion-text color="danger">Problème au chargement des générations</ion-text>
-                                        </ion-col>
-                                    }
-                                </ion-row>
-                            </ion-grid>
-                        </ion-col>
-                    
-                        <ion-col size="12">
-                            <ion-label>
-                                Séries
-                            </ion-label>
-
-                            <ion-select class="ion-margin-bottom" label="Série" formControlName="serieIDs" interface="popover" [interfaceOptions]="{ side: 'top' }" placeholder="-" fill="outline" [multiple]="true">
-                                @for(item of series; track item.id) {
-                                    <ion-select-option [value]="item.id"> 
-                                        {{item.name}}
-                                    </ion-select-option>
+                        <ion-grid class="filter-generation">
+                            <ion-row>
+                                @for (item of generations; track item.id) 
+                                {
+                                    <ion-col size="3">
+                                        <ion-button [class.button--main-small]="hasGenerationSelected(item.id)" [class.button--empty]="true" (click)="onGenerationChanged(item.id, $event)" fill="outline">
+                                            Gen {{item.id}}
+                                        </ion-button>
+                                    </ion-col>
+                                } 
+                                @empty {
+                                    <ion-col>
+                                        <ion-text color="danger">Problème au chargement des générations</ion-text>
+                                    </ion-col>
                                 }
-                            </ion-select> 
-                        </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-col>
+                </ion-row>
 
-                        <ion-col >
-                            <ion-label>
-                                Prix minimun
-                            </ion-label>
+                <ion-row>
+                    <ion-col>
+                        <ion-label>
+                            Séries
+                        </ion-label>
 
-                            <ion-input class="ion-margin-bottom" formControlName="minPrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline"></ion-input>
-                        </ion-col>
+                        <ion-select class="ion-margin-bottom" label="Série" formControlName="serieIDs" interface="popover" [interfaceOptions]="{ side: 'top' }" placeholder="-" fill="outline" [multiple]="true">
+                            @for(item of series; track item.id) {
+                                <ion-select-option [value]="item.id"> 
+                                    {{item.name}}
+                                </ion-select-option>
+                            }
+                        </ion-select> 
+                    </ion-col>
 
-                        <ion-col>
-                            <ion-label>
-                                Prix maximun
-                            </ion-label>
+                    <ion-col>
+                        <ion-label>
+                            Etats
+                        </ion-label>
 
-                            <ion-input class="ion-margin-bottom" formControlName="maxPrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline"></ion-input>
-                        </ion-col>
+                        <ion-select class="ion-margin-bottom" label="Etats" formControlName="conditionIDs" interface="popover" [interfaceOptions]="{ side: 'top' }" placeholder="-" fill="outline" [multiple]="true">
+                            @for(item of cardConditions; track item.id) {
+                                <ion-select-option [value]="item.id"> 
+                                    {{item.libelle}}
+                                </ion-select-option>
+                            }
+                        </ion-select> 
+                    </ion-col>
+                </ion-row>
 
-                        <ion-col size="12">                    
-                            <div class="ion-display-flex ion-justify-content-between">
-                                <ion-toggle formControlName="isAcquired">Acquise</ion-toggle>
-                            </div> 
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-               
+                <ion-row>
+                    <ion-col>
+                        <ion-label>
+                            Prix minimun
+                        </ion-label>
+
+                        <ion-input class="ion-margin-bottom" formControlName="minPrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline"></ion-input>
+                    </ion-col>
+
+                    <ion-col>
+                        <ion-label>
+                            Prix maximun
+                        </ion-label>
+
+                        <ion-input class="ion-margin-bottom" formControlName="maxPrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline"></ion-input>
+                    </ion-col>
+
+                    <ion-col size="12">                    
+                        <div class="ion-display-flex ion-justify-content-between">
+                            <ion-toggle formControlName="isAcquired">Acquise</ion-toggle>
+                        </div> 
+                    </ion-col>
+
+                    <ion-col size="12">                    
+                        <div class="ion-display-flex ion-justify-content-between">
+                            <ion-toggle formControlName="isLegendary">Légendaire</ion-toggle>
+                        </div> 
+                    </ion-col>
+                </ion-row>
+        
                 <div class="ion-margin-top action-buttons">
                     <ion-button class="button--main" (click)="onReset()" color="danger" [strong]="true" >Annuler</ion-button>
                     <ion-button class="button--main" (click)="onSubmit(formGroup.value)" [strong]="true" [disabled]="formGroup.invalid">Filtrer</ion-button>

@@ -5,6 +5,8 @@ export class CardFilter {
     generationIDs: number[] = [];
     isAcquired?: boolean;
     serieIDs: number[] = [];
+    conditionIDs: number[] = [];
+    isLegendary?: boolean;
     minPrice?: number;
     maxPrice?: number;
 }

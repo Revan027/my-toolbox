@@ -1,5 +1,6 @@
 import { Generation } from "./Generation";
 import { Serie } from "./Serie";
+import { CardCondition } from "./CardCondition";
 
 export class Card {
     constructor() {}
@@ -14,7 +15,11 @@ export class Card {
     generationID!: number;
     generation: Generation = new Generation();
     picture?: string;
-    
+    isLegendary: boolean= false;
+    condition?: CardCondition;
+    conditionID?: number;
+    dateAcquired?: string;
+
     static fromSQL(data: any): Card {
         const card = new Card();
         card.id = data.id;
@@ -23,6 +28,9 @@ export class Card {
         card.picture = data.picture;
         card.isAcquired = data.isAcquired;
         card.averagePrice = data.averagePrice;
+        card.conditionID = data.conditionID;
+        card.isLegendary = data.isLegendary;
+        card.dateAcquired = data.dateAcquired;
         card.serieID = data.serieID;
         card.serie = new Serie();
         card.serie.name = data.serie_name;
@@ -32,5 +40,9 @@ export class Card {
         card.generation.libelle = data.generation_libelle;
 
         return card;
+    }
+
+    static getPeriod(date: Date){
+        return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}`
     }
 }

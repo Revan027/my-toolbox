@@ -3,7 +3,7 @@ import { Capacitor } from '@capacitor/core';
 import { MOCK_SERIES } from 'src/app/constants/mock-data';
 import { tableName } from 'src/app/constants/table-names';
 import { Serie } from 'src/app/models/Serie';
-import { StorageService } from '../storage.services.common/storage-service';
+import { StorageService } from './storage.services.common/storage-service';
 
 @Injectable({
     providedIn: 'root',

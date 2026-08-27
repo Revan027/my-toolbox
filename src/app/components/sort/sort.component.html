@@ -5,12 +5,29 @@
                 <ion-title class="ion-margin ion-text-center "> Trier </ion-title>
           
                 <div class="ion-display-flex ion-justify-content-between ion-margin-top ion-margin-bottom">
-                    <ion-toggle formControlName="generationAscending">Par génération Asc</ion-toggle>
+                    <ion-toggle 
+                        helperText="Désactive le trie par prix" 
+                        formControlName="generationAscending"
+                        (ionChange)="onChangeMainSort($event)">
+                    Par génération Asc</ion-toggle>
                 </div> 
 
                 <div class="ion-display-flex ion-justify-content-between ion-margin-top ion-margin-bottom">
-                    <ion-toggle formControlName="nameAscending">Par nom Asc</ion-toggle>
-                </div>    
+                    <ion-toggle 
+                        helperText="Désactive le trie par prix" 
+                        formControlName="nameAscending" 
+                        (ionChange)="onChangeMainSort($event)">
+                    Par nom Asc</ion-toggle>
+                </div>  
+                
+                <div class="ion-display-flex ion-justify-content-between ion-margin-top ion-margin-bottom">
+                    <ion-toggle 
+                        helperText="Désactive les autres tries" 
+                        formControlName="priceAscending" 
+                        (ionChange)="onChangePriceSort($event)">
+                        Par prix Asc
+                    </ion-toggle>
+                </div>  
                                      
                 <div class="ion-margin ion-text-end">
                     <ion-button (click)="onSubmit(formGroup.value)" class="button--main" [strong]="true" [disabled]="formGroup.invalid">Trier</ion-button>
