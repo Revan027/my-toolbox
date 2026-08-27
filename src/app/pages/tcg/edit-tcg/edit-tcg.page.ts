@@ -19,6 +19,7 @@ import { ConfirmationService } from 'src/app/services/services.common/confirmati
 import { MessageEnum } from 'src/app/services/services.common/enum/MessageEnum';
 import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
 import { ToastService } from 'src/app/services/services.common/toast.service';
+import { Location } from '@angular/common';
 
 @Component({
     standalone: false,
@@ -55,7 +56,8 @@ export class EditTCGPage implements OnDestroy {
         private toastService: ToastService,
         private confirmationService: ConfirmationService,
         private router: Router,
-        private generationService: GenerationService
+        private generationService: GenerationService,
+        private location: Location,
     ) 
     {
         this.generations = this.generationService.generations; 
@@ -163,8 +165,7 @@ export class EditTCGPage implements OnDestroy {
         } 
 
         this.cardService.notifyCardsChanged();
-
-        this.router.navigate(['/tcg']);
+        this.location.back();
     }
 
     async onDelete() {
@@ -179,8 +180,7 @@ export class EditTCGPage implements OnDestroy {
                 await me.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
                 
                 me.cardService.notifyCardsChanged();
-
-                me.router.navigate(['/tcg']);
+                me.location.back();
         }
 
         await this.confirmationService.getModalDelete(callback);

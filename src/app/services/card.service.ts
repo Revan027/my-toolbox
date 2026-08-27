@@ -159,7 +159,7 @@ export class CardService {
         return checked ? SortEnum.ASC : SortEnum.DESC
     }
 
-    private async fetchPage(offset: number): Promise<PagedCardResult> {
+    private async fetchPage(offset: number, offsetBase: number | undefined = undefined): Promise<PagedCardResult> {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
             SELECT 
@@ -168,7 +168,7 @@ export class CardService {
             FROM ${tableName.card} AS card 
             ${this.getQuerySearch(this.cardFilter())}
             ${this.getQuerySort(this.cardSort())}          
-            LIMIT ${this.offsetBase} OFFSET ${offset}`);
+            LIMIT ${offsetBase != undefined ? offsetBase : this.offsetBase} OFFSET ${offset}`);
 
         const cards: Card[] = result.values?.map((data: any)=>{
             return Card.fromSQL(data);
@@ -196,6 +196,13 @@ export class CardService {
         const pagedCardResult = await this.fetchPage(offset);
         pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
         pagedCardResult.page = nextPage;
+
+        this.loadPagedCardResult(pagedCardResult);
+    }
+
+    async refreshPage() {
+        let pagedCardResult = await this.fetchPage(0, this.pagedCardResult().cards.length);
+        pagedCardResult.page = this.pagedCardResult().page;
 
         this.loadPagedCardResult(pagedCardResult);
     }

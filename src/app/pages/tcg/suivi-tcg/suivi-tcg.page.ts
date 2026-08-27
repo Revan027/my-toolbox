@@ -38,7 +38,7 @@ export class SuiviTCGPage {
         this.cardService.cardsChanged
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
-            this.search();
+            this.refreshSearch();
         });
 
         // on s'abonne pour savoir si un trie ou une recherche a été faites
@@ -77,6 +77,12 @@ export class SuiviTCGPage {
 
             this.loaded = false;
         }       
+    }  
+
+    private async refreshSearch() {
+        this.resumeService.loadResume();
+
+        await this.cardService.refreshPage();
     }  
 
     async onIonInfinite(event: InfiniteScrollCustomEvent) {

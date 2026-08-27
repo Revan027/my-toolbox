@@ -21,7 +21,13 @@ const routes: Routes = [
 ];
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+        RouterModule.forRoot(
+            routes, 
+            {
+                preloadingStrategy: PreloadAllModules , 
+                scrollPositionRestoration: 'enabled',   // restaure sur retour arrière
+                anchorScrolling: 'enabled',
+            }),
     ],
     exports: [RouterModule],
 })
