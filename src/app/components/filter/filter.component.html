@@ -16,7 +16,7 @@
 
                         <ion-grid class="filter-generation">
                             <ion-row>
-                                @for (item of generations; track item.id) 
+                                @for (item of generations(); track item.id) 
                                 {
                                     <ion-col size="3">
                                         <ion-button [class.button--main-small]="hasGenerationSelected(item.id)" [class.button--empty]="true" (click)="onGenerationChanged(item.id, $event)" fill="outline">
@@ -41,7 +41,7 @@
                         </ion-label>
 
                         <ion-select class="ion-margin-bottom" label="Série" formControlName="serieIDs" interface="popover" [interfaceOptions]="{ side: 'top' }" placeholder="-" fill="outline" [multiple]="true">
-                            @for(item of series; track item.id) {
+                            @for(item of series(); track item.id) {
                                 <ion-select-option [value]="item.id"> 
                                     {{item.name}}
                                 </ion-select-option>
@@ -55,7 +55,7 @@
                         </ion-label>
 
                         <ion-select class="ion-margin-bottom" label="Etats" formControlName="conditionIDs" interface="popover" [interfaceOptions]="{ side: 'top' }" placeholder="-" fill="outline" [multiple]="true">
-                            @for(item of cardConditions; track item.id) {
+                            @for(item of cardConditions(); track item.id) {
                                 <ion-select-option [value]="item.id"> 
                                     {{item.libelle}}
                                 </ion-select-option>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { tableName } from 'src/app/constants/table-names';
 import { Generation } from 'src/app/models/Generation';
 import { Capacitor } from '@capacitor/core';
@@ -9,7 +9,10 @@ import { StorageService } from './storage.services.common/storage-service';
     providedIn: 'root',
 })
 export class GenerationService {
-    constructor(private storageService: StorageService) {}
+    private _generations = signal<Generation[]>([]);
+    readonly generations = this._generations.asReadonly();
+
+    constructor(private storageService: StorageService) { }
 
     async getAll() {
         if (Capacitor.isNativePlatform()){
@@ -21,5 +24,9 @@ export class GenerationService {
         }
         
         return MOCK_GENERATIONS;
+    }
+
+    load(generations: Generation[]){
+        this._generations.set(generations);
     }
 }

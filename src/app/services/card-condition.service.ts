@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { tableName } from 'src/app/constants/table-names';
 import { CardCondition } from 'src/app/models/CardCondition';
 import { MOCK_CARD_CONDITIONS } from 'src/app/constants/mock-data';
@@ -9,6 +9,9 @@ import { Capacitor } from '@capacitor/core';
     providedIn: 'root',
 })
 export class CardConditionService {
+    private _cardConditions= signal<CardCondition[]>([]);
+    readonly cardConditions = this._cardConditions.asReadonly();
+
     constructor(private storageService: StorageService) {}
 
     async getAll() {
@@ -21,5 +24,9 @@ export class CardConditionService {
         }
         
         return MOCK_CARD_CONDITIONS;
+    }
+
+    load(cardConditions: CardCondition[]){
+        this._cardConditions.set(cardConditions);
     }
 }

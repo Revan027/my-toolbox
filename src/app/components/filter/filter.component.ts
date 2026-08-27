@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, WritableSignal, signal, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, WritableSignal, signal, Renderer2, ElementRef, Signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { CardCondition } from 'src/app/models/CardCondition';
@@ -20,12 +20,12 @@ export class FilterComponent implements OnInit {
     @ViewChild('modalFilters') modalFilters!: IonModal;
 
     private cardFilter: WritableSignal<CardFilter> = this.cardService.cardFilter;
+    readonly generations: Signal<Generation[]>; 
+    readonly series: Signal<Serie[]>;
+    readonly cardConditions: Signal<CardCondition[]>;
 
     generationsIDs = signal<number[]>([]);
 
-    generations: Generation[] = []; 
-    series: Serie[] = [];
-    cardConditions: CardCondition[] = [];
     formGroup!: FormGroup;
 
     constructor(
@@ -35,14 +35,14 @@ export class FilterComponent implements OnInit {
         private renderer: Renderer2, 
         private el: ElementRef,
         private cardConditionService: CardConditionService,
-        private serieService: SerieService){       
+        private serieService: SerieService)
+    {       
+       this.generations = this.generationService.generations; 
+       this.series = this.serieService.series; 
+       this.cardConditions = this.cardConditionService.cardConditions; 
     }
 
     async ngOnInit() {
-        this.generations = await this.generationService.getAll();
-        this.series = await this.serieService.getAll();
-        this.cardConditions = await this.cardConditionService.getAll();
-
         this.createForm();
     }
 

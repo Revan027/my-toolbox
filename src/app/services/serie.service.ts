@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { MOCK_SERIES } from 'src/app/constants/mock-data';
 import { tableName } from 'src/app/constants/table-names';
@@ -9,6 +9,8 @@ import { StorageService } from './storage.services.common/storage-service';
     providedIn: 'root',
 })
 export class SerieService {
+    private _series = signal<Serie[]>([]);
+    readonly series = this._series.asReadonly();
 
     constructor(private storageService: StorageService) {}
 
@@ -26,5 +28,9 @@ export class SerieService {
         }
         
         return MOCK_SERIES;
+    }
+
+    load(series: Serie[]){
+        this._series.set(series);
     }
 }

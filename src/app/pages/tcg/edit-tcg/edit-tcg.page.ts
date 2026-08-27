@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, Signal, ViewChild, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,12 +32,12 @@ export class EditTCGPage implements OnDestroy {
     @ViewChild('inputFile') inputFile!: ElementRef;
     @ViewChild('cardImageZoomed') image!: ElementRef;
 
+    readonly generations: Signal<Generation[]>; 
+    readonly series: Signal<Serie[]>;
+    readonly cardConditions: Signal<CardCondition[]>;
+
     formGroup!: FormGroup;
     card: Card = new Card();
-
-    generations: Generation[] = [];
-    series: Serie[] = [];
-    cardConditions: CardCondition[] = [];
 
     private debounceTimer: any;
     lastSrcPicture: string = "";
@@ -57,15 +57,15 @@ export class EditTCGPage implements OnDestroy {
         private confirmationService: ConfirmationService,
         private router: Router,
         private generationService: GenerationService
-    ) { }
+    ) 
+    {
+        this.generations = this.generationService.generations; 
+        this.series = this.serieService.series; 
+        this.cardConditions = this.cardConditionService.cardConditions; 
+    }
 
     //on évite ainsi avec ce lifecycle de faire ramer avec l'animation
-    async ionViewDidEnter() { 
-
-        this.generations = await this.generationService.getAll();
-        this.series = await this.serieService.getAll();
-        this.cardConditions = await this.cardConditionService.getAll();
-        
+    async ionViewDidEnter() {    
         // Ecoute de l'event si l'url change. On ne repasse pas 2 fois dans un ngOnInit normalement
         this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (params) => {
             this.loaded = false;
@@ -226,6 +226,6 @@ export class EditTCGPage implements OnDestroy {
     }
 
     async onSerieChanged(event: CustomEvent) {
-       this.card.serie.srcLogo = this.series.find((serie)=> serie.id == event.detail.value)?.srcLogo || "";
+       this.card.serie.srcLogo = this.series().find((serie)=> serie.id == event.detail.value)?.srcLogo || "";
     }
 }
