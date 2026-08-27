@@ -14,13 +14,19 @@ import { Subject } from 'rxjs';
 export class CardService {    
     private _cardFilter = signal<CardFilter>(new CardFilter());
     private _cardSort = signal<CardSort>(new CardSort());
+    private _pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
     
     readonly cardFilter = this._cardFilter.asReadonly();
     readonly cardSort = this._cardSort.asReadonly();
+    readonly pagedCardResult = this._pagedCardResult.asReadonly();
 
-    pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
-    private cardsChanged$ = new Subject<void>();
-    readonly cardsChanged = this.cardsChanged$.asObservable();
+    private _cardsChanged$ = new Subject<void>();
+    private _sortChanged$ = new Subject<void>();
+    private _filterChanged$ = new Subject<void>();
+
+    readonly cardsChanged = this._cardsChanged$.asObservable();  
+    readonly sortChanged = this._sortChanged$.asObservable();
+    readonly filterChanged = this._filterChanged$.asObservable();
 
     readonly offsetBase: number = 16;
      
@@ -191,28 +197,40 @@ export class CardService {
         pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
         pagedCardResult.page = nextPage;
 
-        this.setPagedCardResult(pagedCardResult);
+        this.loadPagedCardResult(pagedCardResult);
     }
 
     resetPagedCardResult() {
-        this.pagedCardResult.set(new PagedCardResult());
+        this._pagedCardResult.set(new PagedCardResult());
     }
 
     // set() : remplacement complet (primitif ou nouvel objet) — nouvelle référence garantie
     // update() : modification partielle → utiliser le spread { ...current, prop: newValue } pour créer une nouvelle référence
-    setPagedCardResult(pagedCardResult: PagedCardResult) {
-        this.pagedCardResult.set(pagedCardResult);
+    loadPagedCardResult(pagedCardResult: PagedCardResult) {
+        this._pagedCardResult.set(pagedCardResult);
     }
 
     loadCardSort(cardSort: CardSort) {
         this._cardSort.set(cardSort);
+
+        this.notifySortChanged();
     }
 
     loadCardFilter(cardFilter: CardFilter) {
         this._cardFilter.set(cardFilter);
+
+        this.notifyFilterChanged();
     }
 
     notifyCardsChanged() {
-        this.cardsChanged$.next();
+        this._cardsChanged$.next();
+    }
+
+    private notifySortChanged() {
+        this._sortChanged$.next();
+    }
+
+    private notifyFilterChanged() {
+        this._filterChanged$.next();
     }
 }

@@ -38,7 +38,6 @@ export class EditTCGPage implements OnDestroy {
 
     formGroup!: FormGroup;
     card: Card = new Card();
-
     private debounceTimer: any;
     lastSrcPicture: string = "";
     loaded: boolean = false;

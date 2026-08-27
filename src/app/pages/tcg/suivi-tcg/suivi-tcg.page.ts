@@ -8,6 +8,7 @@ import { CardService } from 'src/app/services/card.service';
 import { ResumeService } from 'src/app/services/resume.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
+import { merge, switchMap } from 'rxjs';
 
 @Component({
     standalone: false,
@@ -22,8 +23,7 @@ export class SuiviTCGPage {
 
     totalCard: Signal<number>;
     totalValue: Signal<number>;
-
-    pagedCardResult = this.cardService.pagedCardResult;
+    pagedCardResult: Signal<PagedCardResult>;
 
     loaded: boolean = false;
     percentageCompletion: number = 0;
@@ -32,17 +32,26 @@ export class SuiviTCGPage {
     {
         this.totalCard = this.resumeService.totalCard;
         this.totalValue = this.resumeService.totalValue;
+        this.pagedCardResult = this.cardService.pagedCardResult;
 
-        this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+        // on s'abonne pour savoir quand les cartes ont été modifiées
+        this.cardService.cardsChanged
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
             this.search();
         });
 
-        effect(() => {
-            const sort = this.cardService.cardSort();
-            const filter = this.cardService.cardFilter();
+        // on s'abonne pour savoir si un trie ou une recherche a été faites
+        merge(this.cardService.sortChanged, this.cardService.filterChanged)
+        .pipe( 
+            switchMap(() => this.search()),
+            takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe();
+    }
 
-            untracked(async () => await this.search()) // on track pas les interactions avec d'autre signaux faites dedans pour ne pas réveiller le effect          
-        });
+    ngOnInit(){
+        this.search();
     }
 
     getSrc(uri: string){  
@@ -55,7 +64,7 @@ export class SuiviTCGPage {
             pagedCardResult.cards = MOCK_CARDS;
             pagedCardResult.totalCount = MOCK_CARDS.length;
 
-            this.cardService.setPagedCardResult(pagedCardResult);
+            this.cardService.loadPagedCardResult(pagedCardResult);
         }
         else{
             this.loaded = true;
