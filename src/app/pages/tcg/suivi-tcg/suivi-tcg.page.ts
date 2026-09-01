@@ -21,9 +21,9 @@ export class SuiviTCGPage {
 
     protected readonly pageTransition = pageTransition;
 
-    totalCard: Signal<number>;
-    totalValue: Signal<number>;
-    pagedCardResult: Signal<PagedCardResult>;
+    readonly totalCard: Signal<number>;
+    readonly totalValue: Signal<number>;
+    readonly pagedCardResult: Signal<PagedCardResult>;
 
     loaded: boolean = false;
     percentageCompletion: number = 0;
