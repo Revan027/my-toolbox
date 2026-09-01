@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, untracked } from '@angular/core';
+import { Component, DestroyRef, effect, inject, Signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Capacitor } from '@capacitor/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
@@ -8,6 +8,7 @@ import { CardService } from 'src/app/services/card.service';
 import { ResumeService } from 'src/app/services/resume.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
+import { merge, switchMap } from 'rxjs';
 
 @Component({
     standalone: false,
@@ -20,34 +21,37 @@ export class SuiviTCGPage {
 
     protected readonly pageTransition = pageTransition;
 
-    pagedCardResult = this.cardService.pagedCardResult;
+    readonly totalCard: Signal<number>;
+    readonly totalValue: Signal<number>;
+    readonly pagedCardResult: Signal<PagedCardResult>;
 
     loaded: boolean = false;
-    totalCard: number = 0;
-    totalValue: number = 0;
     percentageCompletion: number = 0;
 
     constructor(private cardService: CardService, private fileService: FileService, private resumeService: ResumeService) 
     {
-        this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-            this.search();
+        this.totalCard = this.resumeService.totalCard;
+        this.totalValue = this.resumeService.totalValue;
+        this.pagedCardResult = this.cardService.pagedCardResult;
+
+        // on s'abonne pour savoir quand les cartes ont été modifiées
+        this.cardService.cardsChanged
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+            this.refreshSearch();
         });
 
-        effect(() => {
-            const sort = this.cardService.cardSort();
-            const filter = this.cardService.cardFilter();
-
-            untracked(async () => await this.search()) // on track pas les interactions avec d'autre signaux faites dedans pour ne pas réveiller le effect          
-        });
+        // on s'abonne pour savoir si un trie ou une recherche a été faites
+        merge(this.cardService.sortChanged, this.cardService.filterChanged)
+        .pipe( 
+            switchMap(() => this.search()),
+            takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe();
     }
 
-    private async initResumeSearch(){
-        const promises = await Promise.all([
-            this.resumeService.countTotalCard(),
-            this.resumeService.countTotalValue(),
-        ]);
-        this.totalCard = promises[0];
-        this.totalValue = promises[1];
+    ngOnInit(){
+        this.search();
     }
 
     getSrc(uri: string){  
@@ -60,12 +64,12 @@ export class SuiviTCGPage {
             pagedCardResult.cards = MOCK_CARDS;
             pagedCardResult.totalCount = MOCK_CARDS.length;
 
-            this.cardService.setPagedCardResult(pagedCardResult);
+            this.cardService.loadPagedCardResult(pagedCardResult);
         }
         else{
             this.loaded = true;
 
-            this.initResumeSearch();
+            this.resumeService.loadResume();
 
             this.cardService.resetPagedCardResult();
 
@@ -73,6 +77,12 @@ export class SuiviTCGPage {
 
             this.loaded = false;
         }       
+    }  
+
+    private async refreshSearch() {
+        this.resumeService.loadResume();
+
+        await this.cardService.refreshPage();
     }  
 
     async onIonInfinite(event: InfiniteScrollCustomEvent) {

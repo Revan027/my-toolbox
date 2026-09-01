@@ -1,0 +1,27 @@
+ion-content{
+--background: var( --color-ink);
+}
+
+.app-logo {
+    font-size: var(--font-size-3xl);
+    color: var(--color-border);
+}
+
+.loading-content{
+    margin-top: 40vh;
+    text-align: center;
+} 
+
+.loading-content__title{
+    font-size: var(--font-size-3xl);
+    color: var(--color-border);
+}
+
+.loading-content__dots{ 
+    line-height: 0;
+}   
+
+ion-text{ 
+    font-size: var(--font-size-2xl);
+    color: var(--color-secondary);
+}

@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { InitAppGuard } from './guards/init-app.guard';
 
 const routes: Routes = [
+    {
+        path: 'loading',
+        canActivate: [InitAppGuard],
+        loadComponent: () =>
+        import('./pages/loading/loading.page').then((m) => m.LoadingPage),
+    },
     {
         path: '',
         loadChildren: () =>
@@ -14,7 +21,13 @@ const routes: Routes = [
 ];
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+        RouterModule.forRoot(
+            routes, 
+            {
+                preloadingStrategy: PreloadAllModules , 
+                scrollPositionRestoration: 'enabled',   // restaure sur retour arrière
+                anchorScrolling: 'enabled',
+            }),
     ],
     exports: [RouterModule],
 })

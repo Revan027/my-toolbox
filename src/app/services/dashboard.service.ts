@@ -5,8 +5,7 @@ import { StorageService } from './storage.services.common/storage-service';
 @Injectable({
     providedIn: 'root',
 })
-export class DashboardService {    
-   
+export class DashboardService {   
     constructor(private storageService: StorageService) {}
 
     async countTotalValue(): Promise<number>{

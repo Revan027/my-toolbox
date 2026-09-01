@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { lastValueFrom, map } from 'rxjs';
 import { Currency, CurrencyResponse } from 'src/app/models/Currency';
 import { Rate } from 'src/app/models/Rate';
@@ -12,6 +12,12 @@ import { HttpService } from './services.common/http-service';
     providedIn: 'root',
 })
 export class ExchangeRateService {
+    private _rates = signal<Rate[]>([]);
+    private _currency= signal<Currency[]>([]);
+
+    readonly rates = this._rates.asReadonly();
+    readonly currency = this._currency.asReadonly();
+
     constructor(
         private httpService: HttpService,
         private currencyService: CurrencyService,
@@ -116,5 +122,13 @@ export class ExchangeRateService {
         }
 
         return this.roundTo(result, 2);
+    }
+
+    loadRates(rates: Rate[]){
+        this._rates.set(rates);
+    }
+
+    loadCurrencies(currencies: Currency[]){
+        this._currency.set(currencies);
     }
 }

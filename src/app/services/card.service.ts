@@ -6,17 +6,27 @@ import { CardFilter } from 'src/app/models/CardFilter';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardSort } from 'src/app/models/CardSort';
 import { SortEnum } from 'src/app/constants/SortEnum';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CardService {    
-    cardSort = signal<CardSort>(new CardSort());
-    cardFilter = signal<CardFilter>(new CardFilter());
-    pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
-    private cardsChanged$ = new Subject<void>();
-    readonly cardsChanged = this.cardsChanged$.asObservable();
+    private _cardFilter = signal<CardFilter>(new CardFilter());
+    private _cardSort = signal<CardSort>(new CardSort());
+    private _pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
+    
+    readonly cardFilter = this._cardFilter.asReadonly();
+    readonly cardSort = this._cardSort.asReadonly();
+    readonly pagedCardResult = this._pagedCardResult.asReadonly();
+
+    private _cardsChanged$ = new Subject<void>();
+    private _sortChanged$ = new Subject<void>();
+    private _filterChanged$ = new Subject<void>();
+
+    readonly cardsChanged = this._cardsChanged$.asObservable();  
+    readonly sortChanged = this._sortChanged$.asObservable();
+    readonly filterChanged = this._filterChanged$.asObservable();
 
     readonly offsetBase: number = 16;
      
@@ -149,7 +159,7 @@ export class CardService {
         return checked ? SortEnum.ASC : SortEnum.DESC
     }
 
-    private async fetchPage(offset: number): Promise<PagedCardResult> {
+    private async fetchPage(offset: number, offsetBase: number | undefined = undefined): Promise<PagedCardResult> {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
             SELECT 
@@ -158,7 +168,7 @@ export class CardService {
             FROM ${tableName.card} AS card 
             ${this.getQuerySearch(this.cardFilter())}
             ${this.getQuerySort(this.cardSort())}          
-            LIMIT ${this.offsetBase} OFFSET ${offset}`);
+            LIMIT ${offsetBase != undefined ? offsetBase : this.offsetBase} OFFSET ${offset}`);
 
         const cards: Card[] = result.values?.map((data: any)=>{
             return Card.fromSQL(data);
@@ -187,28 +197,47 @@ export class CardService {
         pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
         pagedCardResult.page = nextPage;
 
-        this.setPagedCardResult(pagedCardResult);
+        this.loadPagedCardResult(pagedCardResult);
+    }
+
+    async refreshPage() {
+        let pagedCardResult = await this.fetchPage(0, this.pagedCardResult().cards.length);
+        pagedCardResult.page = this.pagedCardResult().page;
+
+        this.loadPagedCardResult(pagedCardResult);
     }
 
     resetPagedCardResult() {
-        this.pagedCardResult.set(new PagedCardResult());
+        this._pagedCardResult.set(new PagedCardResult());
     }
 
     // set() : remplacement complet (primitif ou nouvel objet) — nouvelle référence garantie
     // update() : modification partielle → utiliser le spread { ...current, prop: newValue } pour créer une nouvelle référence
-    setPagedCardResult(pagedCardResult: PagedCardResult) {
-        this.pagedCardResult.set(pagedCardResult);
+    loadPagedCardResult(pagedCardResult: PagedCardResult) {
+        this._pagedCardResult.set(pagedCardResult);
     }
 
-    setCardSort(cardSort: CardSort) {
-        this.cardSort.set(cardSort);
+    loadCardSort(cardSort: CardSort) {
+        this._cardSort.set(cardSort);
+
+        this.notifySortChanged();
     }
 
-    setCardFilter(cardFilter: CardFilter) {
-        this.cardFilter.set(cardFilter);
+    loadCardFilter(cardFilter: CardFilter) {
+        this._cardFilter.set(cardFilter);
+
+        this.notifyFilterChanged();
     }
 
     notifyCardsChanged() {
-        this.cardsChanged$.next();
+        this._cardsChanged$.next();
+    }
+
+    private notifySortChanged() {
+        this._sortChanged$.next();
+    }
+
+    private notifyFilterChanged() {
+        this._filterChanged$.next();
     }
 }

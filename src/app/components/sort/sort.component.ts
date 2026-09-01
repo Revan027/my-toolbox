@@ -1,4 +1,4 @@
-import { Component, ViewChild, WritableSignal } from '@angular/core';
+import { Component, Signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { SortEnum } from 'src/app/constants/SortEnum';
@@ -14,12 +14,14 @@ import { CardService } from 'src/app/services/card.service';
 export class SortComponent {
     @ViewChild('modalSorts') modalSorts!: IonModal;
 
-    private cardSort: WritableSignal<CardSort> = this.cardService.cardSort;
+    private cardSort: Signal<CardSort>;
 
     sortEnum = SortEnum;
     formGroup!: FormGroup;
 
     constructor(private formBuilder: FormBuilder, private cardService: CardService){
+        this.cardSort = this.cardService.cardSort;
+
         this.createForm();
     }
 
@@ -57,6 +59,6 @@ export class SortComponent {
 
         this.modalSorts.dismiss();
 
-        this.cardService.setCardSort(cardSort);
+        this.cardService.loadCardSort(cardSort);
     }
 }

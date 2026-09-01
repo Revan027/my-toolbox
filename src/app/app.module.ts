@@ -30,14 +30,6 @@ registerLocaleData(localeFr);
             if (!Capacitor.isNativePlatform()) return;
 
            // Il faut d'abord faire les injections et ensuite faire le traitement. Sinon on perd le contexte d'injection.
-            const fileService = inject(FileService);
-            const storageService = inject(StorageService);
-
-            // On init l'uri vers le répertoire Documents qui ne bouchera pas
-            await fileService.getDocumentsUri("");
-
-            // On init la base de donné au démarrage de l'application
-            await storageService.initPlugin();
         }),
     ],
     bootstrap: [AppComponent],

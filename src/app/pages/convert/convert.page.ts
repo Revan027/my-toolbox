@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Signal, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Currency } from 'src/app/models/Currency';
 import { Rate } from 'src/app/models/Rate';
@@ -12,34 +12,25 @@ import { AmountService } from 'src/app/services/services.common/amount.service';
     styleUrls: ['./convert.page.scss'],
 })
 export class ConvertPage implements OnInit, OnDestroy {
-    formGroup!: FormGroup;
+    convertResult = signal<number>(0);
 
-    currencies!: Currency[];
-    private rates!: Rate[];
+    readonly currencies: Signal<Currency[]>;
+    private readonly rates: Signal<Rate[]>;
 
-    convertResult: number = 0;
     private debounceTimer: any;
 
-    loaded: boolean = false;
-
+    formGroup!: FormGroup;
+    
     constructor(
         private formBuilder: FormBuilder,
         private exchangeRateService: ExchangeRateService,
         private amountService: AmountService,
-    ) {}
+    ) {
+        this.currencies = this.exchangeRateService.currency;
+        this.rates = this.exchangeRateService.rates;
+    }
 
     async ngOnInit() {
-        const pCurrencies = this.exchangeRateService.getCurrencies();
-        const pRates = this.exchangeRateService.getRates();
-
-        // On attend le resultats des promises pour mettre à jour les variables
-        await Promise.all([pCurrencies, pRates]).then((datas) => {
-            this.currencies = datas[0];
-            this.rates = datas[1];
-        });
-        
-        this.loaded = true;
-
         this.createForm();
     }
 
@@ -56,12 +47,12 @@ export class ConvertPage implements OnInit, OnDestroy {
     }
 
     submit(form: any) {
-        this.convertResult = this.exchangeRateService.converTo(
-            this.rates,
+        this.convertResult.set(this.exchangeRateService.converTo(
+            this.rates(),
             form.originalCurrency,
             form.targetCurrency,
             form.amount,
-        );
+        ));
     }
 
     formatAmountInput(event: CustomEvent) {

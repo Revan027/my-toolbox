@@ -104,7 +104,7 @@
                </ion-label>
 
                <ion-select class="ion-margin-bottom"  formControlName="generationID" interface="popover" placeholder="-" fill="outline">
-                  @for(item of generations; track item.id ){
+                  @for(item of generations(); track item.id ){
                      <ion-select-option [value]="item.id"> 
                         {{item.libelle}}
                      </ion-select-option>
@@ -124,7 +124,7 @@
                </ion-label>
 
                <ion-select class="ion-margin-bottom" formControlName="conditionID" interface="popover" placeholder="-" fill="outline">
-                  @for(item of cardConditions; track item.id ){
+                  @for(item of cardConditions(); track item.id ){
                      <ion-select-option [value]="item.id"> 
                         {{item.libelle}}
                      </ion-select-option>
@@ -164,7 +164,7 @@
             </ion-label>
 
             <ion-select (ionChange)="onSerieChanged($event)" class="ion-margin-bottom" formControlName="serieID" interface="popover" placeholder="-" fill="outline">
-               @for(item of series; track item.id) {
+               @for(item of series(); track item.id) {
                   <ion-select-option [value]="item.id"> 
                      {{item.name}}
                   </ion-select-option>

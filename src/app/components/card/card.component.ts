@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Card } from 'src/app/models/Card';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 
@@ -9,7 +9,7 @@ import { FileService } from 'src/app/services/file.services.common/file.service'
     styleUrls: ['./card.component.scss'],
 })
 export class CardComponent {
-    @Input() card: Card = new Card();
+    card = input<Card>(new Card());
 
     constructor(private fileService: FileService) {}
 
