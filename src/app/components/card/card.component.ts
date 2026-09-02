@@ -14,6 +14,6 @@ export class CardComponent {
     constructor(private fileService: FileService) {}
 
     getSrc(path: string){
-        return this.fileService.getSrcWeb(this.fileService.getAbsolutePath(this.fileService.documentsUri(), path));
+        return this.fileService.getUrlWeb(this.fileService.getPathUri(this.fileService.documentsUri(), path));
     }
 }

@@ -14,7 +14,6 @@ export class Card {
     serie: Serie = new Serie();
     generationID!: number;
     generation: Generation = new Generation();
-    picture?: string;
     isLegendary: boolean= false;
     condition?: CardCondition;
     conditionID?: number;
@@ -25,7 +24,6 @@ export class Card {
         card.id = data.id;
         card.name = data.name;
         card.srcPicture = data.srcPicture;
-        card.picture = data.picture;
         card.isAcquired = data.isAcquired;
         card.averagePrice = data.averagePrice;
         card.conditionID = data.conditionID;

@@ -1,7 +1,12 @@
 import { tableName } from './table-names';
 
 export const DB_NAME = 'todo_list_db';
-export const DB_VERSION = 4;
+export const DB_VERSION = 5;
+
+export const version5: string[] = [
+  `ALTER TABLE ${tableName.card} DROP COLUMN picture;`
+  ,
+];
 
 export const version4: string[] = [
 `INSERT INTO ${tableName.serie} (name, srcLogo) VALUES
@@ -243,4 +248,5 @@ export const DB_UPGRADES = [
   { toVersion: 2, statements: version2 },
   { toVersion: 3, statements: version3 },
   { toVersion: 4, statements: version4 },
+  { toVersion: 5, statements: version5 },
 ];
