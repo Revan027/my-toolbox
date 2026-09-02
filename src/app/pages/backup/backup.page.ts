@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
+import { Component, ElementRef, Signal, signal, ViewChild } from '@angular/core';
 import { folder } from 'src/app/constants/folder';
+import { ExportService } from 'src/app/services/backup.services/export.service';
+import { BackupStep } from 'src/app/services/backup.services/models/backupStep';
 import { CardService } from 'src/app/services/card.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
-import { MessageEnum } from 'src/app/services/services.common/enum/MessageEnum';
 import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
 import { ToastService } from 'src/app/services/services.common/toast.service';
 import { StorageService } from 'src/app/services/storage.services.common/storage-service';
@@ -14,39 +14,37 @@ import { StorageService } from 'src/app/services/storage.services.common/storage
     templateUrl: './backup.page.html',
     styleUrls: ['./backup.page.scss'],
 })
-export class BackupPage implements OnInit {
+export class BackupPage {
     @ViewChild('inputFile') inputFile!: ElementRef;
 
-    showImportSpinner: boolean = false;
-    showExportSpinner: boolean = false;
+    launchStep = signal<boolean>(false);
+    stepProgression: Signal<number>;
+    countStep: Signal<number>;
+    currentStep: Signal<BackupStep | null>;
 
     constructor(
         private storageService: StorageService, 
         private fileService: FileService,
         private toastService: ToastService,
-        private cardService: CardService ) {}
+        private cardService: CardService,
+        private exportService: ExportService) 
+    {
+        this.stepProgression = this.exportService.stepProgression;
+        this.currentStep = this.exportService.currentStep;
+        this.countStep = this.exportService.countStep;
+    }
+    
+    async export() {  
+        this.launchStep.set(true);
 
-    async ngOnInit() {}
+        await this.exportService.launchImportTCG();
 
-    async export() {   // méthode récursive qui va lire et extraire en base apr paquet de 100 cartes. chaque itération enregistre dans un fichier json dédié. faire un répertorie bazckuo dédieé
-        this.showExportSpinner = true;
-
-        // On exporte la base
-        const capSQLiteJson = await this.storageService.exportJson();
-  
-        // On crée le fichier texte de backup unique avec son contenu en chaine de caractère. Ecriture brut en UTF8
-        await this.fileService.writeFile(JSON.stringify(capSQLiteJson.export), `${folder.Backup}/${Date.now()}_backup.txt}`, folder.Backup, Directory.Documents, Encoding.UTF8);
-
-        this.showExportSpinner = false;
-
-        await this.toastService.get(MessageEnum.AppSuccess, StatusEnum.Success);
+        setTimeout(() => {this.launchStep.set(false);}, 3000)     
     }
 
     async import(event: any) {
         // méthode récurisive qui va lire chauqe fichier de backup itéré par le nom et incrémenté. Chaque ietration insère et en base et créer lers images sur le téléphone
         const file: File = event.target.files[0];
-
-        this.showImportSpinner = true;
 
         // On ferme la base
         await this.storageService.closeDb();
@@ -72,7 +70,7 @@ export class BackupPage implements OnInit {
             newCard.id = card.id;
 
             // On upload l'image sous un nouveau nom
-            await Filesystem.writeFile({path: newCard.srcPicture, data: await this.cardService.getPicture(card.id), directory: Directory.Documents});
+            //await Filesystem.writeFile({path: newCard.srcPicture, data: await this.cardService.getPicture(card.id), directory: Directory.Documents});
 
             // On met jour le nouveau path en base
             await this.cardService.updatePicture(newCard);
@@ -80,7 +78,6 @@ export class BackupPage implements OnInit {
 
         await this.toastService.get("Les fichiers sont importés", StatusEnum.Success);
 
-        this.showImportSpinner = false;
     }
 
     openFileSelector() {

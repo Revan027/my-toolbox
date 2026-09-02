@@ -1,3 +1,15 @@
+@use '../../../assets/css/font.scss' as f; 
+
 ion-content {
   --padding-bottom: 80px;
+}
+
+ion-progress-bar{
+  --background: var(--color-secondary);
+  --progress-background: var(--color-main);
+}
+
+.step-name{
+  color: var(--color-meta);
+  @include f.meta;
 }

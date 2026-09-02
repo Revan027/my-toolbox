@@ -17,21 +17,33 @@
 </ion-header>
 
 <ion-content class="ion-padding-top" [fullscreen]="true">
-   <ion-row class="ion-align-items-center">
+   <ion-row class="ion-align-content-center">
+      @if(launchStep()){
+         <ion-col class="ion-margin-bottom" size="12">
+            <ion-progress-bar [value]="stepProgression()"></ion-progress-bar>
+
+            <div class="step-name">
+               @if(currentStep()?.stepOrder){
+                  {{currentStep()?.name}} - {{`${currentStep()?.stepOrder}/${countStep()}`}}
+               }@else{
+                  {{currentStep()?.name}}
+               }         
+            </div>
+         </ion-col>
+      }
+
       <ion-col>     
          <div class="ion-text-center">
-            <input #inputFile type="file" hidden  (change)="import($event)" />
+            <input #inputFile type="file" hidden (change)="import($event)" />
 
-            <ion-button (click)="export()" [strong]="true" class="button--main">
+            <ion-button (click)="export()" [strong]="true" class="button--main ion-margin-bottom" [disabled]="launchStep()">
                <ion-icon slot="start" name="download-outline"></ion-icon>
-               <ion-spinner [class]="showExportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
-               Exporter la base
+               Exporter les données
             </ion-button>
 
             <ion-button (click)="openFileSelector()" [strong]="true" class="button--main">
                <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
-               <ion-spinner [class]="showImportSpinner ? 'ion-margin-end' : 'd-none'" name="dots"></ion-spinner> 
-               Importer une sauvegarde
+               Importer des données
             </ion-button>
          </div>
       </ion-col>

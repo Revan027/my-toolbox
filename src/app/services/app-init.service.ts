@@ -26,7 +26,7 @@ export class AppInitService {
     ) { }
   
   async init(): Promise<void>{
-    await this.fileService.getDocumentsUri(""); // On init l'uri vers le répertoire Documents qui ne bouchera pas
+    await this.fileService.loadDocumentsUri(""); // On init l'uri vers le répertoire Documents qui ne bouchera pas
     await this.storageService.initPlugin(); // On init la base de donné au démarrage de l'application
 
     const p1 = this.generationService.getAll();

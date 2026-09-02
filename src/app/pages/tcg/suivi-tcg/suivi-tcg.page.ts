@@ -55,7 +55,7 @@ export class SuiviTCGPage {
     }
 
     getSrc(uri: string){  
-        return this.fileService.getSrcWeb(uri);
+        return this.fileService.getUrlWeb(uri);
     }
 
     private async search() {

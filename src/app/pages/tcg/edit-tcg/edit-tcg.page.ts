@@ -126,7 +126,6 @@ export class EditTCGPage implements OnDestroy {
             isAcquired: [this.card?.isAcquired, null],
             serieID: [this.card?.serieID, Validators.required],
             generationID: [this.card?.generationID, Validators.required],
-            picture: [this.card?.picture, Validators.required],
             conditionID: [this.card?.conditionID, null],
             isLegendary: [this.card?.isLegendary, Validators.required],
             dateAcquired: [this.card?.dateAcquired ?? (new Date()).toISOString(), null],
@@ -134,7 +133,7 @@ export class EditTCGPage implements OnDestroy {
     }
 
     getSrc(path: string){
-       return this.fileService.getSrcWeb(this.fileService.getAbsolutePath(this.fileService.documentsUri(), path));
+       return this.fileService.getUrlWeb(this.fileService.getPathUri(this.fileService.documentsUri(), path));
     }
 
     getPath(fileName: string){
