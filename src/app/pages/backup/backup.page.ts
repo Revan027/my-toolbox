@@ -1,12 +1,7 @@
-import { Component, ElementRef, Signal, signal, ViewChild } from '@angular/core';
-import { folder } from 'src/app/constants/folder';
+import { Component, effect, ElementRef, Signal, signal, ViewChild } from '@angular/core';
 import { ExportService } from 'src/app/services/backup.services/export.service';
+import { ImportService } from 'src/app/services/backup.services/import.service';
 import { BackupStep } from 'src/app/services/backup.services/models/backupStep';
-import { CardService } from 'src/app/services/card.service';
-import { FileService } from 'src/app/services/file.services.common/file.service';
-import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
-import { ToastService } from 'src/app/services/services.common/toast.service';
-import { StorageService } from 'src/app/services/storage.services.common/storage-service';
 
 @Component({
     standalone: false,
@@ -17,67 +12,45 @@ import { StorageService } from 'src/app/services/storage.services.common/storage
 export class BackupPage {
     @ViewChild('inputFile') inputFile!: ElementRef;
 
-    launchStep = signal<boolean>(false);
+    launchBackup = signal<boolean>(false);
     stepProgression: Signal<number>;
     countStep: Signal<number>;
-    currentStep: Signal<BackupStep | null>;
+    currentStep = signal<BackupStep | null>(null);
 
     constructor(
-        private storageService: StorageService, 
-        private fileService: FileService,
-        private toastService: ToastService,
-        private cardService: CardService,
-        private exportService: ExportService) 
+        private exportService: ExportService,
+        private importService: ImportService) 
     {
         this.stepProgression = this.exportService.stepProgression;
-        this.currentStep = this.exportService.currentStep;
         this.countStep = this.exportService.countStep;
+
+        effect( () => {
+            const currenStep = this.exportService.currentStep();
+
+            this.currentStep.set(currenStep);
+        });
+
+        effect( () => {
+           const currenStep = this.importService.currentStep();
+
+            this.currentStep.set(currenStep);
+        });
     }
     
     async export() {  
-        this.launchStep.set(true);
+        this.launchBackup.set(true); 
 
-        await this.exportService.launchImportTCG();
+        await this.exportService.launchExportTCG();
 
-        setTimeout(() => {this.launchStep.set(false);}, 3000)     
+        setTimeout(() => {this.launchBackup.set(false);}, 3000)     
     }
 
     async import(event: any) {
-        // méthode récurisive qui va lire chauqe fichier de backup itéré par le nom et incrémenté. Chaque ietration insère et en base et créer lers images sur le téléphone
-        const file: File = event.target.files[0];
+        this.launchBackup.set(true);
 
-        // On ferme la base
-        await this.storageService.closeDb();
+        await this.importService.launchImportTCG(event.target.files[0]);
 
-        // On convertit le JSON en objet basique et on met en mode partial pour éviter les soucis de numéro de version de la BD
-        const parsed = JSON.parse(await file.text() as string);
-        parsed.mode = 'partial';
-
-        // On lance l'import avec la chaine de JSON
-        await this.storageService.importJson(JSON.stringify(parsed));
-        await this.toastService.get("Base importée", StatusEnum.Success);
-
-        // On relance la base
-        await this.storageService.initPlugin();
-
-        // On parcours les cartes
-        var cards = await this.cardService.getAll();
-
-        for (const card of cards) {
-            let newCard = card;
-
-            newCard.srcPicture = `${folder.TCG}/${Date.now()}${this.fileService.getExtension(card.srcPicture)}`;
-            newCard.id = card.id;
-
-            // On upload l'image sous un nouveau nom
-            //await Filesystem.writeFile({path: newCard.srcPicture, data: await this.cardService.getPicture(card.id), directory: Directory.Documents});
-
-            // On met jour le nouveau path en base
-            await this.cardService.updatePicture(newCard);
-        }
-
-        await this.toastService.get("Les fichiers sont importés", StatusEnum.Success);
-
+        setTimeout(() => {this.launchBackup.set(false);}, 3000)     
     }
 
     openFileSelector() {

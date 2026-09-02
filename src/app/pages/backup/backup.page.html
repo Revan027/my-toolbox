@@ -18,7 +18,7 @@
 
 <ion-content class="ion-padding-top" [fullscreen]="true">
    <ion-row class="ion-align-content-center">
-      @if(launchStep()){
+      @if(launchBackup()){
          <ion-col class="ion-margin-bottom" size="12">
             <ion-progress-bar [value]="stepProgression()"></ion-progress-bar>
 
@@ -34,14 +34,14 @@
 
       <ion-col>     
          <div class="ion-text-center">
-            <input #inputFile type="file" hidden (change)="import($event)" />
+            <input accept="text/plain" #inputFile type="file" hidden (change)="import($event)" />
 
-            <ion-button (click)="export()" [strong]="true" class="button--main ion-margin-bottom" [disabled]="launchStep()">
+            <ion-button (click)="export()" [strong]="true" class="button--main ion-margin-bottom" [disabled]="launchBackup()">
                <ion-icon slot="start" name="download-outline"></ion-icon>
                Exporter les données
             </ion-button>
 
-            <ion-button (click)="openFileSelector()" [strong]="true" class="button--main">
+            <ion-button (click)="openFileSelector()" [strong]="true" class="button--main" [disabled]="launchBackup()">
                <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
                Importer des données
             </ion-button>
