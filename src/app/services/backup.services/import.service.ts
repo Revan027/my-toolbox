@@ -5,6 +5,7 @@ import { BackupService } from './backupService';
 import { FileService } from '../file.services.common/file.service';
 import { folder } from 'src/app/constants/folder';
 import { CapacitorZip } from '@capgo/capacitor-zip';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 @Injectable({
     providedIn: 'root',
@@ -18,8 +19,9 @@ export class ImportService extends BackupService {
         super();
     }
 
-    private initExportTCG(jsonFile: File){
+    private initExportTCG(jsonFile: File, zipFile: File){
         this.jsonFile = jsonFile;
+        this.zipFile = zipFile;
 
         this.backupSteps = [
             new BackupStep("Importation des cartes", "Importation des cartes réussite", "Erreur dans l'importation des cartes", 1, this.inportDataCards),
@@ -32,8 +34,8 @@ export class ImportService extends BackupService {
         this.resetStepProgression();
     }
 
-    async launchImportTCG(jsonFile: File){
-        this.initExportTCG(jsonFile);
+    async launchImportTCG(jsonFile: File, zipFile: File){
+        this.initExportTCG(jsonFile, zipFile);
 
         for (const backupStep of this.backupSteps) {
             this._currentStep.set(backupStep);
@@ -61,10 +63,20 @@ export class ImportService extends BackupService {
         await this.storageService.initPlugin();
     }
 
-    private async importDirectoryCardImages(){
+    private async importDirectoryCardImages(){  
+        await this.fileService.createDir(folder.Backup, Directory.Documents);
+
+        // Le zip vient d'une autre app (gestionnaire de fichiers, Drive...), donc Android
+        // nous interdit de le lire par son chemin. On le recopie dans un dossier que l'app
+        // possède : c'est le seul endroit où CapacitorZip pourra ensuite l'ouvrir.
+        await this.fileService.chunkLargeFile(`${folder.Backup}/backup.zip`, this.zipFile);
+
+        // Le zip appartient maintenant à l'app, le dézip peut donc l'ouvrir par son chemin.
+        // On extrait à la racine de Documents et non dans TCG : les entrées de l'archive
+        // sont déjà préfixées "TCG/" par l'export, les images retombent donc au bon endroit.
         return CapacitorZip.unzip({
             source: this.fileService.getAbsolutePath(await this.fileService.getDocumentsUri(`${folder.Backup}/backup.zip`)),
-            destination: this.fileService.getAbsolutePath(await this.fileService.getDocumentsUri(`${folder.TCG}`))
+            destination: this.fileService.getAbsolutePath(await this.fileService.getDocumentsUri(""))
         });
     }
 }

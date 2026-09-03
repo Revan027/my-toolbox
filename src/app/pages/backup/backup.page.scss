@@ -9,7 +9,7 @@ ion-progress-bar{
   --progress-background: var(--color-main);
 }
 
-.step-name{
+.step-name, .action-info{
   color: var(--color-meta);
   @include f.meta;
 }

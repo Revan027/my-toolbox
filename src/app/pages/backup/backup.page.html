@@ -34,7 +34,7 @@
 
       <ion-col>     
          <div class="ion-text-center">
-            <input accept="text/plain" #inputFile type="file" hidden (change)="import($event)" />
+            <input multiple accept="text/plain;application/zip" #inputFile type="file" hidden (change)="import($event)" />
 
             <ion-button (click)="export()" [strong]="true" class="button--main ion-margin-bottom" [disabled]="launchBackup()">
                <ion-icon slot="start" name="download-outline"></ion-icon>
@@ -45,6 +45,10 @@
                <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
                Importer des données
             </ion-button>
+
+            <div class="action-info">
+              Le premier fichier doit être le .txt et le second le .zip     
+            </div>
          </div>
       </ion-col>
    </ion-row>
