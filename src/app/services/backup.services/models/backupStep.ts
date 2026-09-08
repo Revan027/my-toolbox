@@ -1,15 +1,18 @@
 export class BackupStep {
-    constructor(name: string, successText: string, errorText: string, stepOrder: number = 0, action?: Function) {
+    constructor(name: string, stepOrder: number = 0, action?: Function) {
         this.name = name;
-        this.successText = successText;
-        this.errorText = errorText;
         this.stepOrder = stepOrder;
         this.action = action;
     }
 
     name!: string;
-    successText!: string;
-    errorText!: string;
+    statusText?: string;
     stepOrder: number = 0; 
     action?: Function;
+}
+
+export enum BackupStepStatusEnum {
+    Error = "Une erreur est survenue",
+    Pending = "En cours",
+    Success = "Terminée",
 }

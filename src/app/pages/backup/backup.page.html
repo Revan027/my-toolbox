@@ -24,7 +24,7 @@
 
             <div class="step-name">
                @if(currentStep()?.stepOrder){
-                  {{currentStep()?.name}} - {{`${currentStep()?.stepOrder}/${countStep()}`}}
+                  {{currentStep()?.name}} - {{currentStep()?.statusText?.toUpperCase()}} - {{`${currentStep()?.stepOrder}/${countStep()}`}}
                }@else{
                   {{currentStep()?.name}}
                }         

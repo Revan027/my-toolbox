@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.services.common/storage-service';
-import { BackupStep } from './models/backupStep';
+import { BackupStep, BackupStepStatusEnum } from './models/backupStep';
 import { BackupService } from './backupService';
 import { FileService } from '../file.services.common/file.service';
 import { folder } from 'src/app/constants/folder';
 import { CapacitorZip } from '@capgo/capacitor-zip';
-import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Directory } from '@capacitor/filesystem';
 
 @Injectable({
     providedIn: 'root',
@@ -24,9 +24,9 @@ export class ImportService extends BackupService {
         this.zipFile = zipFile;
 
         this.backupSteps = [
-            new BackupStep("Importation des cartes", "Importation des cartes réussite", "Erreur dans l'importation des cartes", 1, this.inportDataCards),
-            new BackupStep("Importation du répertoire des images", "Importation des images réussite", "Erreur dans l'importation des images", 2, this.importDirectoryCardImages),
-            new BackupStep("Importation terminée", "", ""),
+            new BackupStep("Importation des cartes", 1, this.inportDataCards),
+            new BackupStep("Importation du répertoire des images", 2, this.importDirectoryCardImages),
+            new BackupStep("Importation terminée"),
         ];
 
         this._countStep.set(this.backupSteps.filter(x => x.stepOrder).length);
@@ -34,16 +34,26 @@ export class ImportService extends BackupService {
         this.resetStepProgression();
     }
 
-    async launchImportTCG(jsonFile: File, zipFile: File){
+    async launchImportTCG(jsonFile: File, zipFile: File): Promise<void>{
         this.initExportTCG(jsonFile, zipFile);
 
         for (const backupStep of this.backupSteps) {
             this._currentStep.set(backupStep);
 
-            if(backupStep.action !== undefined){
-                await backupStep.action.call(this);// on invoke la méthode depuis le contexte du service pour avoir les injections de dépendance
+           if(backupStep.action !== undefined){
+                try{
+                    this.updateStepProgression(BackupStepStatusEnum.Pending)
 
-                this.loadStepProgression();
+                    await backupStep.action.call(this);// on invoke la méthode depuis le contexte du service pour avoir les injections de dépendance
+
+                    this.updateStepProgression(BackupStepStatusEnum.Success)
+
+                    this.loadStepProgression();
+                }catch(e: any){
+                    this.updateStepProgression(BackupStepStatusEnum.Error)
+
+                    return Promise.resolve();
+                } 
             } 
         }
     }

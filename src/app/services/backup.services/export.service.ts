@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.services.common/storage-service';
-import { BackupStep } from './models/backupStep';
+import { BackupStep, BackupStepStatusEnum } from './models/backupStep';
 import { FileService } from '../file.services.common/file.service';
 import { folder } from 'src/app/constants/folder';
 import { Directory, Encoding } from '@capacitor/filesystem';
@@ -17,9 +17,9 @@ export class ExportService extends BackupService {
 
     private initExportTCG(){
         this.backupSteps = [
-            new BackupStep("Exportation des cartes", "Exportation des cartes réussite", "Erreur dans l'exportation des cartes", 1, this.exportDataCards),
-            new BackupStep("Exportation du répertoire des images", "Exportation des images réussite", "Erreur dans l'exportation des images", 2, this.exportDirectoryCardImages),
-            new BackupStep("Exportation terminée", "", ""),
+            new BackupStep("Exportation des cartes", 1, this.exportDataCards),
+            new BackupStep("Exportation du répertoire des images", 2, this.exportDirectoryCardImages),
+            new BackupStep("Exportation terminée"),
         ];
 
         this._countStep.set(this.backupSteps.filter(x => x.stepOrder).length);
@@ -27,16 +27,26 @@ export class ExportService extends BackupService {
         this.resetStepProgression();
     }
 
-    async launchExportTCG(){
+    async launchExportTCG(): Promise<void>{
         this.initExportTCG();
 
         for (const backupStep of this.backupSteps) {
             this._currentStep.set(backupStep);
-
+          
             if(backupStep.action !== undefined){
-                await backupStep.action.call(this);// on invoke la méthode depuis le contexte du service pour avoir les injections de dépendance
+                try{
+                    this.updateStepProgression(BackupStepStatusEnum.Pending)
 
-                this.loadStepProgression();
+                    await backupStep.action.call(this);// on invoke la méthode depuis le contexte du service pour avoir les injections de dépendance
+
+                    this.updateStepProgression(BackupStepStatusEnum.Success)
+
+                    this.loadStepProgression();
+                }catch(e: any){
+                    this.updateStepProgression(BackupStepStatusEnum.Error)
+
+                    return Promise.resolve();
+                } 
             } 
         }
     }
