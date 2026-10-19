@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, OnInit, signal } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { AppInitService } from 'src/app/services/app-init.service';
 
@@ -11,8 +11,8 @@ import { AppInitService } from 'src/app/services/app-init.service';
 })
 export class  LoadingPage implements OnInit {
 
-  dots: string = ".";
-  timer?: number;
+  protected dots = signal<string>(".");
+  private timer?: number;
 
   constructor(private appInitService: AppInitService, private destroyRef: DestroyRef) {
     effect(() => {
@@ -36,11 +36,11 @@ export class  LoadingPage implements OnInit {
 
   fillDots(){
     this.timer = setInterval(() => {
-      if(this.dots.length == 4 ){
-        this.dots = "."
+      if(this.dots().length == 4 ){
+        this.dots.set(".")
       }
       else{
-        this.dots += "."
+        this.dots.update(x => x += ".");
       }
     }, 300);
   }

@@ -7,12 +7,19 @@ const routes: Routes = [
         path: 'loading',
         canActivate: [InitAppGuard],
         loadComponent: () =>
-        import('./pages/loading/loading.page').then((m) => m.LoadingPage),
+            import('./pages/loading/loading.page').then((m) => m.LoadingPage),
     },
     {
-        path: '',
+        path: 'tcg',
         loadChildren: () =>
-            import('./menu/menu.module').then((m) => m.MenuModule),
+            import('./layout/tcg-menu/tcg-menu.module').then((m) => m.TcgMenuModule),
+        
+    },
+    {
+        path: 'tools',
+        loadChildren: () =>
+            import('./layout/tools-menu/tools-menu.module').then((m) => m.ToolsMenuModule),
+        
     },
     {
         path: '**',

@@ -39,6 +39,14 @@ jobs:
       # 4. SDK Android
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # packages: '' -> n'installe aucun paquet supplementaire.
+          # Par defaut l'action lance `sdkmanager tools`, or le paquet legacy
+          # `tools` a ete retire du depot SDK de Google => "Failed to find
+          # package 'tools'" et echec du job. Le runner ubuntu-latest fournit
+          # deja platform-tools / platforms / build-tools, et Gradle telecharge
+          # ce qui manque (les licences sont acceptees par l'action).
+          packages: ''
 
       # 5. Dépendances npm
       #    npm install (et non npm ci) : complète le lock pour la plateforme

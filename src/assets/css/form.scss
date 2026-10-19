@@ -217,7 +217,7 @@ ion-select {
     --background: white!important;
     --color: var(--color-ink)!important;
     @include f.field;
-     --border-color:  var(--color-border);
+    --border-color:  var(--color-border);
     --placeholder-color: var(--color-muted)!important;
     --border-radius: 10px!important;
     min-height: 46px!important;

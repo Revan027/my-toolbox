@@ -1,36 +1,34 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MenuComponent } from './menu.component';
+import { TcgMenuComponent } from './tcg-menu.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: MenuComponent,
+        component: TcgMenuComponent,
         children: [
             {
-                path: 'convertisseur',
-                loadChildren: () =>
-                    import('../pages/convert/convert.module').then(
-                        (m) => m.ConvertPageModule,
-                    ),
+                path: '',
+                redirectTo: 'suivi',
+                pathMatch: 'full',
             },
             {
-                path: 'tcg',
+                path: 'suivi',
                 loadChildren: () =>
-                    import('../pages/tcg/suivi-tcg/suivi-tcg.module').then(
+                    import('../../pages/tcg/suivi-tcg/suivi-tcg.module').then(
                         (m) => m.SuiviTCGPageModule,
                     ),
             },
             {
                 path: 'backup',
                 loadChildren: () =>
-                    import('../pages/backup/backup.module').then(
+                    import('../../pages/tcg/backup/backup.module').then(
                         (m) => m.BackupPageModule,
                     ),
             },
             {
-                path: '',
-                redirectTo: 'tcg',
+                path: 'tools',
+                redirectTo: '/tools',
                 pathMatch: 'full',
             },
         ],
@@ -40,4 +38,4 @@ const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forChild(routes)],
 })
-export class MenuRoutingModule {}
+export class TcgMenuRoutingModule {}

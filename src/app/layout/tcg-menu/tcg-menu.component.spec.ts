@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MenuComponent } from './menu.component';
+import { TcgMenuComponent } from './tcg-menu.component';
 
-describe('MenuComponent', () => {
-    let component: MenuComponent;
-    let fixture: ComponentFixture<MenuComponent>;
+describe('TcgMenuComponent', () => {
+    let component: TcgMenuComponent;
+    let fixture: ComponentFixture<TcgMenuComponent>;
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
-            declarations: [MenuComponent],
+            declarations: [TcgMenuComponent],
             imports: [IonicModule.forRoot()],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(MenuComponent);
+        fixture = TestBed.createComponent(TcgMenuComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     }));
