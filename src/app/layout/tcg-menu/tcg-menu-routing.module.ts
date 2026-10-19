@@ -20,6 +20,13 @@ const routes: Routes = [
                     ),
             },
             {
+                path: 'stats',
+                loadChildren: () =>
+                    import('../../pages/tcg/stats/stats.module').then(
+                        (m) => m.StatsPageModule,
+                    ),
+            },
+            {
                 path: 'backup',
                 loadChildren: () =>
                     import('../../pages/tcg/backup/backup.module').then(

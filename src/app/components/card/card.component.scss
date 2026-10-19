@@ -8,7 +8,7 @@ ion-card {
   justify-content: space-around;
   padding: 0px;
   box-shadow: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-EDEBF4);
 
   ion-card-header{
     padding: 10px 10px 0 10px;
@@ -31,7 +31,7 @@ ion-card {
     right: 20px;
     top: 15px;
     padding: 5px;
-    background-color: var(--color-success-badge);
+    background-color: var(--color-E4F5F1);
     border-radius: 50%;
     display: flex;
 
@@ -46,33 +46,18 @@ ion-card {
     left: 20px;
     top: 15px;
     padding: 5px;
-    background-color: var(--color-background);
+    background-color: var(--color-F7F6FB);
     border-radius: 50%;
     display: flex;
 
     ion-icon {    
-      color: var(--color-main);
+      color: var(--color-6B3FF7);
     }
-  }
-
-  .card-name{
-    @include f.block;
-    color: var(--color-ink);
   }
 
   .card-meta{
     display: flex;
     justify-content: space-between;
     gap: 5px;
-
-    .card-price{
-      @include f.num;
-      color: var(--color-ink);
-    }
-
-    .card-serie{
-      color: var(--color-meta);
-      @include f.meta;
-    }
   }
 }

@@ -124,11 +124,11 @@ export class ExchangeRateService {
         return this.roundTo(result, 2);
     }
 
-    loadRates(rates: Rate[]){
+    setRates(rates: Rate[]){
         this._rates.set(rates);
     }
 
-    loadCurrencies(currencies: Currency[]){
+    setCurrency(currencies: Currency[]){
         this._currency.set(currencies);
     }
 }

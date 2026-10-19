@@ -59,6 +59,6 @@ export class SortComponent {
 
         this.modalSorts.dismiss();
 
-        this.cardService.loadCardSort(cardSort);
+        this.cardService.setCardSort(cardSort);
     }
 }

@@ -5,11 +5,11 @@ ion-content {
 }
 
 ion-progress-bar{
-  --background: var(--color-secondary);
-  --progress-background: var(--color-main);
+  --background: var(--color-B9AEE8);
+  --progress-background: var(--color-6B3FF7);
 }
 
 .step-name, .action-info{
-  color: var(--color-meta);
-  @include f.meta;
+  color: var(--color-6C6880);
+  @include f.meta-text;
 }

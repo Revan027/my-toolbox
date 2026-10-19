@@ -37,11 +37,11 @@ export class AppInitService {
 
     // on attend la résolution des promises
     Promise.all([p1, p2, p3, p4, p5]).then((values) => {    
-      this.generationService.load(values[0]);
-      this.serieService.load(values[1]);
-      this.cardConditionService.load(values[2]);
-      this.exchangeRateService.loadCurrencies(values[3]);
-      this.exchangeRateService.loadRates(values[4]);
+      this.generationService.set(values[0]);
+      this.serieService.set(values[1]);
+      this.cardConditionService.set(values[2]);
+      this.exchangeRateService.setCurrency(values[3]);
+      this.exchangeRateService.setRates(values[4]);
 
       this._isAppInit.set(true);
       this.router.navigateByUrl('tcg');

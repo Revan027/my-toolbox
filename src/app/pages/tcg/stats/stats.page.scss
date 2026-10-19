@@ -1,0 +1,62 @@
+@use '../../../../assets/css/font.scss' as f; 
+
+ion-content {
+  --padding-bottom: 80px;
+}
+
+// ── Grille de tuiles compteurs ──
+.grid-counters {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.grid-counters__card {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--color-EDEBF4);
+  background: white;
+}
+
+.grid-counters__card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.grid-counters__card-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+
+  // Fond de la pastille (varie selon le compteur)
+  &--purple { background: rgba(124, 58, 237, 0.12); }
+  &--green  { background: rgba(90, 125, 90, 0.15); }
+  &--orange { background: rgba(217, 119, 6, 0.14); }
+  &--indigo { background: rgba(59, 31, 110, 0.12); }
+}
+
+.grid-counters__card-header-icon {
+  font-size: 18px;
+
+  // Couleur de l'icône (varie selon le compteur)
+  &--purple { color: #7c3aed; }
+  &--green  { color: var(--ion-color-success); }
+  &--orange { color: #d97706; }
+  &--indigo { color: #3b1f6e; }
+}
+
+.grid-counters__card-content {
+  color: var(--color-6C6880);
+
+}
+
+.grid-counters__card-footer {
+  margin: 10px 0 0;
+ 
+  color: var(--color-171526);
+}

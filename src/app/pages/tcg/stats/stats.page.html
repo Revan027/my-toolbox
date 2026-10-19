@@ -1,0 +1,82 @@
+<ion-header [translucent]="true">
+   <ion-toolbar>
+      <div class="header-content">
+         <div class="hearder-icon">
+           <ion-icon name="stats-chart-outline"></ion-icon>
+         </div>
+
+        <div class="header-text">
+            <span class="header-title">Statistique</span> 
+         
+            <span class="header-description">
+               Statistiques de la collection
+            </span> 
+         </div>              
+      </div>
+   </ion-toolbar>  
+</ion-header>
+
+<ion-content class="ion-padding-top" [fullscreen]="true">
+   <div class="card ion-margin-bottom">
+      <div class="card-title--6C6880 ion-margin-bottom">Valeur de la collection</div>
+      <div class="grid-counters__card">
+         <div class="grid-counters__card-header">
+            <div class="grid-counters__card-header-content grid-counters__card-header-content--purple">
+               <ion-icon name="albums-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--purple"></ion-icon>
+            </div>
+
+            <span class="grid-counters__card-content">Total cartes</span>
+         </div>
+
+         <p class="grid-counters__card-footer">
+           
+      </div>
+   </div>
+
+   <div class="card ion-margin-bottom"> 
+      <div class="card-title ion-margin-bottom">Pokédex</div>
+
+      <div class="completion-header">
+         <span class="section-title">Génération 1</span>
+         <span class="price-text"> {{ 10 | number:'1.0-0' }} %</span>
+      </div>
+
+      <div class="completion-track">
+         <div class="completion-fill" [style.width.%]="10"></div>
+      </div>
+   </div>
+
+   <div class="card ion-margin-bottom">
+      <div class="card-title ion-margin-bottom">Répartition par rareté</div>
+
+      grahpique camembert
+   </div>
+
+   <div class="card">
+      <div class="card-title ion-margin-bottom">Cartes les plus chères</div>
+
+      <ion-row>
+         <ion-col size="auto" class="muted-text">
+         01
+         </ion-col>
+
+         <ion-col class="ion-row">
+            photo
+         </ion-col>
+
+         <ion-col size="auto">
+            <div class="section-title">
+               Ectoplasma VMAX Gigamax
+            </div>
+
+            <div class="meta-text">
+               Styles de Combat
+            </div>
+         </ion-col>
+
+         <ion-col class="price-text" size="auto">
+            128,00 €
+         </ion-col>
+      </ion-row>
+   </div>
+</ion-content>

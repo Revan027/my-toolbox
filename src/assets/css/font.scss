@@ -46,13 +46,62 @@
   font-weight:400; 
 }
 
-@mixin block  { 
+@mixin card-title  { 
   font-family: var(--font-ui);
   font-size:var(--font-size-lg);   
   font-weight:600 ;
 }
 
-@mixin card   { 
+@mixin section-title  { 
+  font-family: var(--font-ui);
+  font-size:var(--font-size-md);   
+  font-weight:600 ;
+}
+
+.card-title,
+.card-title--6C6880{
+  @include card-title;
+}
+
+.card-title--6C6880{
+ color: var(--color-6C6880);
+}
+
+.section-title{
+  @include section-title;
+  color: var(--color-171526);
+}
+
+.muted-text{
+  font-family:var(--font-mono);  
+  font-size:var(--font-size-xs);   
+  color: var(--color-A6A2B6);
+}
+
+@mixin price-text { 
+  font-family:var(--font-mono);  
+  font-size:var(--font-size-xs); 
+  font-weight:500; 
+}
+
+.price-text{
+  @include price-text;
+  color: var(--color-171526);
+}
+
+@mixin meta-text { 
+  font-family: var(--font-ui);
+  font-size:var(--font-size-xs);    
+  font-weight:400; 
+  line-height:1.4; 
+}
+
+.meta-text{
+  color: var(--color-6C6880);
+  @include meta-text;
+}
+
+@mixin card { 
   font-family: var(--font-ui);
   font-size:var(--font-size-md);    
   font-weight:600; 
@@ -63,19 +112,6 @@
 @mixin label  { 
   font-family: var(--font-ui);
   font-size: var(--font-size-sm);   
-  font-weight:500; 
-}
-
-@mixin meta   { 
-  font-family: var(--font-ui);
-  font-size:var(--font-size-xs);    
-  font-weight:400; 
-  line-height:1.4; 
-}
-
-@mixin num    { 
-  font-family:var(--font-mono);  
-  font-size:var(--font-size-xs); 
   font-weight:500; 
 }
 

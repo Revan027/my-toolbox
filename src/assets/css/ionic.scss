@@ -11,7 +11,7 @@ ion-header::after {
 
 ion-header {
   box-shadow: none!important;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-EDEBF4);
 
   ion-toolbar {   
     padding-left: 10px;
@@ -30,7 +30,7 @@ ion-header {
       .hearder-icon{
         font-size: var(--ion-font-size-xl);
         color: white;
-        background-color: var(--color-main);
+        background-color: var(--color-6B3FF7);
         padding: 7px;
         border-radius: 25%;
         display: flex;
@@ -42,14 +42,14 @@ ion-header {
 
       .header-title{
         @include f.title;
-        color: var(--color-ink);
+        color: var(--color-171526);
         flex: 1 1 100%;
       }
 
       .header-description{
-        @include f.meta;
+        @include f.meta-text;
 
-        color: var(--color-meta);
+        color: var(--color-6C6880);
       }
     }
   }
@@ -74,7 +74,7 @@ ion-row {
 }
 
 ion-content {
-  --background: var(--color-background);
+  --background: var(--color-F7F6FB);
   --padding-start: 10px;
   --padding-end: 10px;
 }
@@ -114,11 +114,52 @@ ion-popover{
   aspect-ratio: 828 / 1147;
   object-fit: cover;
   object-position: top; /* recadre par le bas au lieu du centre */
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-EDEBF4);
   border-radius: 10px;
 }
 
 .serie-logo img{
   object-fit: contain;
   max-width: 70px;
+}
+
+// CARDS
+ion-grid.grid-cards{
+  --ion-grid-padding: 0;
+}
+
+.card {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--color-EDEBF4);
+  background: white;
+}
+
+// ── Barre de complétion ──
+.completion {
+  padding: 14px 16px;
+  margin-top: 12px;
+  border-radius: 16px;
+  background: white;
+  border: 1px solid var(--color-EDEBF4);
+}
+
+.completion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.completion-track {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--color-EDEBF4);
+  overflow: hidden;
+}
+
+.completion-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--color-6B3FF7);
 }

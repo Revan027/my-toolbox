@@ -84,13 +84,13 @@
    </div>
 
    <div class="completion">
-      <div class="completion__header">
-         <span class="completion__title">Complétion</span>
-         <span class="completion__percentage"> {{ percentageCompletion | number:'1.0-0' }} %</span>
+      <div class="completion-header">
+         <span class="section-title">Complétion</span>
+         <span class="price-text"> {{ percentageCompletion | number:'1.0-0' }} %</span>
       </div>
 
-      <div class="completion__track">
-         <div class="completion__fill" [style.width.%]="percentageCompletion"></div>
+      <div class="completion-track">
+         <div class="completion-fill" [style.width.%]="percentageCompletion"></div>
       </div>
    </div>
 </div>

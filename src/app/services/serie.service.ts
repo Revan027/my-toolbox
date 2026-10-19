@@ -30,7 +30,7 @@ export class SerieService {
         return MOCK_SERIES;
     }
 
-    load(series: Serie[]){
+    set(series: Serie[]){
         this._series.set(series);
     }
 }

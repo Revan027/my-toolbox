@@ -19,7 +19,7 @@ form{
 
 // BACK BUTTONS 
 ion-back-button {
-  --border-color: var(--color-border);
+  --border-color: var(--color-EDEBF4);
   --border-width: 1px;
   --border-style:  solid;
   --padding-top: 0px;
@@ -29,20 +29,20 @@ ion-back-button {
 }
 
 ion-back-button::part(native) {
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-EDEBF4);
     border-radius: 15px;
 }
 
 ion-back-button::part(icon) {
     font-size: var(--font-size-xl);
-    color: var(--color-ink);
+    color: var(--color-171526);
 }
 
 // BUTTONS 
 ion-button.button--empty {
-    --color: var(--color-ink);
+    --color: var(--color-171526);
     --border-width: 1px;
-    --border-color:  var(--color-border);
+    --border-color:  var(--color-EDEBF4);
     --border-radius: 10px;
     --background: white;
     @include f.label;
@@ -55,7 +55,7 @@ ion-button.button--empty {
 
 ion-button.button--empty {
     ion-icon{
-        color: var(--color-main);
+        color: var(--color-6B3FF7);
     }
 }
 
@@ -64,19 +64,19 @@ ion-button.button--empty ion-label {
 }
 
 ion-button.button--empty.button--main-small  {
-    --background: var(--color-main);
-    --background-hover: var(--color-secondary);
-    --background-activated: var(--color-main);
-    --background-focused: var(--color-main);
+    --background: var(--color-6B3FF7);
+    --background-hover: var(--color-B9AEE8);
+    --background-activated: var(--color-6B3FF7);
+    --background-focused: var(--color-6B3FF7);
     --color: white;
 }
 
 ion-button.button--main {
-    @include f.block;
-    --background: var(--color-main);
-    --background-hover: var(--color-secondary);
-    --background-activated: var(--color-main);
-    --background-focused: var(--color-main);
+    @include f.card-title;
+    --background: var(--color-6B3FF7);
+    --background-hover: var(--color-B9AEE8);
+    --background-activated: var(--color-6B3FF7);
+    --background-focused: var(--color-6B3FF7);
 
     --color: white;
 
@@ -120,7 +120,7 @@ ion-button.button--main {
 // FAB BUTTON
 ion-fab-button{
     &.button--create{
-      --background: var(--color-main);
+      --background: var(--color-6B3FF7);
     }
 }
 
@@ -140,15 +140,15 @@ ion-fab{
 // LABEL
 ion-label{
     @include f.label;
-    color: var(--color-meta);
+    color: var(--color-6C6880);
 }
 
 // INPUTS
 input[type=text]{
     background: white;
-    color: var(--color-ink);
+    color: var(--color-171526);
     @include f.field;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-EDEBF4);
     border-radius: 10px;
     min-height: 46px;   
     width: 100%; 
@@ -159,29 +159,29 @@ input[type=text]{
 
 input[type=text]:focus{
    outline: none;
-   border-color: var(--color-main);
+   border-color: var(--color-6B3FF7);
 }
 
 
 ion-input.input-fill-outline[type=number]{ 
     @include f.field;
-    --border-color: var(--color-border);
+    --border-color: var(--color-EDEBF4);
     --border-width: 1px;
     --border-style: solid;
     --border-radius: 12px;
 
-    --highlight-color-focused: var(--color-main);
-    --highlight-color: var(--color-main);
+    --highlight-color-focused: var(--color-6B3FF7);
+    --highlight-color: var(--color-6B3FF7);
 
     --background: #fff;
-    --color: var(--color-ink);
-    --placeholder-color: var(--color-muted);
+    --color: var(--color-171526);
+    --placeholder-color: var(--color-A6A2B6);
     --padding-start: 16px;
     --padding-end: 16px;
     min-height: 46px;
 
     &:hover {
-        --border-color: var(--color-main);
+        --border-color: var(--color-6B3FF7);
     }
 
     &.has-focus {
@@ -189,7 +189,7 @@ ion-input.input-fill-outline[type=number]{
     }
 
     ion-icon{
-        color: var(--color-muted);
+        color: var(--color-A6A2B6);
         @include f.label;
     }
 }
@@ -199,13 +199,13 @@ ion-searchbar.sc-ion-searchbar-md-h{
     @include f.field; 
     --box-shadow: none;
     --background: #fff;
-    --icon-color: var(--color-muted);
-    --color: var(--color-ink);
-    --placeholder-color: var(--color-muted); 
+    --icon-color: var(--color-A6A2B6);
+    --color: var(--color-171526);
+    --placeholder-color: var(--color-A6A2B6); 
     min-height: 46px;
 
     .searchbar-input-container input{
-        border-color: var(--color-border);
+        border-color: var(--color-EDEBF4);
         border-width: 1px;
         border-style: solid;
         border-radius: 12px;
@@ -215,16 +215,16 @@ ion-searchbar.sc-ion-searchbar-md-h{
 // SELECT
 ion-select {
     --background: white!important;
-    --color: var(--color-ink)!important;
+    --color: var(--color-171526)!important;
     @include f.field;
-    --border-color:  var(--color-border);
-    --placeholder-color: var(--color-muted)!important;
+    --border-color:  var(--color-EDEBF4);
+    --placeholder-color: var(--color-A6A2B6)!important;
     --border-radius: 10px!important;
     min-height: 46px!important;
 }
 
 ion-select::part(icon) {
-    color: var(--color-muted);
+    color: var(--color-A6A2B6);
     position: absolute;
     right: 15px;   
 }
@@ -242,12 +242,12 @@ ion-searchbar{
 ion-toggle{
     width: 100%;
     @include f.field;background: white;
-    border: 1px solid var(--color-border); 
+    border: 1px solid var(--color-EDEBF4); 
     border-radius: 10px;
     padding: 16px;
-    --handle-background: var(--color-main);  
-    --handle-background-checked: var(--color-main);  
-    --track-background-checked: var(--color-secondary);
+    --handle-background: var(--color-6B3FF7);  
+    --handle-background-checked: var(--color-6B3FF7);  
+    --track-background-checked: var(--color-B9AEE8);
 }
 
 ion-toggle::part(track){
@@ -258,11 +258,11 @@ ion-toggle::part(track){
 // DATETIME
 ion-datetime-button::part(native){
     background: white;
-    color: var(--color-ink);
+    color: var(--color-171526);
     font-family: var(--font-ui);
     font-size: var(--font-size-lg);
     font-weight: 400;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-EDEBF4);
     border-radius: 10px;
     min-height: 46px;
     width: 100%;

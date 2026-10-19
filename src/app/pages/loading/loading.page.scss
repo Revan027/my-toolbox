@@ -1,10 +1,10 @@
 ion-content{
---background: var( --color-ink);
+--background: var( --color-171526);
 }
 
 .app-logo {
     font-size: var(--font-size-3xl);
-    color: var(--color-border);
+    color: var(--color-EDEBF4);
 }
 
 .loading-content{
@@ -14,7 +14,7 @@ ion-content{
 
 .loading-content__title{
     font-size: var(--font-size-3xl);
-    color: var(--color-border);
+    color: var(--color-EDEBF4);
 }
 
 .loading-content__dots{ 
@@ -23,5 +23,5 @@ ion-content{
 
 ion-text{ 
     font-size: var(--font-size-2xl);
-    color: var(--color-secondary);
+    color: var(--color-B9AEE8);
 }

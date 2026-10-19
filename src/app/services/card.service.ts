@@ -182,14 +182,14 @@ export class CardService {
         pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
         pagedCardResult.page = nextPage;
 
-        this.loadPagedCardResult(pagedCardResult);
+        this.setPagedCardResult(pagedCardResult);
     }
 
     async refreshPage() {
         let pagedCardResult = await this.fetchPage(0, this.pagedCardResult().cards.length);
         pagedCardResult.page = this.pagedCardResult().page;
 
-        this.loadPagedCardResult(pagedCardResult);
+        this.setPagedCardResult(pagedCardResult);
     }
 
     resetPagedCardResult() {
@@ -198,17 +198,17 @@ export class CardService {
 
     // set() : remplacement complet (primitif ou nouvel objet) — nouvelle référence garantie
     // update() : modification partielle → utiliser le spread { ...current, prop: newValue } pour créer une nouvelle référence
-    loadPagedCardResult(pagedCardResult: PagedCardResult) {
+    setPagedCardResult(pagedCardResult: PagedCardResult) {
         this._pagedCardResult.set(pagedCardResult);
     }
 
-    loadCardSort(cardSort: CardSort) {
+    setCardSort(cardSort: CardSort) {
         this._cardSort.set(cardSort);
 
         this.notifySortChanged();
     }
 
-    loadCardFilter(cardFilter: CardFilter) {
+    setCardFilter(cardFilter: CardFilter) {
         this._cardFilter.set(cardFilter);
 
         this.notifyFilterChanged();

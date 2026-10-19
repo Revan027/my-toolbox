@@ -26,7 +26,7 @@ export class CardConditionService {
         return MOCK_CARD_CONDITIONS;
     }
 
-    load(cardConditions: CardCondition[]){
+    set(cardConditions: CardCondition[]){
         this._cardConditions.set(cardConditions);
     }
 }

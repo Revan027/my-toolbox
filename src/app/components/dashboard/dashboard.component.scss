@@ -22,7 +22,7 @@
   border-radius: 16px;
   background: var(--color-linear);
   color: white; 
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-EDEBF4);
 }
 
 .metric-banner__icon {
@@ -35,7 +35,7 @@
 
 .metric-banner__title {
   margin: 0;
-  @include f.meta;
+  @include f.meta-text;
   opacity: 0.85;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -64,7 +64,7 @@
 .grid-counters__card {
   padding: 14px 16px;
   border-radius: 16px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-EDEBF4);
   background: white;
 }
 
@@ -100,54 +100,16 @@
 }
 
 .grid-counters__card-content {
-  color: var(--color-meta);
+  color: var(--color-6C6880);
   @include f.label;
 }
 
 .grid-counters__card-footer {
   margin: 10px 0 0;
   @include f.figure;
-  color: var(--color-ink);
+  color: var(--color-171526);
 }
 
-// ── Barre de complétion ──
-.completion {
-  padding: 14px 16px;
-  margin-top: 12px;
-  border-radius: 16px;
-  background: white;
-  border: 1px solid var(--color-border);
-}
-
-.completion__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 8px;
-}
-
-.completion__title {
- @include f.block;
-  color: var(--color-ink);
-}
-
-.completion__percentage {
-  @include f.num;
-  color: var(--color-main);
-}
-
-.completion__track {
-  height: 10px;
-  border-radius: 99px;
-  background: var(--color-border);
-  overflow: hidden;
-}
-
-.completion__fill {
-  height: 100%;
-  border-radius: 99px;
-  background: var(--color-main);
-}
 
 @keyframes animationDashboardOpen {
   from { transform: translateX(-110%); }
