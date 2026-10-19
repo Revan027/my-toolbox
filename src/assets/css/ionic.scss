@@ -69,10 +69,6 @@ ion-header[collapse="condense"] ion-toolbar {
 }
 
 // STRUCTURE
-ion-row {
-  height: 100%;
-}
-
 ion-content {
   --background: var(--color-F7F6FB);
   --padding-start: 10px;
@@ -162,4 +158,11 @@ ion-grid.grid-cards{
   height: 100%;
   border-radius: 99px;
   background: var(--color-6B3FF7);
+}
+
+// BADGE
+.badge{
+  width: 10px;
+  height: 10px;
+  margin-top: 3px;
 }

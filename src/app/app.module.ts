@@ -9,8 +9,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { Capacitor } from '@capacitor/core';
 import { CurrencyPipe } from '@angular/common';
 import { ErrorService } from './services/services.common/error.service';
-import { FileService } from './services/file.services.common/file.service';
-import { StorageService } from './services/storage.services.common/storage-service';
+import * as echarts from 'echarts/core';
+import { BarChart } from 'echarts/charts';
+import { GridComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+echarts.use([BarChart, GridComponent, CanvasRenderer]);
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 
@@ -18,7 +21,11 @@ registerLocaleData(localeFr);
 
 @NgModule({
     declarations: [AppComponent, LoaderComponent],
-    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+    imports: [
+        BrowserModule, 
+        IonicModule.forRoot(), 
+        AppRoutingModule,
+    ],
     exports: [LoaderComponent],
     providers: [
         CurrencyPipe,

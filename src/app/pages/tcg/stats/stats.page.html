@@ -28,13 +28,15 @@
             <span class="grid-counters__card-content">Total cartes</span>
          </div>
 
-         <p class="grid-counters__card-footer">
+         @if(options2() != undefined){
+            <div echarts [options]="options2()"></div>
+          }  
            
       </div>
    </div>
 
    <div class="card ion-margin-bottom"> 
-      <div class="card-title ion-margin-bottom">Pokédex</div>
+      <div class="card-title ion-margin-bottom">Avancement collections</div>
 
       <div class="completion-header">
          <span class="section-title">Génération 1</span>
@@ -47,36 +49,114 @@
    </div>
 
    <div class="card ion-margin-bottom">
-      <div class="card-title ion-margin-bottom">Répartition par rareté</div>
+      <div class="card-title ion-margin-bottom">Répartition par acquisition</div>
+      
+      <ion-row>
+         <ion-col size="5" class="muted-text ion-align-content-center">
+            @if(acquisitionChart() != undefined){
+               <div echarts [options]="acquisitionChart().option" class="pie-chart--light"></div>
+            }   
+         </ion-col>
 
-      grahpique camembert
+         <ion-col class="ion-align-content-center">
+           <ion-row>
+               @for(item of acquisitionChart().legends; track item.name; let idx = $index ){ 
+                  <ion-col size="12">
+                     <ion-row>
+                        <ion-col size="auto">
+                           <div class="badge" [style.background-color]="item.color"></div>
+                        </ion-col>
+
+                        <ion-col size="5" class="meta-text">
+                           {{item.name}}
+                        </ion-col>
+
+                        <ion-col size="2" class="price-text">
+                           {{item.value}}
+                        </ion-col>
+
+                        <ion-col size="auto" class="muted-text">
+                           {{item.percentage | number:'2.2-2' }} %
+                        </ion-col>
+                     </ion-row>
+                  </ion-col>
+               }
+            </ion-row>
+         </ion-col>
+      </ion-row>   
+   </div>
+
+   <div class="card ion-margin-bottom">
+      <div class="card-title ion-margin-bottom">Répartition par catégorie acquise</div>
+   
+      <ion-row>
+         <ion-col size="5" class="muted-text ion-align-content-center">
+            @if(categoryChart() != undefined){
+               <div echarts [options]="categoryChart().option" class="pie-chart--light"></div>
+            }   
+         </ion-col>
+
+         <ion-col class="ion-align-content-center">
+           <ion-row>
+               @for(item of categoryChart().legends; track item.name; let idx = $index ){ 
+                  <ion-col size="12">
+                     <ion-row>
+                        <ion-col size="auto">
+                           <div class="badge" [style.background-color]="item.color"></div>
+                        </ion-col>
+
+                        <ion-col size="5" class="meta-text">
+                           {{item.name}}
+                        </ion-col>
+
+                        <ion-col size="2" class="price-text">
+                           {{item.value}}
+                        </ion-col>
+
+                        <ion-col size="auto" class="muted-text">
+                           {{item.percentage | number:'2.2-2' }} %
+                        </ion-col>
+                     </ion-row>
+                  </ion-col>
+               }
+            </ion-row>
+         </ion-col>
+      </ion-row>
    </div>
 
    <div class="card">
       <div class="card-title ion-margin-bottom">Cartes les plus chères</div>
 
-      <ion-row>
-         <ion-col size="auto" class="muted-text">
-         01
-         </ion-col>
+      @for(item of expensiveCards(); track item.id; let idx = $index ){
+         <ion-row>
+            <ion-col size="1" class="muted-text ion-align-content-center">
+               {{idx + 1| number: '2.0-0'}}
+            </ion-col>
 
-         <ion-col class="ion-row">
-            photo
-         </ion-col>
+            <ion-col size="3">
+               @if (item.srcPicture) {
+                  <img class="card-image" [alt]="item.name" [src]="getSrc(item.srcPicture)"/>
+               }
+            </ion-col>
 
-         <ion-col size="auto">
-            <div class="section-title">
-               Ectoplasma VMAX Gigamax
-            </div>
+            <ion-col size="4" class="ion-align-content-center">
+               <div class="section-title">
+                  {{item.name}}
+               </div>
 
-            <div class="meta-text">
-               Styles de Combat
-            </div>
-         </ion-col>
+               <div class="meta-text">
+                  {{item.serie.name}}
+               </div>
+            </ion-col>
 
-         <ion-col class="price-text" size="auto">
-            128,00 €
-         </ion-col>
-      </ion-row>
+            <ion-col class="price-text ion-align-content-center" size="auto">
+               @if(item.averagePrice){
+                  {{ item.averagePrice | currency:'EUR':'symbol' }}
+               }  
+            </ion-col>
+         </ion-row>
+      } @empty {
+         <ion-text color="info">-</ion-text>
+      }     
    </div>
 </ion-content>
