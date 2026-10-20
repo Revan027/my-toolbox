@@ -3,6 +3,6 @@ export class DataChartLegend {
 
     value!: number;
     percentage!: number;
-    name!: string;
+    libelle!: string;
     color!: string;
 }

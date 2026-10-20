@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CardService } from 'src/app/services/card.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
+import { StatistiqueService } from 'src/app/services/statistique.service';
 
 @Component({
     standalone: false,
@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
   percentageCompletion: number = 0;
   averagePrice: number = 0;
 
-  constructor(private dashboardService: DashboardService, private cardService: CardService, ) { 
+  constructor(private statistiqueService: StatistiqueService, private cardService: CardService, ) { 
     this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.initDashboard()
     });
@@ -33,18 +33,18 @@ export class DashboardComponent implements OnInit {
 
   async initDashboard(){
     const [totalCard, totalValue, totalMissingCard, totalAcquiredCard] = await Promise.all([
-      this.dashboardService.countTotalCard(),
-      this.dashboardService.countTotalValue(),
-      this.dashboardService.countTotalMissingCard(),
-      this.dashboardService.countTotalAcquiredCard(),
+      this.statistiqueService.countTotalCard(),
+      this.statistiqueService.countTotalValue(),
+      this.statistiqueService.countTotalMissingCard(),
+      this.statistiqueService.countTotalAcquiredCard(),
     ]);
 
     this.totalCard = totalCard;
     this.totalValue = totalValue;
     this.totalMissingCard = totalMissingCard;
     this.totalAcquiredCard = totalAcquiredCard;
-    this.averagePrice = this.dashboardService.getAveragePrice(this.totalValue,  this.totalCard);
-    this.percentageCompletion = this.dashboardService.getPercentageCompletion(this.totalAcquiredCard,  this.totalCard);
+    this.averagePrice = this.statistiqueService.getAveragePrice(this.totalValue,  this.totalCard);
+    this.percentageCompletion = this.statistiqueService.getPercentageCompletion(this.totalAcquiredCard,  this.totalCard);
   }
 
   onDisplayDashboard(){

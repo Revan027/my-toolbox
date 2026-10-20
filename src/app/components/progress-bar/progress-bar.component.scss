@@ -1,0 +1,19 @@
+.completion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.completion-track {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--color-EDEBF4);
+  overflow: hidden;
+}
+
+.completion-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--color-6B3FF7);
+}

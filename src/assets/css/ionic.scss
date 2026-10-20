@@ -105,7 +105,6 @@ ion-popover{
   }
 }
 
-// CLASS ENTITE
 .card-image {
   aspect-ratio: 828 / 1147;
   object-fit: cover;
@@ -131,34 +130,7 @@ ion-grid.grid-cards{
   background: white;
 }
 
-// ── Barre de complétion ──
-.completion {
-  padding: 14px 16px;
-  margin-top: 12px;
-  border-radius: 16px;
-  background: white;
-  border: 1px solid var(--color-EDEBF4);
-}
 
-.completion-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 8px;
-}
-
-.completion-track {
-  height: 10px;
-  border-radius: 99px;
-  background: var(--color-EDEBF4);
-  overflow: hidden;
-}
-
-.completion-fill {
-  height: 100%;
-  border-radius: 99px;
-  background: var(--color-6B3FF7);
-}
 
 // BADGE
 .badge{

@@ -83,14 +83,7 @@
       </div>
    </div>
 
-   <div class="completion">
-      <div class="completion-header">
-         <span class="section-title">Complétion</span>
-         <span class="price-text"> {{ percentageCompletion | number:'1.0-0' }} %</span>
-      </div>
-
-      <div class="completion-track">
-         <div class="completion-fill" [style.width.%]="percentageCompletion"></div>
-      </div>
+   <div class="card ion-margin-top">
+      <app-progress-bar libelle="Complétion" [currentValue]="percentageCompletion"></app-progress-bar>
    </div>
 </div>

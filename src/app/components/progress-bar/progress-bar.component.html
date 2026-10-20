@@ -1,0 +1,8 @@
+<div class="completion-header">
+      <span class="section-title">{{libelle()}}</span>
+      <span class="price-text"> {{ currentValue() | number:'1.0-0' }} %</span>
+  </div>
+
+<div class="completion-track">
+    <div class="completion-fill" [style.width.%]="currentValue()"></div>
+</div>

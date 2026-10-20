@@ -30,7 +30,7 @@ export const pageTransition = (baseEl: HTMLElement, opts?: any) => {
             .create()
             .addElement(enteringEl)
             .fromTo('transform', 'translateX(-100%)', 'translateX(0)')
-            .fromTo('opacity', '1', '1');
+            .fromTo('opacity', '1', '1')
     }
     return animCtrl
         .create()
