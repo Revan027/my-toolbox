@@ -78,7 +78,7 @@ export class ChartService {
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
-                    type: 'line',
+                    type: 'none',
                     label: {
                         backgroundColor: '#b9aee8'
                     }
@@ -106,12 +106,12 @@ export class ChartService {
             ],
             yAxis: [
                 {   
-                    splitNumber: 2,
+                   
                     type: 'value', 
                     splitLine: {
                         show: false
                     },
-                    minInterval: 2000,
+                    interval: 3000,
                     axisLabel: {
                         color: '#231544',
                         fontSize: 10

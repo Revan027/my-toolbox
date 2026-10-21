@@ -4,6 +4,7 @@ import { StorageService } from './storage.services.common/storage-service';
 import { Card } from '../models/Card';
 import { DataLineChart } from '../models/DataLineChart';
 import moment from 'moment';
+import { PeriodEnum } from '../constants/PeriodEnum';
 
 
 @Injectable({
@@ -12,33 +13,6 @@ import moment from 'moment';
 export class StatistiqueService {   
     constructor(private storageService: StorageService) {
         moment.locale('fr');
-    }
-
-    async getPeriod(){
-        let results:string[] = [];
-        //les 12 derniers mois
-
-        let startDate = moment().add("-12", "months").format('YYYY-MM-01');
-        let endDate = moment().format('YYYY-MM-DD');
-         //les 6 derniers mois
-        startDate = moment().add("-3", "years").format('YYYY-MM-01');
-        endDate = moment().format('YYYY-MM-DD');
-        await this.getTotalValueChart(startDate,endDate )
-        return results;
-    }
-
-    async getMostExpensiveCard(): Promise<Card[]>{
-        let result = await this.storageService.getDb().query(`
-            SELECT card.name, card.srcPicture, card.averagePrice, serie.name as serie_name FROM ${tableName.card} as card
-            INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
-            INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = card.serieId
-            ORDER BY averagePrice DESC LIMIT 6`);
-        
-        const cards: Card[] = result.values?.map((data: any)=>{
-            return Card.fromSQL(data);
-        })|| [];   
-
-        return cards;
     }
 
     async countCompletionByGeneration(generationID: number, isAcquired: boolean | undefined = undefined): Promise<number>{
@@ -95,6 +69,38 @@ export class StatistiqueService {
 
     getPercentageCompletion(currentValue: number, total: number): number{
         return (100 * currentValue) / total;
+    }
+
+    getPeriods(periodEnum: PeriodEnum): string[]{
+        let startDate = undefined;
+        let endDate = undefined;
+
+        switch(periodEnum) {
+            case PeriodEnum.SIX_MONTH:
+                startDate = moment().add("-6", "months").format('YYYY-MM-01'); // commencement au 01 du mois
+                endDate = moment().format('YYYY-MM-DD'); // fin à la date en cours
+                break;
+            case PeriodEnum.TWELVE_MONTH:
+                startDate = moment().add("-12", "months").format('YYYY-MM-01'); // commencement au 01 du mois
+                endDate = moment().format('YYYY-MM-DD'); // fin à la date en cours
+                break;
+        }
+
+        return [startDate, endDate];
+    }
+
+    async getMostExpensiveCard(): Promise<Card[]>{
+        let result = await this.storageService.getDb().query(`
+            SELECT card.name, card.srcPicture, card.averagePrice, serie.name as serie_name FROM ${tableName.card} as card
+            INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
+            INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = card.serieId
+            ORDER BY averagePrice DESC LIMIT 6`);
+        
+        const cards: Card[] = result.values?.map((data: any)=>{
+            return Card.fromSQL(data);
+        })|| [];   
+
+        return cards;
     }
 
     async getCompletionLegendary(): Promise<number>{

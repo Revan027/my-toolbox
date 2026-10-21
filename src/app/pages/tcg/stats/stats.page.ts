@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { EChartsOption } from 'echarts';
 import moment from 'moment';
+import { PeriodEnum } from 'src/app/constants/PeriodEnum';
 import { Card } from 'src/app/models/Card';
 import { DataChart } from 'src/app/models/DataChart';
 import { ChartService } from 'src/app/services/chart.service';
@@ -22,20 +22,17 @@ export class StatsPage {
     protected percentageCompletionGeneration1 = signal<number>(0);
     protected percentageCompletionGeneration2 = signal<number>(0);
     protected percentageCompletionGlobal = signal<number>(0);
+    protected activeCurrentPeriod = signal<PeriodEnum>(PeriodEnum.TWELVE_MONTH);
 
+    protected periodEnum = PeriodEnum;
+    
     constructor(private chartService: ChartService, private statistiqueService: StatistiqueService, private fileService: FileService){
         moment.locale('fr');
     }
 
-    async ngOnInit(){alert()
-        let a:string[] = [];
-                        //les 12 derniers mois
-                
-                        let startDate = moment().add("-12", "months").format('YYYY-MM-01');
-                        let endDate = moment().format('YYYY-MM-DD');
-                         //les 6 derniers mois
-                        startDate = moment().add("-3", "years").format('YYYY-MM-01');
-                        endDate = moment().format('YYYY-MM-DD');
+    async ngOnInit(){
+        const periods = this.statistiqueService.getPeriods(this.activeCurrentPeriod());
+
         const p1 = this.statistiqueService.getMostExpensiveCard();
         const p2 = this.statistiqueService.getCategoryChart();
         const p3 = this.statistiqueService.getAcquisitionChart();
@@ -43,7 +40,7 @@ export class StatsPage {
         const p5 = this.statistiqueService.getCompletionGeneration(2);
         const p6 = this.statistiqueService.getCompletionLegendary();
         const p7 = this.statistiqueService.getCompletionGlobal();
-        const p8 = this.statistiqueService.getTotalValueChart(startDate, endDate);
+        const p8 = this.statistiqueService.getTotalValueChart(periods[0], periods[1]);
   
         await Promise.all([p1, p2, p3, p4, p5, p6, p7, p8])
             .then(async (results) => {
@@ -57,6 +54,15 @@ export class StatsPage {
                 this.setTotalValueChart(this.chartService.buildLineArea(results[7]));
             })
         // il fadura un observalbe popur écocuter un crud surl es cartes      
+    }
+    
+    async onPeriodChanged(periodEnum: PeriodEnum){
+        const periods = this.statistiqueService.getPeriods(periodEnum);
+
+        this.updateActiveCurrentPeriod(periodEnum);
+
+        // reconstruction du graphique
+        this.setTotalValueChart(this.chartService.buildLineArea(await this.statistiqueService.getTotalValueChart(periods[0], periods[1])));
     }
 
     getSrc(path: string){
@@ -93,5 +99,9 @@ export class StatsPage {
 
     setTotalValueChart(value: DataChart){
         this.totalValueChart.set({...value});
+    }
+
+    updateActiveCurrentPeriod(value: PeriodEnum){
+        this.activeCurrentPeriod.update((x) => value);
     }
 }

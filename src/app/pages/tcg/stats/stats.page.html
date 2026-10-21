@@ -18,20 +18,32 @@
 
 <ion-content class="ion-padding-top" [fullscreen]="true">
    <div class="card ion-margin-bottom">
-      <div class="card-title--6C6880 ion-margin-bottom">Valeur de la collection</div>
-      <div class="grid-counters__card">
-         <div class="grid-counters__card-header">
-            <div class="grid-counters__card-header-content grid-counters__card-header-content--purple">
-               <ion-icon name="albums-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--purple"></ion-icon>
-            </div>
+      
+      <ion-row>
+         <ion-col>
 
-            <span class="grid-counters__card-content">Total cartes</span>
-         </div>
-         @if(totalValueChart() != undefined){
-            <div echarts [options]="totalValueChart().option" class="line-chart"></div>
-         } 
-  
-      </div>
+         </ion-col>
+
+         <ion-col size="auto">
+            <ion-row class="period-selector">
+               <ion-col size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.SIX_MONTH" (click)="onPeriodChanged(periodEnum.SIX_MONTH)">
+                  <span>6 mois</span>    
+               </ion-col> 
+                  
+               <ion-col size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.TWELVE_MONTH" (click)="onPeriodChanged(periodEnum.TWELVE_MONTH)">
+                  <span>1 an</span>
+               </ion-col> 
+            </ion-row>
+         </ion-col>
+      </ion-row>
+
+      <ion-row>
+         <ion-col size="12">
+            @if(totalValueChart() != undefined){
+               <div echarts [options]="totalValueChart().option" class="line-chart"></div>
+            } 
+         </ion-col>
+      </ion-row>
    </div>
 
    <div class="card ion-margin-bottom"> 

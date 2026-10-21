@@ -9,5 +9,24 @@ ion-content {
 }
 
 .line-chart {
-  height: 220px;
+  height: 160px;
 }
+
+.period-selector{
+  background: var(--color-EDEBF4);
+  border-radius: 10px;
+  padding: 5px 10px;
+  gap: 10px;
+
+  .period{
+    padding: 5px
+  }
+
+  .period.active{
+    background: white;
+    color: var(--color-231544);
+    border-radius: 5px;
+    font-weight: bold;
+  }
+}
+
