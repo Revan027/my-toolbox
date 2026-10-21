@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, Signal, ViewChild, WritableSignal } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnDestroy, signal, Signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,20 +30,21 @@ import { Location } from '@angular/common';
 export class EditTCGPage implements OnDestroy {
     private destroyRef = inject(DestroyRef);
 
-    @ViewChild('inputFile') inputFile!: ElementRef;
-    @ViewChild('cardImageZoomed') image!: ElementRef;
+    inputFile = viewChild.required<ElementRef>('inputFile');
+    image = viewChild.required<ElementRef>('cardImageZoomed')
+    
+    loaded = signal<boolean>(false);
+    hasZoom = signal<boolean>(false);
+    card = signal<Card>(new Card());
 
     readonly generations: Signal<Generation[]>; 
     readonly series: Signal<Serie[]>;
     readonly cardConditions: Signal<CardCondition[]>;
 
     formGroup!: FormGroup;
-    card: Card = new Card();
     private debounceTimer: any;
-    lastSrcPicture: string = "";
-    loaded: boolean = false;
-    hasZoom: boolean = false;
-    panzoom?: PanzoomObject;
+    private lastSrcPicture: string = "";
+    private panzoom?: PanzoomObject;
 
     constructor(
         private route: ActivatedRoute,
@@ -69,18 +70,18 @@ export class EditTCGPage implements OnDestroy {
     async ionViewDidEnter() {    
         // Ecoute de l'event si l'url change. On ne repasse pas 2 fois dans un ngOnInit normalement
         this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (params) => {
-            this.loaded = false;
+            this.setLoaded(false);
 
             const id = Number(params.get('id'));
 
             if (Capacitor.isNativePlatform() && id){
-                this.card = await this.cardService.getById(id);
-                this.lastSrcPicture = this.card.srcPicture;
+                this.setCard(await this.cardService.getById(id));
+                this.lastSrcPicture = this.card().srcPicture;
             }
 
             this.createForm();
          
-            this.loaded = true;
+            this.setLoaded(true);
         });
     }
 
@@ -92,11 +93,11 @@ export class EditTCGPage implements OnDestroy {
     }
 
     initZoom(event: any){  
-        this.hasZoom = true;
+        this.setHasZoom(true);
 
         // ne s'execute qu'une fois le code exécuté e  le navigateur a rendu/mis à jour le DOM.
         setTimeout(()=> {
-            this.panzoom = Panzoom( this.image.nativeElement, {
+            this.panzoom = Panzoom( this.image().nativeElement, {
                 maxScale: 5,
                 minScale: 1,
             })
@@ -114,21 +115,21 @@ export class EditTCGPage implements OnDestroy {
         this.panzoom?.resetStyle();
         this.panzoom?.destroy();
 
-        this.hasZoom = false;
+        this.setHasZoom(false);
     }
 
     private createForm() {
         this.formGroup = this.formBuilder.group({
-            id: [this.card?.id],
-            name: [this.card?.name, Validators.compose([Validators.required])],
-            srcPicture: [this.card?.srcPicture, Validators.required],
-            averagePrice: [this.card?.averagePrice, null],
-            isAcquired: [this.card?.isAcquired, null],
-            serieID: [this.card?.serieID, Validators.required],
-            generationID: [this.card?.generationID, Validators.required],
-            conditionID: [this.card?.conditionID, null],
-            isLegendary: [this.card?.isLegendary, Validators.required],
-            dateAcquired: [this.card?.dateAcquired ?? (new Date()).toISOString(), null],
+            id: [this.card()?.id],
+            name: [this.card()?.name, Validators.compose([Validators.required])],
+            srcPicture: [this.card()?.srcPicture, Validators.required],
+            averagePrice: [this.card()?.averagePrice, null],
+            isAcquired: [this.card()?.isAcquired, null],
+            serieID: [this.card()?.serieID, Validators.required],
+            generationID: [this.card()?.generationID, Validators.required],
+            conditionID: [this.card()?.conditionID, null],
+            isLegendary: [this.card()?.isLegendary, Validators.required],
+            dateAcquired: [this.card()?.dateAcquired ?? (new Date()).toISOString(), null],
         });
     }
 
@@ -149,18 +150,18 @@ export class EditTCGPage implements OnDestroy {
     async onSubmit(card: Card) {
         card.dateAcquired = Card.getPeriod(new Date(card.dateAcquired ?? ""));
 
-        let result = this.card.id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
+        let result = this.card().id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
         isSuccess = (result.changes?.changes ?? 0) > 0;
 
         await this.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
 
-        if(this.card.id == 0){
+        if(this.card().id == 0){
             this.createForm();
 
             // On reset les éléments dynamique
             this.lastSrcPicture = "";
 
-            this.card = new Card();
+            this.setCard(new Card());
         } 
 
         this.cardService.notifyCardsChanged();
@@ -171,10 +172,11 @@ export class EditTCGPage implements OnDestroy {
         var me = this;
 
         let callback = async function(){
-            let result = await me.cardService.delete(me.card.id),
+            let result = await me.cardService.delete(me.card().id),
                 isSuccess = (result.changes?.changes ?? 0) > 0;
 
-                if (isSuccess)  me.deleteLastFile();
+                if (isSuccess)  
+                    me.deleteLastFile();
 
                 await me.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
                 
@@ -207,7 +209,7 @@ export class EditTCGPage implements OnDestroy {
     }
 
     onFileSelector(event: Event) {
-        this.inputFile.nativeElement.click();
+        this.inputFile().nativeElement.click();
     }
 
     async onFileChanged(event: any) {
@@ -226,7 +228,15 @@ export class EditTCGPage implements OnDestroy {
         this.lastSrcPicture = path;
     }
 
-    async onSerieChanged(event: CustomEvent) {
-       this.card.serie.srcLogo = this.series().find((serie)=> serie.id == event.detail.value)?.srcLogo || "";
+    setLoaded(value: boolean){
+        this.loaded.set(value);
+    }
+
+    setHasZoom(value: boolean){
+        this.hasZoom.set(value);
+    }
+
+    setCard(value: Card){
+        this.card.set({...value});
     }
 }

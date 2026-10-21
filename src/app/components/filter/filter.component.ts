@@ -55,8 +55,10 @@ export class FilterComponent implements OnInit {
         this.formGroup = this.formBuilder.group({
             searchText: [this.cardFilter().searchText],
             isAcquired: [this.cardFilter().isAcquired],
+            isNotAcquired: [this.cardFilter().isNotAcquired],
             serieIDs: [this.cardFilter().serieIDs],
             isLegendary: [this.cardFilter().isLegendary],
+            isNotLegendary: [this.cardFilter().isNotLegendary],
             conditionIDs: [this.cardFilter().conditionIDs],
             minPrice: [this.cardFilter().minPrice],
             maxPrice: [this.cardFilter().maxPrice],
@@ -68,7 +70,9 @@ export class FilterComponent implements OnInit {
         cardFilter.generationIDs = this.generationsIDs();
         cardFilter.searchText = datas.searchText;
         cardFilter.isAcquired = datas.isAcquired;
+        cardFilter.isNotAcquired = datas.isNotAcquired;
         cardFilter.isLegendary = datas.isLegendary;
+        cardFilter.isNotLegendary = datas.isNotLegendary;
         cardFilter.conditionIDs = datas.conditionIDs;
         cardFilter.minPrice = datas.minPrice;
         cardFilter.maxPrice = datas.maxPrice;
@@ -84,6 +88,24 @@ export class FilterComponent implements OnInit {
         this.generationsIDs.set([]);
         this.createForm();
         this.modalFilters()?.dismiss();
+    }
+
+    onToggleIsLegendary(event: any){
+        if(event.srcElement.getAttribute("formControlName") == "isNotLegendary" ){
+            this.formGroup.get("isLegendary")?.setValue(false);
+        }
+        else{
+            this.formGroup.get("isNotLegendary")?.setValue(false);
+        }
+    }
+
+    onToggleIsAcquired(event: any){
+        if(event.srcElement.getAttribute("formControlName") == "isNotAcquired" ){
+            this.formGroup.get("isAcquired")?.setValue(false);
+        }
+        else{
+            this.formGroup.get("isNotAcquired")?.setValue(false);
+        }
     }
 
     async onGenerationChanged(generationID: number, event: any) {

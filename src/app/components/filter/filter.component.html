@@ -81,17 +81,37 @@
                         <ion-input class="ion-margin-bottom" formControlName="maxPrice" type="number" inputmode="decimal" placeholder="00.00" fill="outline"></ion-input>
                     </ion-col>
 
-                    <ion-col size="12">                    
-                        <div class="ion-display-flex ion-justify-content-between">
-                            <ion-toggle formControlName="isAcquired">Acquise</ion-toggle>
-                        </div> 
-                    </ion-col>
+                    <ion-col size="12" class="ion-margin-bottom">  
+                        <ion-row>
+                            <ion-col>
+                                <div class="ion-display-flex ion-justify-content-between">
+                                    <ion-toggle formControlName="isAcquired" (ionChange)="onToggleIsAcquired($event)">Acquise</ion-toggle>
+                                </div>                        
+                            </ion-col>
 
-                    <ion-col size="12">                    
-                        <div class="ion-display-flex ion-justify-content-between">
-                            <ion-toggle formControlName="isLegendary">Légendaire</ion-toggle>
-                        </div> 
-                    </ion-col>
+                             <ion-col>
+                                <div class="ion-display-flex ion-justify-content-between">
+                                    <ion-toggle formControlName="isNotAcquired" (ionChange)="onToggleIsAcquired($event)">Non Acquise</ion-toggle>
+                                </div>
+                            </ion-col>
+                        </ion-row>  
+                    </ion-col> 
+                    
+                    <ion-col size="12" class="ion-margin-bottom">  
+                        <ion-row>
+                            <ion-col>
+                                <div class="ion-display-flex ion-justify-content-between">
+                                    <ion-toggle formControlName="isLegendary" (ionChange)="onToggleIsLegendary($event)">Légendaire</ion-toggle>
+                                </div> 
+                            </ion-col>
+
+                             <ion-col>
+                               <div class="ion-display-flex ion-justify-content-between">
+                                    <ion-toggle formControlName="isNotLegendary" (ionChange)="onToggleIsLegendary($event)">Non Légendaire</ion-toggle>
+                                </div> 
+                            </ion-col>
+                        </ion-row>  
+                    </ion-col> 
                 </ion-row>
         
                 <div class="ion-margin-top action-buttons">
