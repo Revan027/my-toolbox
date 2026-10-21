@@ -36,18 +36,18 @@ export class SuiviTCGPage {
 
         // on s'abonne pour savoir quand les cartes ont été modifiées
         this.cardService.cardsChanged
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => {
-            this.refreshSearch();
-        });
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.refreshSearch();
+            });
 
         // on s'abonne pour savoir si un trie ou une recherche a été faites
         merge(this.cardService.sortChanged, this.cardService.filterChanged)
-        .pipe( 
-            switchMap(() => this.search()),
-            takeUntilDestroyed(this.destroyRef)
-        )
-        .subscribe();
+            .pipe( 
+                switchMap(() => this.search()),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe();
     }
 
     ngOnInit(){
