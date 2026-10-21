@@ -1,0 +1,33 @@
+@use '../../../../assets/css/font.scss' as f; 
+
+ion-content {
+  --padding-bottom: 80px;
+}
+
+.pie-chart--light {
+  height: 160px;
+}
+
+.line-chart {
+  height: 160px;
+}
+
+.period-selector{
+  background: var(--color-EDEBF4);
+  border-radius: 10px;
+  padding: 5px 10px;
+  display: flex;
+  gap: 10px;
+
+  .period{
+    padding: 5px
+  }
+
+  .period.active{
+    background: white;
+    color: var(--color-231544);
+    border-radius: 5px;
+    font-weight: bold;
+  }
+}
+

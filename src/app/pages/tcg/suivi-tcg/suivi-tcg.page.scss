@@ -1,15 +1,11 @@
 @use '../../../../assets/css/font' as f; 
 
 
-ion-grid.grid-cards{
-  --ion-grid-padding: 0;
-}
-
 .resume-search{
   display: flex;
   align-items: stretch;
   background: white;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-EDEBF4);
   border-radius: 16px;
   padding: 8px 4px;
   margin-bottom: 12px;
@@ -23,12 +19,12 @@ ion-grid.grid-cards{
 
 .resume-search__section-value{
   margin: 0; 
-  color: var(--color-ink);
-  @include f.block;
+  color: var(--color-171526);
+  @include f.card-title;
 }
 
 .resume-search__section-result{
-  color: var(--color-meta);
+  color: var(--color-6C6880);
   @include f.label;
 }
 

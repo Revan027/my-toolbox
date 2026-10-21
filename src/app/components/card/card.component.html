@@ -20,16 +20,16 @@
    </ion-card-header>
 
    <ion-card-content select="[body]">
-      <div class="card-name ion-margin-bottom">
+      <div class="section-title ion-margin-bottom">
          {{ card().name }}
       </div>
 
       <div class="card-meta">
-         <div class="card-serie">
+         <div class="meta-text">
             {{ card().serie.name }}
          </div>
 
-         <div class="card-price">
+         <div class="price-text">
             @if(card().averagePrice){
                {{ card().averagePrice | currency:'EUR':'symbol' }}
             }        

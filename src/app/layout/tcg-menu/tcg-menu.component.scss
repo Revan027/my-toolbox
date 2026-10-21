@@ -1,4 +1,4 @@
-@use '../../assets/css/font.scss' as f; 
+@use '../../../assets/css/font.scss' as f; 
 
 ion-tab-bar {
   --background: #ffffff;
@@ -8,20 +8,20 @@ ion-tab-bar {
 }
 
 ion-tab-button {
-  --color-selected: var(--color-muted); 
+  --color-selected: var(--color-A6A2B6); 
   @include f.menu;
 
   ion-label{
-    color: var(--color-muted); 
+    color: var(--color-A6A2B6); 
     @include f.menu;
   }
 
   &.tab-selected{
-    --color-selected: var(--color-main); 
+    --color-selected: var(--color-6B3FF7); 
     @include f.menu-selected;
 
     ion-label{
-      color: var(--color-main); 
+      color: var(--color-6B3FF7); 
       @include f.menu-selected;
     }
   }

@@ -26,7 +26,7 @@ export class GenerationService {
         return MOCK_GENERATIONS;
     }
 
-    load(generations: Generation[]){
+    set(generations: Generation[]){
         this._generations.set(generations);
     }
 }

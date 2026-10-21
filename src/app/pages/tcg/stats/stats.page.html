@@ -1,0 +1,186 @@
+<ion-header [translucent]="true">
+   <ion-toolbar>
+      <div class="header-content">
+         <div class="hearder-icon">
+           <ion-icon name="stats-chart-outline"></ion-icon>
+         </div>
+
+        <div class="header-text">
+            <span class="header-title">Statistique</span> 
+         
+            <span class="header-description">
+               Statistiques de la collection
+            </span> 
+         </div>              
+      </div>
+   </ion-toolbar>  
+</ion-header>
+
+<ion-content class="ion-padding-top" [fullscreen]="true">
+   <div class="card--full ion-margin-bottom">
+
+      <app-metric-banner></app-metric-banner>
+
+      <div class="card-content">
+         <ion-row class="ion-justify-content-end">
+            <ion-col size="auto">
+               <div class="period-selector">
+                  <div size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.SIX_MONTH" (click)="onPeriodChanged(periodEnum.SIX_MONTH)">
+                     <span>6 mois</span>    
+                  </div> 
+                     
+                  <div size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.TWELVE_MONTH" (click)="onPeriodChanged(periodEnum.TWELVE_MONTH)">
+                     <span>1 an</span>
+                  </div> 
+
+                  <div size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.ALL" (click)="onPeriodChanged(periodEnum.ALL)">
+                     <span>Tout</span>
+                  </div> 
+               </div>
+            </ion-col>       
+         </ion-row>
+
+         <ion-row>
+            <ion-col size="12">
+               @if(totalValueChart() != undefined){
+                  <div echarts [options]="totalValueChart().option" class="line-chart"></div>
+               } 
+            </ion-col>
+         </ion-row>
+      </div>
+   </div>
+
+   <div class="card ion-margin-bottom"> 
+      <div class="card-title ion-margin-bottom">Avancement collections</div>
+
+      <ion-row>
+         <ion-col size="12">
+            <app-progress-bar libelle="Génération 1" [currentValue]="percentageCompletionGeneration1()"></app-progress-bar>
+         </ion-col>
+
+         <ion-col size="12">
+            <app-progress-bar libelle="Génération 2" [currentValue]="percentageCompletionGeneration2()"></app-progress-bar>
+         </ion-col>
+
+         <ion-col size="12">
+            <app-progress-bar libelle="Légendaires" [currentValue]="percentageCompletionLegendary()"></app-progress-bar>
+         </ion-col>
+
+         <ion-col size="12">
+            <app-progress-bar libelle="Total" [currentValue]="percentageCompletionGlobal()"></app-progress-bar>
+         </ion-col>
+      </ion-row>
+   </div>
+
+   <div class="card ion-margin-bottom">
+      <div class="card-title ion-margin-bottom">Répartition par acquisition</div>
+      
+      <ion-row>
+         <ion-col size="5" class="muted-text ion-align-content-center">
+            @if(acquisitionChart() != undefined){
+               <div echarts [options]="acquisitionChart().option" class="pie-chart--light"></div>
+            }   
+         </ion-col>
+
+         <ion-col class="ion-align-content-center">
+           <ion-row>
+               @for(item of acquisitionChart().legends; track item.libelle; let idx = $index ){ 
+                  <ion-col size="12">
+                     <ion-row>
+                        <ion-col size="auto">
+                           <div class="badge" [style.background-color]="item.color"></div>
+                        </ion-col>
+
+                        <ion-col size="5" class="meta-text">
+                           {{item.libelle}}
+                        </ion-col>
+
+                        <ion-col size="2" class="price-text">
+                           {{item.value}}
+                        </ion-col>
+
+                        <ion-col size="auto" class="muted-text">
+                           {{item.percentage | number:'2.2-2' }} %
+                        </ion-col>
+                     </ion-row>
+                  </ion-col>
+               }
+            </ion-row>
+         </ion-col>
+      </ion-row>   
+   </div>
+
+   <div class="card ion-margin-bottom">
+      <div class="card-title ion-margin-bottom">Répartition par catégorie acquise</div>
+   
+      <ion-row>
+         <ion-col size="5" class="muted-text ion-align-content-center">
+            @if(categoryChart() != undefined){
+               <div echarts [options]="categoryChart().option" class="pie-chart--light"></div>
+            }   
+         </ion-col>
+
+         <ion-col class="ion-align-content-center">
+           <ion-row>
+               @for(item of categoryChart().legends; track item.libelle; let idx = $index ){ 
+                  <ion-col size="12">
+                     <ion-row>
+                        <ion-col size="auto">
+                           <div class="badge" [style.background-color]="item.color"></div>
+                        </ion-col>
+
+                        <ion-col size="5" class="meta-text">
+                           {{item.libelle}}
+                        </ion-col>
+
+                        <ion-col size="2" class="price-text">
+                           {{item.value}}
+                        </ion-col>
+
+                        <ion-col size="auto" class="muted-text">
+                           {{item.percentage | number:'2.2-2' }} %
+                        </ion-col>
+                     </ion-row>
+                  </ion-col>
+               }
+            </ion-row>
+         </ion-col>
+      </ion-row>
+   </div>
+
+   <div class="card">
+      <div class="card-title ion-margin-bottom">Cartes les plus chères</div>
+
+      @for(item of expensiveCards(); track item.id; let idx = $index ){
+         <ion-row>
+            <ion-col size="1" class="muted-text ion-align-content-center">
+               {{idx + 1| number: '2.0-0'}}
+            </ion-col>
+
+            <ion-col size="3">
+               @if (item.srcPicture) {
+                  <img class="card-image" [alt]="item.name" [src]="getSrc(item.srcPicture)"/>
+               }
+            </ion-col>
+
+            <ion-col size="4" class="ion-align-content-center">
+               <div class="section-title">
+                  {{item.name}}
+               </div>
+
+               <div class="meta-text">
+                  {{item.serie.name}}
+               </div>
+            </ion-col>
+
+            <ion-col class="price-text ion-align-content-center" size="auto">
+               @if(item.averagePrice){
+                  {{ item.averagePrice | currency:'EUR':'symbol' }}
+               }  
+            </ion-col>
+         </ion-row>
+      } @empty {
+         <ion-text color="info">-</ion-text>
+      }     
+   </div>
+</ion-content>

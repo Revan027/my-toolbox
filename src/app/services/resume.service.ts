@@ -43,11 +43,11 @@ export class ResumeService {
         return result.values != undefined ? result.values[0].totalCard : 0
     }
    
-    loadTotalValue(value: number){
+    private loadTotalValue(value: number){
         this._totalValue.set(value);
     }
 
-    loadTotalCard(value: number){
+    private loadTotalCard(value: number){
         this._totalCard.set(value);
     }
 }

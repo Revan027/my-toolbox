@@ -64,7 +64,7 @@ export class SuiviTCGPage {
             pagedCardResult.cards = MOCK_CARDS;
             pagedCardResult.totalCount = MOCK_CARDS.length;
 
-            this.cardService.loadPagedCardResult(pagedCardResult);
+            this.cardService.setPagedCardResult(pagedCardResult);
         }
         else{
             this.loaded = true;

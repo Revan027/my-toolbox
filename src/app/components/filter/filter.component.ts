@@ -76,11 +76,11 @@ export class FilterComponent implements OnInit {
 
         this.modalFilters()?.dismiss();
 
-        this.cardService.loadCardFilter(cardFilter);
+        this.cardService.setCardFilter(cardFilter);
     }
 
     onReset() {     
-        this.cardService.loadCardFilter(new CardFilter());
+        this.cardService.setCardFilter(new CardFilter());
         this.generationsIDs.set([]);
         this.createForm();
         this.modalFilters()?.dismiss();

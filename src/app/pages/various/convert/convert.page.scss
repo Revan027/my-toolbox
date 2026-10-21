@@ -1,0 +1,15 @@
+@use '../../../../assets/css/font.scss' as f; 
+
+.swap-icon {
+  color: var(--color-A6A2B6);
+}
+
+.result-box {
+  background: var(--color-231544);
+  border-radius: 12px;
+  color: #fff;
+}
+
+.result-label {
+  @include f.figure;
+}

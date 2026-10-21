@@ -3,23 +3,7 @@
 </button>
 
 <div class="dashboard-panel ion-margin-bottom" [class.open]="displayDashboard == true" [class.close]="displayDashboard === false" (animationend)="onAnimationDone($event)">
-   <div class="metric-banner">
-      <ion-icon class="metric-banner__icon" name="diamond-outline"></ion-icon>
-
-      <p class="metric-banner__title">
-         Valeur estimée
-      </p>
-
-      <p class="metric-banner__amount">
-         {{ totalValue | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
-      </p>
-
-      <div class="metric-banner__stats">
-         <ion-icon name="trending-up-outline"></ion-icon>
-
-         <span style="font-size: var(--ion-font-size-xs); opacity: 0.9;">+82,30 € ce mois</span>
-      </div>
-   </div>
+   <app-metric-banner></app-metric-banner>
 
    <div class="grid-counters">
       <!-- Total cartes -->
@@ -83,14 +67,7 @@
       </div>
    </div>
 
-   <div class="completion">
-      <div class="completion__header">
-         <span class="completion__title">Complétion</span>
-         <span class="completion__percentage"> {{ percentageCompletion | number:'1.0-0' }} %</span>
-      </div>
-
-      <div class="completion__track">
-         <div class="completion__fill" [style.width.%]="percentageCompletion"></div>
-      </div>
+   <div class="card ion-margin-top">
+      <app-progress-bar libelle="Complétion" [currentValue]="percentageCompletion"></app-progress-bar>
    </div>
 </div>

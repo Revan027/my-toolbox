@@ -15,7 +15,7 @@ export class CurrencyService {
         await this.getAll();
     }
 
-    async create(currencies: Currency[]) {
+    private async create(currencies: Currency[]) {
         await Promise.all(currencies.map((currency) => {
             const sql = `INSERT INTO ${tableName.currency} (symbol, name) VALUES ("${currency.symbol}", "${currency.name}")`;
 
@@ -31,7 +31,7 @@ export class CurrencyService {
         return result.values as Currency[];
     }
 
-    async delete() {
+    private async delete() {
         const sql = `DELETE FROM ${tableName.currency}`;
 
         return await this.storageService.getDb().execute(sql);

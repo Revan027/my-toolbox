@@ -98,7 +98,7 @@ export class ExchangeRateService {
         return currencies;
     }
 
-    roundTo(amount: number, decimal: number) {
+    private roundTo(amount: number, decimal: number) {
         const factor = Math.pow(10, decimal);
 
         return Math.round(amount * factor) / factor;
@@ -124,11 +124,11 @@ export class ExchangeRateService {
         return this.roundTo(result, 2);
     }
 
-    loadRates(rates: Rate[]){
+    setRates(rates: Rate[]){
         this._rates.set(rates);
     }
 
-    loadCurrencies(currencies: Currency[]){
+    setCurrency(currencies: Currency[]){
         this._currency.set(currencies);
     }
 }

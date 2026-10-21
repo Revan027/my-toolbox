@@ -1,0 +1,15 @@
+@use '../../../../assets/css/font.scss' as f; 
+
+ion-content {
+  --padding-bottom: 80px;
+}
+
+ion-progress-bar{
+  --background: var(--color-B9AEE8);
+  --progress-background: var(--color-6B3FF7);
+}
+
+.step-name, .action-info{
+  color: var(--color-6C6880);
+  @include f.meta-text;
+}
