@@ -14,45 +14,6 @@
   &.close { animation-name: animationDashboardClose; }
 }
 
-// ── Bannière valeur de collection ──
-.metric-banner {
-  position: relative;
-  overflow: hidden;
-  padding: 18px 20px;
-  border-radius: 16px;
-  background: var(--color-linear);
-  color: white; 
-  border: 1px solid var(--color-EDEBF4);
-}
-
-.metric-banner__icon {
-  position: absolute;
-  right: -10px;
-  top: -10px;
-  font-size: 96px;
-  opacity: 0.12;
-}
-
-.metric-banner__title {
-  margin: 0;
-  @include f.meta-text;
-  opacity: 0.85;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-}
-
-.metric-banner__amount {
-  margin: 2px 0 0;
-  @include f.display;
-}
-
-.metric-banner__stats {
-  display: none; // v3 : masqué (était flex)
-  align-items: center;
-  gap: 6px;
-  margin-top: 6px;
-}
-
 // ── Grille de tuiles compteurs ──
 .grid-counters {
   display: grid;

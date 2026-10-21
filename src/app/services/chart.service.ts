@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { EChartsOption } from 'echarts';
 import { DataLineChart } from '../models/DataLineChart';
 import { DataChartLegend } from '../models/DataChartLegend';
 import { DataChart } from '../models/DataChart';

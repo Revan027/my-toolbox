@@ -17,33 +17,37 @@
 </ion-header>
 
 <ion-content class="ion-padding-top" [fullscreen]="true">
-   <div class="card ion-margin-bottom">
-      
-      <ion-row>
-         <ion-col>
+   <div class="card--full ion-margin-bottom">
 
-         </ion-col>
+      <app-metric-banner></app-metric-banner>
 
-         <ion-col size="auto">
-            <ion-row class="period-selector">
-               <ion-col size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.SIX_MONTH" (click)="onPeriodChanged(periodEnum.SIX_MONTH)">
-                  <span>6 mois</span>    
-               </ion-col> 
-                  
-               <ion-col size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.TWELVE_MONTH" (click)="onPeriodChanged(periodEnum.TWELVE_MONTH)">
-                  <span>1 an</span>
-               </ion-col> 
-            </ion-row>
-         </ion-col>
-      </ion-row>
+      <div class="card-content">
+         <ion-row class="ion-justify-content-end">
+            <ion-col size="auto">
+               <div class="period-selector">
+                  <div size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.SIX_MONTH" (click)="onPeriodChanged(periodEnum.SIX_MONTH)">
+                     <span>6 mois</span>    
+                  </div> 
+                     
+                  <div size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.TWELVE_MONTH" (click)="onPeriodChanged(periodEnum.TWELVE_MONTH)">
+                     <span>1 an</span>
+                  </div> 
 
-      <ion-row>
-         <ion-col size="12">
-            @if(totalValueChart() != undefined){
-               <div echarts [options]="totalValueChart().option" class="line-chart"></div>
-            } 
-         </ion-col>
-      </ion-row>
+                  <div size="auto" class="period meta-text" [class.active]="activeCurrentPeriod() == periodEnum.ALL" (click)="onPeriodChanged(periodEnum.ALL)">
+                     <span>Tout</span>
+                  </div> 
+               </div>
+            </ion-col>       
+         </ion-row>
+
+         <ion-row>
+            <ion-col size="12">
+               @if(totalValueChart() != undefined){
+                  <div echarts [options]="totalValueChart().option" class="line-chart"></div>
+               } 
+            </ion-col>
+         </ion-row>
+      </div>
    </div>
 
    <div class="card ion-margin-bottom"> 

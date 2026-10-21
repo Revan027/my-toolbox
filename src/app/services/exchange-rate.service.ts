@@ -98,7 +98,7 @@ export class ExchangeRateService {
         return currencies;
     }
 
-    roundTo(amount: number, decimal: number) {
+    private roundTo(amount: number, decimal: number) {
         const factor = Math.pow(10, decimal);
 
         return Math.round(amount * factor) / factor;

@@ -6,6 +6,7 @@ import { StatsPageRoutingModule } from './stats-routing.module';
 import { NgxEchartsDirective, NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { ProgressBarModule } from 'src/app/components/progress-bar/progress-bar.module';
+import { MetricBannerModule } from 'src/app/components/metric-banner/metric-banner.module';
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { ProgressBarModule } from 'src/app/components/progress-bar/progress-bar.
         StatsPageRoutingModule,
         NgxEchartsDirective,     
         NgxEchartsModule.forRoot({ echarts }),
-        ProgressBarModule
+        ProgressBarModule,
+        MetricBannerModule,
     ],
     declarations: [StatsPage],
 })

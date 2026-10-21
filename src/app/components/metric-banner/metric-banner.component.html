@@ -1,0 +1,23 @@
+<div class="metric-banner">
+    <ion-icon class="metric-banner-icon" name="diamond-outline"></ion-icon>
+
+    <p class="metric-banner-title">
+        Valeur estimée
+    </p>
+
+    <div class="metric-banner-footer">
+        <div class="metric-banner-amount">
+            {{ totalValue() | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
+        </div>
+
+        <div class="metric-banner-stats positive meta-text" [class.positive]="progressPercentage() > 0" [class.negative]="progressPercentage() <= 0">
+            @if(progressPercentage() > 0){
+                <ion-icon name="trending-up-outline"></ion-icon>
+            }
+            @else{
+                <ion-icon name="trending-down-outline"></ion-icon>
+            }
+            <span>{{progressPercentage() | number:'1.0-1'}} %</span>
+        </div>
+    </div>
+</div>

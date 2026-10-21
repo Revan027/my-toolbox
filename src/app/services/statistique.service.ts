@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { tableName } from 'src/app/constants/table-names';
 import { StorageService } from './storage.services.common/storage-service';
 import { Card } from '../models/Card';
@@ -10,12 +10,18 @@ import { PeriodEnum } from '../constants/PeriodEnum';
 @Injectable({
     providedIn: 'root',
 })
-export class StatistiqueService {   
+export class StatistiqueService {  
+    private progressionPercentage = signal<number>(0);
+    private totalValue = signal<number>(0);
+
+    _progressionPercentage = this.progressionPercentage.asReadonly();
+    _totalValue = this.totalValue.asReadonly();
+
     constructor(private storageService: StorageService) {
         moment.locale('fr');
     }
 
-    async countCompletionByGeneration(generationID: number, isAcquired: boolean | undefined = undefined): Promise<number>{
+    private async countCompletionByGeneration(generationID: number, isAcquired: boolean | undefined = undefined): Promise<number>{
         let result = await this.storageService.getDb().query(`
             SELECT COUNT(*) as totalCount
             FROM ${tableName.card} as card
@@ -24,7 +30,7 @@ export class StatistiqueService {
         return result.values != undefined ? result.values[0].totalCount : 0
     }  
     
-    async countLegendary(isAcquired: boolean | undefined = undefined): Promise<number>{
+    private async countLegendary(isAcquired: boolean | undefined = undefined): Promise<number>{
         let result = await this.storageService.getDb().query(`
             SELECT COUNT(*) as totalCount
             FROM ${tableName.card} as card
@@ -67,8 +73,26 @@ export class StatistiqueService {
         return totalValue / totalCard;
     }
 
-    getPercentageCompletion(currentValue: number, total: number): number{
+    getCompletionPercentage(currentValue: number, total: number): number{
         return (100 * currentValue) / total;
+    }
+
+    private getProgressionPercentage(initValue: number, finalValue: number){
+        return ((finalValue - initValue) / initValue) * 100;
+    }
+
+    async getProgressionByMonth(currentValue: number){
+        const periods = this.getPeriods(PeriodEnum.PREVIOUS_MONTH);
+        
+        // récupération de la valeur du mois dernier
+        let result = await this.storageService.getDb().query(`
+            SELECT SUM(averagePrice) as totalCount FROM ${tableName.card}
+            WHERE DATE(dateAcquired || '-01') <= ?
+            AND isAcquired = 1`, [periods[0]]);
+           
+        const initValue = result.values != undefined ? result.values[0].totalCount : 0;    
+ 
+        return this.getProgressionPercentage(initValue, currentValue);
     }
 
     getPeriods(periodEnum: PeriodEnum): string[]{
@@ -82,6 +106,14 @@ export class StatistiqueService {
                 break;
             case PeriodEnum.TWELVE_MONTH:
                 startDate = moment().add("-12", "months").format('YYYY-MM-01'); // commencement au 01 du mois
+                endDate = moment().format('YYYY-MM-DD'); // fin à la date en cours
+                break;
+            case PeriodEnum.PREVIOUS_MONTH:
+                startDate = moment().add("-1", "months").format('YYYY-MM-01'); // commencement au 01 du mois
+                endDate = moment().format('YYYY-MM-DD'); // fin à la date en cours
+                break;
+            case PeriodEnum.ALL:
+                startDate = moment().format('2024-01-01'); // commencement au 01 du mois
                 endDate = moment().format('YYYY-MM-DD'); // fin à la date en cours
                 break;
         }
@@ -107,37 +139,48 @@ export class StatistiqueService {
         const total = await this.countLegendary();
         const currentValue = await this.countLegendary(true);
 
-        return this.getPercentageCompletion(currentValue, total);
+        return this.getCompletionPercentage(currentValue, total);
     }
 
     async getCompletionGeneration(generationID: number): Promise<number>{
         const total = await this.countCompletionByGeneration(generationID);
         const currentValue = await this.countCompletionByGeneration(generationID, true);
 
-        return this.getPercentageCompletion(currentValue, total);
+        return this.getCompletionPercentage(currentValue, total);
     }
 
     async getCompletionGlobal(): Promise<number>{
         const total = await this.countTotalCard();
         const currentValue = await this.countTotalAcquiredCard();
 
-        return this.getPercentageCompletion(currentValue, total);
+        return this.getCompletionPercentage(currentValue, total);
     }
     
     async getTotalValueChart(startBegin: string, endBegin: string): Promise<DataLineChart[]>{   
+        let startValue = 0;
         // regroupement par mois et calcul de la valeur des cartes du mois
-        let result = await this.storageService.getDb().query(`
+        //WHERE DATE(dateAcquired || '-01') >= ? AND DATE(dateAcquired || '-01') <= ?
+  
+        // recherche de la valeur de la collection avant la date de début
+       let result = await this.storageService.getDb().query(`
+            SELECT SUM(averagePrice) as totalCount FROM ${tableName.card}
+            WHERE DATE(dateAcquired || '-01') < ?
+            AND isAcquired = 1`, [startBegin]);
+
+        startValue = result.values != undefined ? result.values[0].totalCount : 0;
+
+        result = await this.storageService.getDb().query(`
             SELECT SUM(averagePrice) as totalCount, dateAcquired as libelle  FROM ${tableName.card}
             WHERE DATE(dateAcquired || '-01') >= ? AND DATE(dateAcquired || '-01') <= ?
             AND isAcquired = 1
             GROUP BY dateAcquired`, [startBegin, endBegin]);
         
         const values: any[] = result.values ?? [];
-        let previousValue = 0;
+        let previousValue = startValue;
 
         // parcours des mois et ajout de la valeur précédente à la valeur en cours pour avoir une progression total
         for(let value of values){
-            value.totalCount = (Math.round((value.totalCount + previousValue) * 100) / 100); // on arrondiee pour éviter des chiffres infinie du a sql lite
+            value.totalCount = (Math.round((value.totalCount + previousValue) * 100) / 100); // on arrondie pour éviter des chiffres infinie du a sql lite
 
             previousValue = value.totalCount;
             value.libelle = moment(value.libelle).format('MM/YY');
@@ -147,7 +190,7 @@ export class StatistiqueService {
             return DataLineChart.fromSQL(data);
         })|| []; 
 
-       // alert(JSON.stringify(values, null, 2));
+        //alert(JSON.stringify(values, null, 2));
         return lines;
     }
 
@@ -185,4 +228,12 @@ export class StatistiqueService {
 
         return lines;
     }   
+
+    setProgressionPercentage(value: number){
+        this.progressionPercentage.set(value)
+    }
+
+    setTotalValue(value: number){
+        this.totalValue.set(value)
+    } 
 }

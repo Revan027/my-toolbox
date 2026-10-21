@@ -140,7 +140,7 @@ export class CardService {
                 ${this.cardSort().priceAscending === true ? `card.averagePrice ${SortEnum.DESC} NULLS LAST` : "TRUE"}`;
     }
 
-    getSortDirection(checked: boolean): string{
+    private getSortDirection(checked: boolean): string{
         return checked ? SortEnum.ASC : SortEnum.DESC
     }
 

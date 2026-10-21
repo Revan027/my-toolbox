@@ -14,7 +14,6 @@ export class DashboardComponent implements OnInit {
 
   // todo : avec l'arrivé d'une page dédie, des signaux seront nécéssaire pour recalculer le tout après une modif de liste
   displayDashboard: boolean | undefined = true;
-  totalValue: number = 0;
   totalCard: number = 0;
   totalMissingCard: number = 0;
   totalAcquiredCard: number = 0;
@@ -32,19 +31,17 @@ export class DashboardComponent implements OnInit {
   }
 
   async initDashboard(){
-    const [totalCard, totalValue, totalMissingCard, totalAcquiredCard] = await Promise.all([
+    const [totalCard, totalMissingCard, totalAcquiredCard] = await Promise.all([
       this.statistiqueService.countTotalCard(),
-      this.statistiqueService.countTotalValue(),
       this.statistiqueService.countTotalMissingCard(),
       this.statistiqueService.countTotalAcquiredCard(),
     ]);
 
     this.totalCard = totalCard;
-    this.totalValue = totalValue;
     this.totalMissingCard = totalMissingCard;
     this.totalAcquiredCard = totalAcquiredCard;
-    this.averagePrice = this.statistiqueService.getAveragePrice(this.totalValue,  this.totalCard);
-    this.percentageCompletion = this.statistiqueService.getPercentageCompletion(this.totalAcquiredCard,  this.totalCard);
+    this.averagePrice = this.statistiqueService.getAveragePrice(this.statistiqueService._totalValue(),  this.totalCard);
+    this.percentageCompletion = this.statistiqueService.getCompletionPercentage(this.totalAcquiredCard,  this.totalCard);
   }
 
   onDisplayDashboard(){
