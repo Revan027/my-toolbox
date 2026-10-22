@@ -6,9 +6,9 @@
          </div>
 
         <div class="header-text">
-            <span class="header-title">Backup</span> 
+            <span class="header-title page-title">Backup</span> 
          
-            <span class="header-description">
+            <span class="meta-text">
                Sauvegarder les données
             </span> 
          </div>              
@@ -22,7 +22,7 @@
          <ion-col class="ion-margin-bottom" size="12">
             <ion-progress-bar [value]="stepProgression()"></ion-progress-bar>
 
-            <div class="step-name">
+            <div class="meta-text">
                @if(currentStep()?.stepOrder){
                   {{currentStep()?.name}} - {{currentStep()?.statusText?.toUpperCase()}} - {{`${currentStep()?.stepOrder}/${countStep()}`}}
                }@else{
@@ -46,7 +46,7 @@
                Importer des données
             </ion-button>
 
-            <div class="action-info">
+            <div class="meta-text">
               Le premier fichier doit être le .txt et le second le .zip     
             </div>
          </div>

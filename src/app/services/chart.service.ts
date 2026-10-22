@@ -143,7 +143,7 @@ export class ChartService {
         return dataChart;
     }
 
-    private getColor(index: number, colors: string[]){
+    private getColor(index: number, colors: string[]): string{
         return colors[index > colors.length - 1 ? (index - Math.trunc(index / 2) * colors.length) : index]
     }
 
@@ -165,7 +165,7 @@ export class ChartService {
         return legends; 
     }
 
-    private getTotal(dataLineChart: DataLineChart[]){
+    private getTotal(dataLineChart: DataLineChart[]): number{
         return dataLineChart.map(x => x.value).reduce((x, y) => x + y);
     }
 }

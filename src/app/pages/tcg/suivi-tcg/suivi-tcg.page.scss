@@ -1,6 +1,3 @@
-@use '../../../../assets/css/font' as f; 
-
-
 .resume-search{
   display: flex;
   align-items: stretch;
@@ -9,27 +6,17 @@
   border-radius: 16px;
   padding: 8px 4px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.resume-search-title{
+  flex: stretch;
 }
 
 .resume-search-section{
   flex: 1; 
   text-align: center; 
   padding: 0 6px;
-}
-
-.resume-search-section-value{
-  margin: 0; 
-  color: var(--color-171526);
-  @include f.card-title;
-}
-
-.resume-search-section-result{
-  color: var(--color-6C6880);
-  @include f.label;
-}
-
-.resume-search-section-value--indigo {
-  color: #7c3aed;
 }
 
 .resume-search-separator{

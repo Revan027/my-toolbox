@@ -14,7 +14,7 @@ export class CardConditionService {
 
     constructor(private storageService: StorageService) {}
 
-    async getAll() {
+    async getAll(): Promise<CardCondition[]> {
         if (Capacitor.isNativePlatform()){
             let result = await this.storageService
                 .getDb()
@@ -26,7 +26,7 @@ export class CardConditionService {
         return MOCK_CARD_CONDITIONS;
     }
 
-    set(cardConditions: CardCondition[]){
+    set(cardConditions: CardCondition[]): void{
         this._cardConditions.set(cardConditions);
     }
 }

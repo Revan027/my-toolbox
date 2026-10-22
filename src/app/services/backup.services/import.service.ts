@@ -19,7 +19,7 @@ export class ImportService extends BackupService {
         super();
     }
 
-    private initExportTCG(jsonFile: File, zipFile: File){
+    private initExportTCG(jsonFile: File, zipFile: File): void{
         this.jsonFile = jsonFile;
         this.zipFile = zipFile;
 
@@ -58,7 +58,7 @@ export class ImportService extends BackupService {
         }
     }
 
-    private async inportDataCards(){
+    private async inportDataCards(): Promise<void>{
         // On ferme la base
         await this.storageService.closeDb();
 
@@ -73,7 +73,7 @@ export class ImportService extends BackupService {
         await this.storageService.initPlugin();
     }
 
-    private async importDirectoryCardImages(){  
+    private async importDirectoryCardImages(): Promise<void>{  
         await this.fileService.createDir(folder.Backup, Directory.Documents);
 
         // Le zip vient d'une autre app (gestionnaire de fichiers, Drive...), donc Android
