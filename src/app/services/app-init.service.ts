@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { FileService } from './file.services.common/file.service';
-import { StorageService } from './storage.services.common/storage-service';
+import { FileService } from './capacitor.services.common/file.service';
+import { StorageService } from './capacitor.services.common/storage-service';
 import { GenerationService } from './generation.service';
 import { SerieService } from './serie.service';
 import { CardConditionService } from './card-condition.service';

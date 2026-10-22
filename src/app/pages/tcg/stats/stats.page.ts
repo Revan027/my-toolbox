@@ -6,7 +6,7 @@ import { Card } from 'src/app/models/Card';
 import { DataChart } from 'src/app/models/DataChart';
 import { CardService } from 'src/app/services/card.service';
 import { ChartService } from 'src/app/services/chart.service';
-import { FileService } from 'src/app/services/file.services.common/file.service';
+import { FileService } from 'src/app/services/capacitor.services.common/file.service';
 import { StatistiqueService } from 'src/app/services/statistique.service';
 
 @Component({

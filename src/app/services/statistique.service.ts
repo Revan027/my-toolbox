@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { tableName } from 'src/app/constants/table-names';
-import { StorageService } from './storage.services.common/storage-service';
+import { StorageService } from './capacitor.services.common/storage-service';
 import { Card } from '../models/Card';
 import { DataLineChart } from '../models/DataLineChart';
 import moment from 'moment';

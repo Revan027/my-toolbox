@@ -13,12 +13,12 @@ import { CardService } from 'src/app/services/card.service';
 import { GenerationService } from 'src/app/services/generation.service';
 import { CardConditionService } from 'src/app/services/card-condition.service';
 import { SerieService } from 'src/app/services/serie.service';
-import { FileService } from 'src/app/services/file.services.common/file.service';
-import { MediaService } from 'src/app/services/media.services.common/media.service';
-import { ConfirmationService } from 'src/app/services/services.common/confirmation.service';
-import { MessageEnum } from 'src/app/services/services.common/enum/MessageEnum';
-import { StatusEnum } from 'src/app/services/services.common/enum/status.enum';
-import { ToastService } from 'src/app/services/services.common/toast.service';
+import { FileService } from 'src/app/services/capacitor.services.common/file.service';
+import { MediaService } from 'src/app/services/capacitor.services.common/media.service';
+import { ConfirmationService } from 'src/app/services/ionic.services.common/confirmation.service';
+import { MessageEnum } from 'src/app/services/ionic.services.common/enum/MessageEnum';
+import { StatusEnum } from 'src/app/services/ionic.services.common/enum/status.enum';
+import { ToastService } from 'src/app/services/ionic.services.common/toast.service';
 import { Location } from '@angular/common';
 
 @Component({

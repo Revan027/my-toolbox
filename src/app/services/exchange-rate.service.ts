@@ -6,7 +6,7 @@ import { CurrencyService } from './currency.service';
 import { RateService } from './rate.service';
 import { Network } from '@capacitor/network';
 import { environment } from 'src/environments/environment';
-import { HttpService } from './services.common/http-service';
+import { HttpService } from './capacitor.services.common/http-service';
 
 @Injectable({
     providedIn: 'root',

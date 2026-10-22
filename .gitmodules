@@ -1,12 +1,8 @@
-[submodule "src/app/services/file.services.common"]
-	path = src/app/services/file.services.common
-	url = https://github.com/Revan027/file.services.common.git
-[submodule "src/app/services/media.services.common"]
-	path = src/app/services/media.services.common
-	url = https://github.com/Revan027/media.services.common.git
-[submodule "src/app/services/storage.services.common"]
-	path = src/app/services/storage.services.common
-	url = https://github.com/Revan027/storage.services.common.git
-[submodule "src/app/services/services.common"]
-	path = src/app/services/services.common
-	url = https://github.com/Revan027/services.common.git
+[submodule "src/app/services/capacitor.services.common"]
+	path = src/app/services/capacitor.services.common
+	url = https://github.com/Revan027/capacitor.services.common.git
+	branch = main
+[submodule "src/app/services/ionic.services.common"]
+	path = src/app/services/ionic.services.common
+	url = https://github.com/Revan027/ionic.services.common.git
+	branch = main

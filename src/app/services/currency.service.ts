@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Currency } from 'src/app/models/Currency';
 import { tableName } from 'src/app/constants/table-names';
-import { StorageService } from './storage.services.common/storage-service';
+import { StorageService } from './capacitor.services.common/storage-service';
 import { capSQLiteChanges } from '@capacitor-community/sqlite';
 
 @Injectable({

@@ -8,7 +8,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { provideHttpClient } from '@angular/common/http';
 import { Capacitor } from '@capacitor/core';
 import { CurrencyPipe } from '@angular/common';
-import { ErrorService } from './services/services.common/error.service';
+import { ErrorService } from './services/ionic.services.common/error.service';
 import * as echarts from 'echarts/core';
 import { BarChart } from 'echarts/charts';
 import { GridComponent } from 'echarts/components';

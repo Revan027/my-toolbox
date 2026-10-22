@@ -5,7 +5,7 @@ import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { MOCK_CARDS } from 'src/app/constants/mock-data';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardService } from 'src/app/services/card.service';
-import { FileService } from 'src/app/services/file.services.common/file.service';
+import { FileService } from 'src/app/services/capacitor.services.common/file.service';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
 import { merge, switchMap } from 'rxjs';
 import { CardFilter } from 'src/app/models/CardFilter';

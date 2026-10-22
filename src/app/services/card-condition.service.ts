@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { tableName } from 'src/app/constants/table-names';
 import { CardCondition } from 'src/app/models/CardCondition';
 import { MOCK_CARD_CONDITIONS } from 'src/app/constants/mock-data';
-import { StorageService } from './storage.services.common/storage-service';
+import { StorageService } from './capacitor.services.common/storage-service';
 import { Capacitor } from '@capacitor/core';
 
 @Injectable({

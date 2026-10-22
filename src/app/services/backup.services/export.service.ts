@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { StorageService } from '../storage.services.common/storage-service';
+import { StorageService } from '../capacitor.services.common/storage-service';
 import { BackupStep, BackupStepStatusEnum } from './models/backupStep';
-import { FileService } from '../file.services.common/file.service';
+import { FileService } from '../capacitor.services.common/file.service';
 import { folder } from 'src/app/constants/folder';
 import { Directory, Encoding } from '@capacitor/filesystem';
 import { CapacitorZip } from '@capgo/capacitor-zip';
