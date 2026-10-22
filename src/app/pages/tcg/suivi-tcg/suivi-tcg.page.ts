@@ -1,14 +1,14 @@
-import { Component, DestroyRef, effect, inject, Signal, untracked } from '@angular/core';
+import { Component, DestroyRef, inject, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Capacitor } from '@capacitor/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { MOCK_CARDS } from 'src/app/constants/mock-data';
 import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardService } from 'src/app/services/card.service';
-import { ResumeService } from 'src/app/services/resume.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 import { pageTransition } from 'src/app/animations/page-transition.animation';
 import { merge, switchMap } from 'rxjs';
+import { CardFilter } from 'src/app/models/CardFilter';
 
 @Component({
     standalone: false,
@@ -21,76 +21,78 @@ export class SuiviTCGPage {
 
     protected readonly pageTransition = pageTransition;
 
-    readonly totalCard: Signal<number>;
-    readonly totalValue: Signal<number>;
     readonly pagedCardResult: Signal<PagedCardResult>;
 
-    loaded: boolean = false;
-    percentageCompletion: number = 0;
+    protected loaded = signal<boolean>(false);
+    protected hasFilter = signal<boolean>(false);
 
-    constructor(private cardService: CardService, private fileService: FileService, private resumeService: ResumeService) 
+    constructor(private cardService: CardService, private fileService: FileService) 
     {
-        this.totalCard = this.resumeService.totalCard;
-        this.totalValue = this.resumeService.totalValue;
         this.pagedCardResult = this.cardService.pagedCardResult;
 
         // on s'abonne pour savoir quand les cartes ont été modifiées
         this.cardService.cardsChanged
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => {
-                this.refreshSearch();
+                this.refreshCards();
             });
 
         // on s'abonne pour savoir si un trie ou une recherche a été faites
         merge(this.cardService.sortChanged, this.cardService.filterChanged)
             .pipe( 
-                switchMap(() => this.search()),
+                switchMap(() => this.getCards()),
                 takeUntilDestroyed(this.destroyRef)
             )
             .subscribe();
     }
 
-    ngOnInit(){
-        this.search();
+    ngOnInit(){     
+        this.getCards();
     }
 
     getSrc(uri: string){  
         return this.fileService.getUrlWeb(uri);
     }
 
-    private async search() {
+    private async getCards() {
         if (!Capacitor.isNativePlatform()){
             let pagedCardResult = new PagedCardResult();   
             pagedCardResult.cards = MOCK_CARDS;
-            pagedCardResult.totalCount = MOCK_CARDS.length;
+            pagedCardResult.totalCard = MOCK_CARDS.length;
 
             this.cardService.setPagedCardResult(pagedCardResult);
         }
         else{
-            this.loaded = true;
+            this.setLoaded(true);
 
-            this.resumeService.loadResume();
-
+            this.setHasFilter(this.cardService.cardFilter() != undefined);// controle si un filtre est en place
+          
             this.cardService.resetPagedCardResult();
 
-            await this.cardService.loadNextPage();
-
-            this.loaded = false;
+            await this.cardService.loadPage(this.cardService.cardFilter() as CardFilter, this.cardService.cardSort());
+          
+            this.setLoaded(false);
         }       
     }  
 
-    private async refreshSearch() {
-        this.resumeService.loadResume();
-
-        await this.cardService.refreshPage();
+    private async refreshCards() {
+        await this.cardService.refreshPage(this.cardService.cardFilter() as CardFilter, this.cardService.cardSort()); 
     }  
 
     async onIonInfinite(event: InfiniteScrollCustomEvent) {
-        if (this.loaded)
+        if (this.loaded())
             return;
 
-        await this.cardService.loadNextPage();
+        await this.cardService.loadPage(this.cardService.cardFilter() as CardFilter, this.cardService.cardSort());
            
         await event.target.complete();
+    }
+
+    setLoaded(value: boolean){
+        this.loaded.set(value);
+    }
+
+    setHasFilter(value: boolean){
+        this.hasFilter.set(value);
     }
 }

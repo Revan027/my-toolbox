@@ -190,7 +190,6 @@ export class StatistiqueService {
             return DataLineChart.fromSQL(data);
         })|| []; 
 
-        //alert(JSON.stringify(values, null, 2));
         return lines;
     }
 

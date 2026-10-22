@@ -137,6 +137,10 @@ ion-fab{
   }
 }
 
+.fab-button-disabled{
+    opacity: 0.8;
+}
+
 // LABEL
 ion-label{
     @include f.label;

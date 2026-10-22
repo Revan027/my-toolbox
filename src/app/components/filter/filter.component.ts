@@ -19,7 +19,7 @@ import { SerieService } from 'src/app/services/serie.service';
 export class FilterComponent implements OnInit {
     modalFilters = viewChild<IonModal>('modalFilters');
 
-    readonly cardFilter: Signal<CardFilter>; 
+    readonly cardFilter: Signal<CardFilter | undefined>; 
     readonly generations: Signal<Generation[]>; 
     readonly series: Signal<Serie[]>;
     readonly cardConditions: Signal<CardCondition[]>;
@@ -53,15 +53,15 @@ export class FilterComponent implements OnInit {
 
     private createForm() {
         this.formGroup = this.formBuilder.group({
-            searchText: [this.cardFilter().searchText],
-            isAcquired: [this.cardFilter().isAcquired],
-            isNotAcquired: [this.cardFilter().isNotAcquired],
-            serieIDs: [this.cardFilter().serieIDs],
-            isLegendary: [this.cardFilter().isLegendary],
-            isNotLegendary: [this.cardFilter().isNotLegendary],
-            conditionIDs: [this.cardFilter().conditionIDs],
-            minPrice: [this.cardFilter().minPrice],
-            maxPrice: [this.cardFilter().maxPrice],
+            searchText: [this.cardFilter()?.searchText],
+            isAcquired: [this.cardFilter()?.isAcquired],
+            isNotAcquired: [this.cardFilter()?.isNotAcquired],
+            serieIDs: [this.cardFilter()?.serieIDs],
+            isLegendary: [this.cardFilter()?.isLegendary],
+            isNotLegendary: [this.cardFilter()?.isNotLegendary],
+            conditionIDs: [this.cardFilter()?.conditionIDs],
+            minPrice: [this.cardFilter()?.minPrice],
+            maxPrice: [this.cardFilter()?.maxPrice],
         });
     }
 
@@ -83,9 +83,10 @@ export class FilterComponent implements OnInit {
         this.cardService.setCardFilter(cardFilter);
     }
 
-    onReset() {     
-        this.cardService.setCardFilter(new CardFilter());
+    onStop() {     
+        this.cardService.setCardFilter(undefined);
         this.generationsIDs.set([]);
+        
         this.createForm();
         this.modalFilters()?.dismiss();
     }

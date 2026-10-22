@@ -11,28 +11,28 @@
   margin-bottom: 12px;
 }
 
-.resume-search__section{
+.resume-search-section{
   flex: 1; 
   text-align: center; 
   padding: 0 6px;
 }
 
-.resume-search__section-value{
+.resume-search-section-value{
   margin: 0; 
   color: var(--color-171526);
   @include f.card-title;
 }
 
-.resume-search__section-result{
+.resume-search-section-result{
   color: var(--color-6C6880);
   @include f.label;
 }
 
-.resume-search__section-value--indigo {
+.resume-search-section-value--indigo {
   color: #7c3aed;
 }
 
-.resume-search__separator{
+.resume-search-separator{
   width: 1px; 
   background: var(--app-border-color, #e0e0e0); 
   margin: 4px 0;

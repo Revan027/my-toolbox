@@ -1,5 +1,13 @@
 @use './font' as f; 
 
+.ms-1{
+  margin-left: 5px;
+}
+
+.mb-1{
+  margin-bottom: 5px;
+}
+
 :host ion-content {
   --keyboard-offset: 0px !important;
 }

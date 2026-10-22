@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class CardService {    
-    private _cardFilter = signal<CardFilter>(new CardFilter());
+    private _cardFilter = signal<CardFilter | undefined>(undefined);
     private _cardSort = signal<CardSort>(new CardSort());
     private _pagedCardResult = signal<PagedCardResult>(new PagedCardResult());
     
@@ -117,6 +117,30 @@ export class CardService {
         return card;
     }
 
+    async getLastAcquisition(take: number): Promise<PagedCardResult> {
+        let result = await this.storageService.getDb().query(`
+             SELECT 
+                card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, card.isLegendary,
+                serie.srcLogo as serie_src_logo, serie.name as serie_name
+            FROM ${tableName.card} AS card 
+            INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
+            INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
+            WHERE card.isAcquired = 1
+            ORDER BY card.dateAcquired DESC
+            LIMIT ${take}`);
+
+         const cards: Card[] = result.values?.map((data: any)=>{
+            return Card.fromSQL(data);
+        })|| [];  
+    
+        let pagedCardResult = new PagedCardResult();   
+        pagedCardResult.cards = cards;
+        pagedCardResult.totalCard = cards.length;
+        pagedCardResult.totalValue = cards.map(x => x.averagePrice).reduce((x, y) => x + y);
+
+        return pagedCardResult;
+    }
+
     getQuerySearch(cardFilter: CardFilter){
         const queryAcquired = cardFilter.isAcquired === true ? "card.isAcquired = 1" : cardFilter.isNotAcquired === true ? "card.isAcquired = 0" : "TRUE";
         const queryLegendary = cardFilter.isLegendary === true ? "card.isLegendary = 1" : cardFilter.isNotLegendary === true ? "card.isLegendary = 0" : "TRUE";
@@ -125,37 +149,37 @@ export class CardService {
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
             WHERE
-                (${cardFilter.searchText.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.searchText.toLowerCase()}%') AND
+                (${cardFilter.searchText?.length > 0 ? 'FALSE' : 'TRUE'} OR lower(card.name) LIKE '%${cardFilter.searchText?.toLowerCase()}%') AND
                 (${queryAcquired}) AND  
                 (${queryLegendary}) AND    
                 (${cardFilter.minPrice != undefined ? 'FALSE' : 'TRUE'} OR card.averagePrice >= ${cardFilter.minPrice || 0}) AND 
                 (${cardFilter.maxPrice != undefined  ? 'FALSE' : 'TRUE'} OR card.averagePrice <= ${cardFilter.maxPrice || 0}) AND 
-                (${cardFilter.serieIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.serieID IN (${cardFilter.serieIDs})) AND  
-                (${cardFilter.conditionIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.conditionID IN (${cardFilter.conditionIDs})) AND                
-                (${cardFilter.generationIDs.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
+                (${cardFilter.serieIDs?.length > 0 ? 'FALSE' : 'TRUE'} OR card.serieID IN (${cardFilter.serieIDs})) AND  
+                (${cardFilter.conditionIDs?.length > 0 ? 'FALSE' : 'TRUE'} OR card.conditionID IN (${cardFilter.conditionIDs})) AND                
+                (${cardFilter.generationIDs?.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
     }
 
-    private getQuerySort(){
+    private getQuerySort(cardSort: CardSort){
         return`
             ORDER BY 
-                ${this.cardSort().generationAscending == undefined ? "TRUE" : `card.generationID ${this.getSortDirection(this.cardSort().generationAscending as boolean)}`},
-                ${this.cardSort().nameAscending == undefined ? "TRUE" : `card.name COLLATE NOCASE ${this.getSortDirection(this.cardSort().nameAscending as boolean)}`},
-                ${this.cardSort().priceAscending === true ? `card.averagePrice ${SortEnum.DESC} NULLS LAST` : "TRUE"}`;
+                ${cardSort.generationAscending == undefined ? "TRUE" : `card.generationID ${this.getSortDirection(cardSort.generationAscending as boolean)}`},
+                ${cardSort.nameAscending == undefined ? "TRUE" : `card.name COLLATE NOCASE ${this.getSortDirection(cardSort.nameAscending as boolean)}`},
+                ${cardSort.priceAscending === true ? `card.averagePrice ${SortEnum.DESC} NULLS LAST` : "TRUE"}`;
     }
 
     private getSortDirection(checked: boolean): string{
         return checked ? SortEnum.ASC : SortEnum.DESC
     }
 
-    private async fetchPage(offset: number, offsetBase: number | undefined = undefined): Promise<PagedCardResult> {
+    private async fetchPage(cardFilter: CardFilter, cardSort: CardSort, offset: number, offsetBase: number | undefined = undefined): Promise<PagedCardResult> {
         // Si on a pas de valeur de filtre on fait un Where TRUE pour ne pas filtrer
         let result = await this.storageService.getDb().query(`
             SELECT 
                 card.id, card.name, card.srcPicture, card.averagePrice, card.isAcquired, card.serieID, card.isLegendary,
                 serie.srcLogo as serie_src_logo, serie.name as serie_name
             FROM ${tableName.card} AS card 
-            ${this.getQuerySearch(this.cardFilter())}
-            ${this.getQuerySort()}          
+            ${this.getQuerySearch(cardFilter)}
+            ${this.getQuerySort(cardSort)}          
             LIMIT ${offsetBase != undefined ? offsetBase : this.offsetBase} OFFSET ${offset}`);
 
         const cards: Card[] = result.values?.map((data: any)=>{
@@ -164,12 +188,13 @@ export class CardService {
 
         let pagedCardResult = new PagedCardResult();   
         pagedCardResult.cards = cards;
-        pagedCardResult.totalCount = await this.countSearch(this.cardFilter());
+        pagedCardResult.totalCard = await this.countTotalCardSearch(cardFilter);
+        pagedCardResult.totalValue = await this.countTotalValueSearch(cardFilter);
 
         return pagedCardResult;
     }
 
-    private async countSearch(cardFilter: CardFilter): Promise<number>{
+    private async countTotalCardSearch(cardFilter: CardFilter): Promise<number>{
         let result = await this.storageService.getDb().query(`
             SELECT COUNT(*) as totalCount FROM ${tableName.card} AS card
             ${this.getQuerySearch(cardFilter)}`);
@@ -177,20 +202,43 @@ export class CardService {
         return result.values != undefined ? result.values[0].totalCount : 0
     }
 
-    async loadNextPage() {
-        let nextPage = this.pagedCardResult().page + 1;
-        let offset = this.offsetBase * (nextPage - 1);
+    private async countTotalValueSearch(cardFilter: CardFilter): Promise<number>{
+        let result = await this.storageService.getDb().query(`
+            SELECT SUM(averagePrice) as totalCount FROM ${tableName.card} AS card
+            ${this.getQuerySearch(cardFilter)}`);
+        
+        return result.values != undefined ? result.values[0].totalCount : 0
+    }
 
-        const pagedCardResult = await this.fetchPage(offset);
-        pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
-        pagedCardResult.page = nextPage;
+    async loadPage(cardFilter: CardFilter, cardSort: CardSort) {
+        let pagedCardResult: PagedCardResult;
 
+        if(cardFilter != undefined){
+            let nextPage = this.pagedCardResult().page + 1;
+            let offset = this.offsetBase * (nextPage - 1);
+
+            pagedCardResult = await this.fetchPage(cardFilter, cardSort, offset);
+            pagedCardResult.cards = this.pagedCardResult().cards.concat(pagedCardResult.cards);
+            pagedCardResult.page = nextPage;
+        }
+        else{
+           pagedCardResult = await this.getLastAcquisition(10);
+        }
+
+       
         this.setPagedCardResult(pagedCardResult);
     }
 
-    async refreshPage() {
-        let pagedCardResult = await this.fetchPage(0, this.pagedCardResult().cards.length);
-        pagedCardResult.page = this.pagedCardResult().page;
+    async refreshPage(cardFilter: CardFilter, cardSort: CardSort) {
+        let pagedCardResult: PagedCardResult;
+
+        if(cardFilter != undefined){
+            pagedCardResult = await this.fetchPage(cardFilter , cardSort, 0, this.pagedCardResult().cards.length);
+            pagedCardResult.page = this.pagedCardResult().page;
+        }
+        else{
+            pagedCardResult = await this.getLastAcquisition(10);
+        }
 
         this.setPagedCardResult(pagedCardResult);
     }
@@ -211,9 +259,14 @@ export class CardService {
         this.notifySortChanged();
     }
 
-    setCardFilter(cardFilter: CardFilter) {
-        this._cardFilter.set(cardFilter);
-
+    setCardFilter(cardFilter: CardFilter | undefined) {
+        if(cardFilter != undefined){
+            this._cardFilter.set(cardFilter);
+        }
+        else{
+            this._cardFilter.update((x) => x = cardFilter);
+        }
+        
         this.notifyFilterChanged();
     }
 
