@@ -98,7 +98,7 @@ export class ExchangeRateService {
         return currencies;
     }
 
-    private roundTo(amount: number, decimal: number) {
+    private roundTo(amount: number, decimal: number): number {
         const factor = Math.pow(10, decimal);
 
         return Math.round(amount * factor) / factor;
@@ -109,7 +109,7 @@ export class ExchangeRateService {
         originalCurrency: string,
         targetCurrency: string,
         amount: number,
-    ) {
+    ): number {
         // On va chercher le taux de conversion d'un euros en dollards
         const originalRate = rates.find((x) => x.symbol == originalCurrency);
         const targetRate = rates.find((x) => x.symbol == targetCurrency);
@@ -124,11 +124,11 @@ export class ExchangeRateService {
         return this.roundTo(result, 2);
     }
 
-    setRates(rates: Rate[]){
+    setRates(rates: Rate[]): void{
         this._rates.set(rates);
     }
 
-    setCurrency(currencies: Currency[]){
+    setCurrency(currencies: Currency[]): void{
         this._currency.set(currencies);
     }
 }

@@ -14,7 +14,7 @@ export class SerieService {
 
     constructor(private storageService: StorageService) {}
 
-    async getAll() {
+    async getAll(): Promise<Serie[]> {
         if (Capacitor.isNativePlatform()){
             let result = await this.storageService
                 .getDb()
@@ -30,7 +30,7 @@ export class SerieService {
         return MOCK_SERIES;
     }
 
-    set(series: Serie[]){
+    set(series: Serie[]): void{
         this._series.set(series);
     }
 }

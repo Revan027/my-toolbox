@@ -64,25 +64,23 @@ export class EditTCGPage implements OnDestroy {
         this.generations = this.generationService.generations; 
         this.series = this.serieService.series; 
         this.cardConditions = this.cardConditionService.cardConditions; 
-    }
 
-    //on évite ainsi avec ce lifecycle de faire ramer avec l'animation
-    async ionViewDidEnter() {    
-        // Ecoute de l'event si l'url change. On ne repasse pas 2 fois dans un ngOnInit normalement
-        this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(async (params) => {
-            this.setLoaded(false);
+        this.route.paramMap
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(async (params) => {
+                this.setLoaded(false);
 
-            const id = Number(params.get('id'));
+                const id = Number(params.get('id'));
 
-            if (Capacitor.isNativePlatform() && id){
-                this.setCard(await this.cardService.getById(id));
-                this.lastSrcPicture = this.card().srcPicture;
-            }
+                if (Capacitor.isNativePlatform() && id){
+                    this.setCard(await this.cardService.getById(id));
+                    this.lastSrcPicture = this.card().srcPicture;
+                }
 
-            this.createForm();
-         
-            this.setLoaded(true);
-        });
+                this.createForm();
+            
+                this.setLoaded(true);
+            });
     }
 
     ngOnDestroy() {

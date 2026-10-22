@@ -15,7 +15,7 @@ export class ExportService extends BackupService {
         super();
     }
 
-    private initExportTCG(){
+    private initExportTCG(): void{
         this.backupSteps = [
             new BackupStep("Exportation des cartes", 1, this.exportDataCards),
             new BackupStep("Exportation du répertoire des images", 2, this.exportDirectoryCardImages),
@@ -51,7 +51,7 @@ export class ExportService extends BackupService {
         }
     }
 
-    private async exportDataCards(){
+    private async exportDataCards(): Promise<void>{
         //alert(JSON.stringify(this.storageService, null, 2));
         // On exporte la base
         const capSQLiteJson = await this.storageService.exportJson();

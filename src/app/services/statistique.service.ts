@@ -77,11 +77,11 @@ export class StatistiqueService {
         return (100 * currentValue) / total;
     }
 
-    private getProgressionPercentage(initValue: number, finalValue: number){
+    private getProgressionPercentage(initValue: number, finalValue: number): number{
         return ((finalValue - initValue) / initValue) * 100;
     }
 
-    async getProgressionByMonth(currentValue: number){
+    async getProgressionByMonth(currentValue: number): Promise<number>{
         const periods = this.getPeriods(PeriodEnum.PREVIOUS_MONTH);
         
         // récupération de la valeur du mois dernier
@@ -228,18 +228,18 @@ export class StatistiqueService {
         return lines;
     }   
 
-    async resfreshMetricBanner(){
+    async resfreshMetricBanner(): Promise<void>{
         const totalValue = await this.countTotalValue();
 
         this.setTotalValue(totalValue);
         this.setProgressionPercentage(await this.getProgressionByMonth(totalValue));
     }
 
-    setProgressionPercentage(value: number){
+    setProgressionPercentage(value: number): void{
         this.progressionPercentage.set(value)
     }
 
-    setTotalValue(value: number){
+    setTotalValue(value: number): void{
         this.totalValue.set(value)
     } 
 }

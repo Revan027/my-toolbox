@@ -14,7 +14,7 @@ export class GenerationService {
 
     constructor(private storageService: StorageService) { }
 
-    async getAll() {
+    async getAll(): Promise<Generation[]> {
         if (Capacitor.isNativePlatform()){
             let result = await this.storageService
                 .getDb()
@@ -26,7 +26,7 @@ export class GenerationService {
         return MOCK_GENERATIONS;
     }
 
-    set(generations: Generation[]){
+    set(generations: Generation[]): void{
         this._generations.set(generations);
     }
 }

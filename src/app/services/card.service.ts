@@ -7,6 +7,7 @@ import { PagedCardResult } from 'src/app/models/PagedCardResult';
 import { CardSort } from 'src/app/models/CardSort';
 import { SortEnum } from 'src/app/constants/SortEnum';
 import { Subject } from 'rxjs';
+import { capSQLiteChanges } from '@capacitor-community/sqlite';
 
 @Injectable({
     providedIn: 'root',
@@ -32,7 +33,7 @@ export class CardService {
      
     constructor(private storageService: StorageService) {}
 
-    async create(card: Card) {
+    async create(card: Card): Promise<capSQLiteChanges> {
         const sql = `
             INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isAcquired, serieID, generationID, isLegendary, conditionID, dateAcquired) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -53,7 +54,7 @@ export class CardService {
         return result;
     }
 
-    async update(card: Card) {
+    async update(card: Card): Promise<capSQLiteChanges> {
         const sql = `
             UPDATE ${tableName.card}
             SET name = ?, srcPicture = ?, averagePrice = ?, isAcquired = ?, serieID = ?, generationID = ?, isLegendary = ?, conditionID = ?, dateAcquired = ?
@@ -74,7 +75,7 @@ export class CardService {
         ]);
     }
 
-    async updatePicture(card: Card) {
+    async updatePicture(card: Card): Promise<capSQLiteChanges> {
         const sql = `
             UPDATE ${tableName.card} 
             SET srcPicture = "${card.srcPicture}" 
@@ -83,7 +84,7 @@ export class CardService {
         return await this.storageService.getDb().execute(sql);
     }
 
-    async delete(id: number) {
+    async delete(id: number): Promise<capSQLiteChanges> {
         const sql = `DELETE FROM ${tableName.card} WHERE id = ${id}`;
 
         const result = await this.storageService.getDb().execute(sql);
@@ -91,7 +92,7 @@ export class CardService {
         return result;
     }
 
-    async getAll() {
+    async getAll(): Promise<Card[]> {
         let result = await this.storageService.getDb().query(`
             SELECT id, name, srcPicture, isAcquired, averagePrice, serieID
             FROM ${tableName.card}`);
@@ -99,7 +100,7 @@ export class CardService {
         return result.values as Card[];
     }
 
-    async getById(id: number) {
+    async getById(id: number): Promise<Card> {
         let result = await this.storageService.getDb().query(`
             SELECT 
             generation.id AS generationID, generation.libelle AS generation_libelle, 
@@ -141,7 +142,7 @@ export class CardService {
         return pagedCardResult;
     }
 
-    getQuerySearch(cardFilter: CardFilter){
+    getQuerySearch(cardFilter: CardFilter): string{
         const queryAcquired = cardFilter.isAcquired === true ? "card.isAcquired = 1" : cardFilter.isNotAcquired === true ? "card.isAcquired = 0" : "TRUE";
         const queryLegendary = cardFilter.isLegendary === true ? "card.isLegendary = 1" : cardFilter.isNotLegendary === true ? "card.isLegendary = 0" : "TRUE";
 
@@ -159,7 +160,7 @@ export class CardService {
                 (${cardFilter.generationIDs?.length > 0 ? 'FALSE' : 'TRUE'} OR card.generationID IN (${cardFilter.generationIDs}))`;
     }
 
-    private getQuerySort(cardSort: CardSort){
+    private getQuerySort(cardSort: CardSort): string{
         return`
             ORDER BY 
                 ${cardSort.generationAscending == undefined ? "TRUE" : `card.generationID ${this.getSortDirection(cardSort.generationAscending as boolean)}`},
@@ -210,7 +211,7 @@ export class CardService {
         return result.values != undefined ? result.values[0].totalCount : 0
     }
 
-    async loadPage(cardFilter: CardFilter, cardSort: CardSort) {
+    async loadPage(cardFilter: CardFilter, cardSort: CardSort): Promise<void> {
         let pagedCardResult: PagedCardResult;
 
         if(cardFilter != undefined){
@@ -229,7 +230,7 @@ export class CardService {
         this.setPagedCardResult(pagedCardResult);
     }
 
-    async refreshPage(cardFilter: CardFilter, cardSort: CardSort) {
+    async refreshPage(cardFilter: CardFilter, cardSort: CardSort): Promise<void> {
         let pagedCardResult: PagedCardResult;
 
         if(cardFilter != undefined){
@@ -243,23 +244,23 @@ export class CardService {
         this.setPagedCardResult(pagedCardResult);
     }
 
-    resetPagedCardResult() {
+    resetPagedCardResult(): void {
         this._pagedCardResult.set(new PagedCardResult());
     }
 
     // set() : remplacement complet (primitif ou nouvel objet) — nouvelle référence garantie
     // update() : modification partielle → utiliser le spread { ...current, prop: newValue } pour créer une nouvelle référence
-    setPagedCardResult(pagedCardResult: PagedCardResult) {
+    setPagedCardResult(pagedCardResult: PagedCardResult): void {
         this._pagedCardResult.set(pagedCardResult);
     }
 
-    setCardSort(cardSort: CardSort) {
+    setCardSort(cardSort: CardSort): void {
         this._cardSort.set(cardSort);
 
         this.notifySortChanged();
     }
 
-    setCardFilter(cardFilter: CardFilter | undefined) {
+    setCardFilter(cardFilter: CardFilter | undefined): void {
         if(cardFilter != undefined){
             this._cardFilter.set(cardFilter);
         }
@@ -270,15 +271,15 @@ export class CardService {
         this.notifyFilterChanged();
     }
 
-    notifyCardsChanged() {
+    notifyCardsChanged(): void {
         this._cardsChanged$.next();
     }
 
-    private notifySortChanged() {
+    private notifySortChanged(): void {
         this._sortChanged$.next();
     }
 
-    private notifyFilterChanged() {
+    private notifyFilterChanged(): void {
         this._filterChanged$.next();
     }
 }
