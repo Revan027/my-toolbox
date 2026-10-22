@@ -1,4 +1,6 @@
-@use './font' as f; 
+.m-0{
+  margin: 0;
+}
 
 .ms-1{
   margin-left: 5px;
@@ -49,15 +51,7 @@ ion-header {
       }
 
       .header-title{
-        @include f.title;
-        color: var(--color-171526);
         flex: 1 1 100%;
-      }
-
-      .header-description{
-        @include f.meta-text;
-
-        color: var(--color-6C6880);
       }
     }
   }
@@ -66,14 +60,6 @@ ion-header {
 ion-header[collapse="condense"] ion-toolbar {
   --background: transparent;
   border-bottom: none;
-}
-
-
-// ALERTE
-.alert{
-  &.alert-danger{
-    @include f.label;
-  }
 }
 
 // STRUCTURE

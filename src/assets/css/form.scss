@@ -72,7 +72,7 @@ ion-button.button--empty.button--main-small  {
 }
 
 ion-button.button--main {
-    @include f.card-title;
+    @include f.button-text;
     --background: var(--color-6B3FF7);
     --background-hover: var(--color-B9AEE8);
     --background-activated: var(--color-6B3FF7);
@@ -245,7 +245,8 @@ ion-searchbar{
 // TOGGLE
 ion-toggle{
     width: 100%;
-    @include f.field;background: white;
+    @include f.field;
+    background: white;
     border: 1px solid var(--color-EDEBF4); 
     border-radius: 10px;
     padding: 16px;

@@ -1,30 +1,8 @@
-@use '../../../assets/css/font.scss' as f; 
-
 ion-tab-bar {
   --background: #ffffff;
   border-top: 1px solid #e5e5e5;
   height: 64px;
   padding-bottom: env(safe-area-inset-bottom);
-}
-
-ion-tab-button {
-  --color-selected: var(--color-A6A2B6); 
-  @include f.menu;
-
-  ion-label{
-    color: var(--color-A6A2B6); 
-    @include f.menu;
-  }
-
-  &.tab-selected{
-    --color-selected: var(--color-6B3FF7); 
-    @include f.menu-selected;
-
-    ion-label{
-      color: var(--color-6B3FF7); 
-      @include f.menu-selected;
-    }
-  }
 }
 
 .app-version{

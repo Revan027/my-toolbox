@@ -1,6 +1,0 @@
-@use '../../../assets/css/font' as f; 
-
-ion-title{
-  @include f.title;
-  color: var(--color-171526);
-}

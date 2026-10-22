@@ -7,14 +7,14 @@
 
          @if(card().id > 0){
             <div class="header-text">
-               <div class="header-title">Modifier la carte</div> 
+               <div class="header-title page-title">Modifier la carte</div> 
             
-               <div class="header-description">
+               <div class="meta-text">
                   {{card().name}} - {{ card().serie.name}}
                </div> 
             </div>
          }@else{
-            <span class="header-title">Ajouter une carte</span>
+            <span class="header-title page-title">Ajouter une carte</span>
          }               
       </div>
    </ion-toolbar>
@@ -78,7 +78,7 @@
             <input type="text" formControlName="name" />
 
             @if(formGroup.controls['name'].invalid && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)){
-               <ion-text class="alert alert-danger" color="danger">Le nom est requis</ion-text>
+               <ion-text class="alert info-text alert-danger" color="danger">Le nom est requis</ion-text>
             }
          </div>
          

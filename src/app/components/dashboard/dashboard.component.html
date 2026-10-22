@@ -7,61 +7,61 @@
 
    <div class="grid-counters">
       <!-- Total cartes -->
-      <div class="grid-counters__card">
-         <div class="grid-counters__card-header">
-            <div class="grid-counters__card-header-content grid-counters__card-header-content--purple">
-               <ion-icon name="albums-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--purple"></ion-icon>
+      <div class="grid-counters-card">
+         <div class="grid-counters-card-header">
+            <div class="grid-counters-card-header-content grid-counters-card-header-content--purple">
+               <ion-icon name="albums-outline" class="grid-counters-card-header-icon grid-counters-card-header-icon--purple"></ion-icon>
             </div>
 
-            <span class="grid-counters__card-content">Total cartes</span>
+            <span class="info-text--6C6880">Total cartes</span>
          </div>
 
-         <p class="grid-counters__card-footer">
+         <p class="grid-counters-card-footer metric-number--17152">
             {{totalCard()}}
          </p>
       </div>
 
       <!-- Cartes acquises -->
-      <div class="grid-counters__card">
-         <div class="grid-counters__card-header">
-            <div class="grid-counters__card-header-content grid-counters__card-header-content--green">
-               <ion-icon name="checkmark-circle-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--green"></ion-icon>
+      <div class="grid-counters-card">
+         <div class="grid-counters-card-header">
+            <div class="grid-counters-card-header-content grid-counters-card-header-content--green">
+               <ion-icon name="checkmark-circle-outline" class="grid-counters-card-header-icon grid-counters-card-header-icon--green"></ion-icon>
             </div>
 
-            <span class="grid-counters__card-content">Acquises</span>
+            <span class="info-text--6C6880">Acquises</span>
          </div>
 
-         <p class="grid-counters__card-footer">
+         <p class="grid-counters-card-footer metric-number--17152">
             {{totalAcquiredCard()}}
          </p>
       </div>
 
       <!-- Manquantes -->
-      <div class="grid-counters__card">
-         <div class="grid-counters__card-header">
-            <div class="grid-counters__card-header-content grid-counters__card-header-content--orange">
-               <ion-icon name="search-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--orange"></ion-icon>
+      <div class="grid-counters-card">
+         <div class="grid-counters-card-header">
+            <div class="grid-counters-card-header-content grid-counters-card-header-content--orange">
+               <ion-icon name="search-outline" class="grid-counters-card-header-icon grid-counters-card-header-icon--orange"></ion-icon>
             </div>
 
-            <span class="grid-counters__card-content">Manquantes</span>
+            <span class="info-text--6C6880">Manquantes</span>
          </div>
 
-         <p class="grid-counters__card-footer">
+         <p class="grid-counters-card-footer metric-number--17152">
             {{totalMissingCard()}}
          </p>
       </div>
 
       <!-- Prix moyen -->
-      <div class="grid-counters__card">
-         <div class="grid-counters__card-header">
-            <div class="grid-counters__card-header-content grid-counters__card-header-content--indigo">
-               <ion-icon name="cash-outline" class="grid-counters__card-header-icon grid-counters__card-header-icon--indigo"></ion-icon>
+      <div class="grid-counters-card">
+         <div class="grid-counters-card-header">
+            <div class="grid-counters-card-header-content grid-counters-card-header-content--indigo">
+               <ion-icon name="cash-outline" class="grid-counters-card-header-icon grid-counters-card-header-icon--indigo"></ion-icon>
             </div>
 
-            <span class="grid-counters__card-content">Prix moyen</span>
+            <span class="info-text--6C6880">Prix moyen</span>
          </div>
 
-         <p class="grid-counters__card-footer">
+         <p class="grid-counters-card-footer metric-number--17152">
             {{ averagePrice() | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
          </p>
       </div>

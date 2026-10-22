@@ -6,9 +6,9 @@
          </div>
 
         <div class="header-text">
-            <span class="header-title">Statistique</span> 
+            <span class="header-title page-title">Statistique</span> 
          
-            <span class="header-description">
+            <span class="meta-text">
                Statistiques de la collection
             </span> 
          </div>              
@@ -95,7 +95,7 @@
                            {{item.libelle}}
                         </ion-col>
 
-                        <ion-col size="2" class="price-text">
+                        <ion-col size="2" class="number-text">
                            {{item.value}}
                         </ion-col>
 
@@ -133,7 +133,7 @@
                            {{item.libelle}}
                         </ion-col>
 
-                        <ion-col size="2" class="price-text">
+                        <ion-col size="2" class="number-text">
                            {{item.value}}
                         </ion-col>
 
@@ -173,7 +173,7 @@
                </div>
             </ion-col>
 
-            <ion-col class="price-text ion-align-content-center" size="auto">
+            <ion-col class="number-text ion-align-content-center" size="auto">
                @if(item.averagePrice){
                   {{ item.averagePrice | currency:'EUR':'symbol' }}
                }  
