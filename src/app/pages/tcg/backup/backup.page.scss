@@ -9,6 +9,10 @@ ion-progress-bar{
   --progress-background: var(--color-6B3FF7);
 }
 
+.backup-content{
+  height: 100%;
+}
+
 .step-name, .action-info{
   color: var(--color-6C6880);
   @include f.meta-text;

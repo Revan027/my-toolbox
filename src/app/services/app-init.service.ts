@@ -37,9 +37,10 @@ export class AppInitService {
     const p4 = this.exchangeRateService.getCurrencies();
     const p5 = this.exchangeRateService.getRates();
     const p6 = this.statistiqueService.countTotalValue();
-
+this._isAppInit.set(true);
+      this.router.navigateByUrl('tcg');
     // on attend la résolution des promises
-    Promise.all([p1, p2, p3, p4, p5, p6]).then( async (values) => {    
+    Promise.all([p1, p2, p3, p4, p5, p6]).then( async (values) => {   
       this.generationService.set(values[0]);
       this.serieService.set(values[1]);
       this.cardConditionService.set(values[2]);

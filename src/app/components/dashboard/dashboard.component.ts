@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit} from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, Signal, signal} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CardService } from 'src/app/services/card.service';
 import { StatistiqueService } from 'src/app/services/statistique.service';
@@ -12,18 +12,28 @@ import { StatistiqueService } from 'src/app/services/statistique.service';
 export class DashboardComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
-  // todo : avec l'arrivé d'une page dédie, des signaux seront nécéssaire pour recalculer le tout après une modif de liste
-  displayDashboard: boolean | undefined = true;
-  totalCard: number = 0;
-  totalMissingCard: number = 0;
-  totalAcquiredCard: number = 0;
-  percentageCompletion: number = 0;
-  averagePrice: number = 0;
+  protected displayDashboard = signal<boolean | undefined>(true);
+  protected totalCard = signal<number>(0);
+  protected totalMissingCard = signal<number>(0);
+  protected totalAcquiredCard = signal<number>(0);
 
-  constructor(private statistiqueService: StatistiqueService, private cardService: CardService, ) { 
-    this.cardService.cardsChanged.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.initDashboard()
-    });
+  protected averagePrice: Signal<number>;
+  protected percentageCompletion: Signal<number>;
+
+  constructor(private statistiqueService: StatistiqueService, private cardService: CardService, ) {
+    this.averagePrice = computed<number>(() =>
+      this.statistiqueService.getAveragePrice(this.statistiqueService._totalValue(),  this.totalCard())
+    );
+
+    this.percentageCompletion = computed<number>(() =>
+      this.statistiqueService.getCompletionPercentage(this.totalAcquiredCard(),  this.totalCard())
+    );
+
+    this.cardService.cardsChanged
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.initDashboard()
+      });
   }
   
   ngOnInit() {
@@ -37,20 +47,34 @@ export class DashboardComponent implements OnInit {
       this.statistiqueService.countTotalAcquiredCard(),
     ]);
 
-    this.totalCard = totalCard;
-    this.totalMissingCard = totalMissingCard;
-    this.totalAcquiredCard = totalAcquiredCard;
-    this.averagePrice = this.statistiqueService.getAveragePrice(this.statistiqueService._totalValue(),  this.totalCard);
-    this.percentageCompletion = this.statistiqueService.getCompletionPercentage(this.totalAcquiredCard,  this.totalCard);
+    this.setTotalCard(totalCard);
+    this.setTotalMissingCard(totalMissingCard);
+    this.setTotalAcquiredCard(totalAcquiredCard);
   }
 
   onDisplayDashboard(){
-    this.displayDashboard = !this.displayDashboard;
+    this.setDisplayDashboard(!this.displayDashboard());
   }
 
   onAnimationDone(event: any){
-    if (this.displayDashboard === false){
-      this.displayDashboard = undefined;
+    if (this.displayDashboard() === false){
+      this.setDisplayDashboard(undefined);
     }
+  }
+
+  setDisplayDashboard(value: boolean | undefined){
+    this.displayDashboard.set(value)
+  } 
+
+  setTotalCard(value: number){
+    this.totalCard.set(value)
+  } 
+
+  setTotalMissingCard(value: number){
+    this.totalMissingCard.set(value)
+  } 
+
+  setTotalAcquiredCard(value: number){
+    this.totalAcquiredCard.set(value)
   }
 }

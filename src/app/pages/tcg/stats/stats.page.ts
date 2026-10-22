@@ -1,8 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import moment from 'moment';
 import { PeriodEnum } from 'src/app/constants/PeriodEnum';
 import { Card } from 'src/app/models/Card';
 import { DataChart } from 'src/app/models/DataChart';
+import { CardService } from 'src/app/services/card.service';
 import { ChartService } from 'src/app/services/chart.service';
 import { FileService } from 'src/app/services/file.services.common/file.service';
 import { StatistiqueService } from 'src/app/services/statistique.service';
@@ -13,7 +15,9 @@ import { StatistiqueService } from 'src/app/services/statistique.service';
     templateUrl: './stats.page.html',
     styleUrls: ['./stats.page.scss'],
 })
-export class StatsPage {
+export class StatsPage { 
+    private destroyRef = inject(DestroyRef);
+
     protected totalValueChart = signal<DataChart>(new DataChart());
     protected categoryChart = signal<DataChart>(new DataChart());
     protected acquisitionChart = signal<DataChart>(new DataChart());
@@ -26,8 +30,19 @@ export class StatsPage {
 
     protected periodEnum = PeriodEnum;
     
-    constructor(private chartService: ChartService, private statistiqueService: StatistiqueService, private fileService: FileService){
+    constructor(
+        private cardService: CardService,
+        private chartService: ChartService, 
+        private statistiqueService: StatistiqueService, 
+        private fileService: FileService)
+    {
         moment.locale('fr');
+
+        this.cardService.cardsChanged
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.ngOnInit();
+            });
     }
 
     async ngOnInit(){
@@ -52,8 +67,7 @@ export class StatsPage {
                 this.setPercentageCompletionLegendary(results[5]);
                 this.setPercentageCompletionGlobal(results[6]);           
                 this.setTotalValueChart(this.chartService.buildLineArea(results[7]));
-            })
-        // il fadura un observalbe popur écocuter un crud surl es cartes      
+            })    
     }
     
     async onPeriodChanged(periodEnum: PeriodEnum){

@@ -190,7 +190,6 @@ export class StatistiqueService {
             return DataLineChart.fromSQL(data);
         })|| []; 
 
-        //alert(JSON.stringify(values, null, 2));
         return lines;
     }
 
@@ -228,6 +227,13 @@ export class StatistiqueService {
 
         return lines;
     }   
+
+    async resfreshMetricBanner(){
+        const totalValue = await this.countTotalValue();
+
+        this.setTotalValue(totalValue);
+        this.setProgressionPercentage(await this.getProgressionByMonth(totalValue));
+    }
 
     setProgressionPercentage(value: number){
         this.progressionPercentage.set(value)

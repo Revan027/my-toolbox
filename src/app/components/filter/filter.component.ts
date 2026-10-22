@@ -19,7 +19,7 @@ import { SerieService } from 'src/app/services/serie.service';
 export class FilterComponent implements OnInit {
     modalFilters = viewChild<IonModal>('modalFilters');
 
-    readonly cardFilter: Signal<CardFilter>; 
+    readonly cardFilter: Signal<CardFilter | undefined>; 
     readonly generations: Signal<Generation[]>; 
     readonly series: Signal<Serie[]>;
     readonly cardConditions: Signal<CardCondition[]>;
@@ -53,13 +53,15 @@ export class FilterComponent implements OnInit {
 
     private createForm() {
         this.formGroup = this.formBuilder.group({
-            searchText: [this.cardFilter().searchText],
-            isAcquired: [this.cardFilter().isAcquired],
-            serieIDs: [this.cardFilter().serieIDs],
-            isLegendary: [this.cardFilter().isLegendary],
-            conditionIDs: [this.cardFilter().conditionIDs],
-            minPrice: [this.cardFilter().minPrice],
-            maxPrice: [this.cardFilter().maxPrice],
+            searchText: [this.cardFilter()?.searchText],
+            isAcquired: [this.cardFilter()?.isAcquired],
+            isNotAcquired: [this.cardFilter()?.isNotAcquired],
+            serieIDs: [this.cardFilter()?.serieIDs],
+            isLegendary: [this.cardFilter()?.isLegendary],
+            isNotLegendary: [this.cardFilter()?.isNotLegendary],
+            conditionIDs: [this.cardFilter()?.conditionIDs],
+            minPrice: [this.cardFilter()?.minPrice],
+            maxPrice: [this.cardFilter()?.maxPrice],
         });
     }
 
@@ -68,7 +70,9 @@ export class FilterComponent implements OnInit {
         cardFilter.generationIDs = this.generationsIDs();
         cardFilter.searchText = datas.searchText;
         cardFilter.isAcquired = datas.isAcquired;
+        cardFilter.isNotAcquired = datas.isNotAcquired;
         cardFilter.isLegendary = datas.isLegendary;
+        cardFilter.isNotLegendary = datas.isNotLegendary;
         cardFilter.conditionIDs = datas.conditionIDs;
         cardFilter.minPrice = datas.minPrice;
         cardFilter.maxPrice = datas.maxPrice;
@@ -79,11 +83,30 @@ export class FilterComponent implements OnInit {
         this.cardService.setCardFilter(cardFilter);
     }
 
-    onReset() {     
-        this.cardService.setCardFilter(new CardFilter());
+    onStop() {     
+        this.cardService.setCardFilter(undefined);
         this.generationsIDs.set([]);
+        
         this.createForm();
         this.modalFilters()?.dismiss();
+    }
+
+    onToggleIsLegendary(event: any){
+        if(event.srcElement.getAttribute("formControlName") == "isNotLegendary" ){
+            this.formGroup.get("isLegendary")?.setValue(false);
+        }
+        else{
+            this.formGroup.get("isNotLegendary")?.setValue(false);
+        }
+    }
+
+    onToggleIsAcquired(event: any){
+        if(event.srcElement.getAttribute("formControlName") == "isNotAcquired" ){
+            this.formGroup.get("isAcquired")?.setValue(false);
+        }
+        else{
+            this.formGroup.get("isNotAcquired")?.setValue(false);
+        }
     }
 
     async onGenerationChanged(generationID: number, event: any) {

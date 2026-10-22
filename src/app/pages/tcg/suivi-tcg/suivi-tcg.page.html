@@ -28,29 +28,32 @@
          <ion-icon size="small" name="filter-outline"></ion-icon>
       </ion-fab-button>
 
-      <ion-fab-button class="button--sorts" size="small"id="btn-modal-sorts" expand="block">
+      <ion-fab-button class="button--sorts" size="small"id="btn-modal-sorts" expand="block" [disabled]="!hasFilter()">
          <ion-icon  size="small" name="swap-vertical-outline"></ion-icon> 
       </ion-fab-button>   
    </ion-fab>
 
    <app-dashboard></app-dashboard>
 
-   @if(!loaded){
-   
-      @if(this.pagedCardResult().cards.length > 0){
+   @if(!loaded()){
+      @if(!hasFilter()){
+         <div class="section-title ms-1 mb-1">
+            Dernières acquisitions
+         </div>
+      }
+
+      @if(pagedCardResult().cards.length > 0){
         <div class="resume-search">
-          <!-- Résultats -->
-          <div class="resume-search__section">
-            <p class="resume-search__section-value">{{ totalCard() }}</p>
-            <span class="resume-search__section-result">carte{{(totalCard() > 1 ? "s" : "")}}</span>
+          <div class="resume-search-section">
+            <p class="resume-search-section-value">{{pagedCardResult().totalCard}}</p>
+            <span class="resume-search-section-result">carte{{(pagedCardResult().totalCard > 1 ? "s" : "")}}</span>
           </div>
 
-          <div class="resume-search__separator"></div>
+          <div class="resume-search-separator"></div>
 
-          <!-- Valeur -->
-          <div class="resume-search__section">
-            <p class="resume-search__section-value"> {{ totalValue() | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</p>
-            <span class="resume-search__section-result">valeur</span>
+          <div class="resume-search-section">
+            <p class="resume-search-section-value"> {{ pagedCardResult().totalValue | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}</p>
+            <span class="resume-search-section-result">valeur</span>
           </div>
         </div>
       }
@@ -74,8 +77,8 @@
       </ion-grid>  
 
       <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="pagedCardResult().isFinished">
-         <ion-infinite-scroll-content loadingText="Chargement..." loadingSpinner="dots"></ion-infinite-scroll-content>
-      </ion-infinite-scroll>    
+            <ion-infinite-scroll-content loadingText="Chargement..." loadingSpinner="dots"></ion-infinite-scroll-content>
+         </ion-infinite-scroll>    
    } 
    @else{
       <div class="loader-center">
