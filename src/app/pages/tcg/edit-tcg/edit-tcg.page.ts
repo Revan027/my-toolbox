@@ -20,6 +20,7 @@ import { MessageEnum } from 'src/app/services/ionic.services.common/enum/Message
 import { StatusEnum } from 'src/app/services/ionic.services.common/enum/status.enum';
 import { ToastService } from 'src/app/services/ionic.services.common/toast.service';
 import { Location } from '@angular/common';
+import { IonModal } from '@ionic/angular';
 
 @Component({
     standalone: false,
@@ -31,11 +32,14 @@ export class EditTCGPage implements OnDestroy {
     private destroyRef = inject(DestroyRef);
 
     inputFile = viewChild.required<ElementRef>('inputFile');
-    image = viewChild.required<ElementRef>('cardImageZoomed')
+    image = viewChild.required<ElementRef>('cardImageZoomed');
+    dateAcquiredModal = viewChild<IonModal>('dateAcquiredModal')
     
     loaded = signal<boolean>(false);
     hasZoom = signal<boolean>(false);
     card = signal<Card>(new Card());
+    hasDateAcquired = signal<boolean>(false);
+    hasSubmit = signal<boolean>(false);
 
     readonly generations: Signal<Generation[]>; 
     readonly series: Signal<Serie[]>;
@@ -78,6 +82,8 @@ export class EditTCGPage implements OnDestroy {
                 }
 
                 this.createForm();
+
+                this.setHasDateAcquired(this.card().dateAcquired != undefined)
             
                 this.setLoaded(true);
             });
@@ -146,6 +152,8 @@ export class EditTCGPage implements OnDestroy {
     }
 
     async onSubmit(card: Card) {
+        this.setHasSubmit(true);
+
         card.dateAcquired = Card.getPeriod(new Date(card.dateAcquired ?? ""));
 
         let result = this.card().id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
@@ -161,6 +169,8 @@ export class EditTCGPage implements OnDestroy {
 
             this.setCard(new Card());
         } 
+        
+        this.setHasSubmit(false);
 
         this.cardService.notifyCardsChanged();
         this.location.back();
@@ -226,6 +236,14 @@ export class EditTCGPage implements OnDestroy {
         this.lastSrcPicture = path;
     }
 
+    onSelectedEmptyDate(){
+      this.dateAcquiredModal()?.present()           
+    }
+
+    onDateAcquiredChanged(e: any){
+        this.setHasDateAcquired(true);
+    }
+
     setLoaded(value: boolean){
         this.loaded.set(value);
     }
@@ -236,5 +254,13 @@ export class EditTCGPage implements OnDestroy {
 
     setCard(value: Card){
         this.card.set({...value});
+    }
+
+    setHasDateAcquired(value: boolean){
+        this.hasDateAcquired.set(value);
+    }
+
+    setHasSubmit(value: boolean){
+        this.hasSubmit.set(value);
     }
 }

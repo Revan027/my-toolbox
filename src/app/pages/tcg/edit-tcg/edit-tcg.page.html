@@ -136,22 +136,27 @@
                   Date d'acquisition
                </ion-label>
 
-               <ion-datetime-button datetime="datetime"></ion-datetime-button>
+               @if(!hasDateAcquired()){
+                  <ion-button class="button--empty w-100" fill="clear" (click)="onSelectedEmptyDate()">-</ion-button>
+               }
 
-               <ion-modal [keepContentsMounted]="true">
+               <ion-datetime-button [class.d-none]="!hasDateAcquired()" datetime="datetime"></ion-datetime-button>
+
+               <ion-modal #dateAcquiredModal [keepContentsMounted]="true">
                   <ng-template>
                      <ion-datetime
                         formControlName="dateAcquired"
                         id="datetime"
                         presentation="month-year"
-
                         [formatOptions]="{
                            date: {
                               month: '2-digit',
                               year: 'numeric',
-                           },
-                        }"
-                     ></ion-datetime>
+                           }
+                          
+                        }" 
+                        (ionChange)="onDateAcquiredChanged($event)">
+                     </ion-datetime>
                   </ng-template>
                </ion-modal>
             </ion-col>
@@ -195,9 +200,18 @@
 
          <div class="action-buttons">
             @if(card().id > 0){
-               <ion-button class="button--main" (click)="onDelete()" color="danger" [strong]="true">Supprimer</ion-button>
+               <ion-button class="button--main" (click)="onDelete()" color="danger" [strong]="true">
+                  Supprimer
+               </ion-button>
             }
-            <ion-button class="button--main" (click)="onSubmit(formGroup.value)" [strong]="true" [disabled]="formGroup.invalid">Enregistrer</ion-button>
+
+            <ion-button class="button--main" (click)="onSubmit(formGroup.value)" [strong]="true" [disabled]="formGroup.invalid || hasSubmit()">
+               Enregistrer
+
+               @if(this.hasSubmit()){
+                  <ion-spinner class="ms-1" name="dots"></ion-spinner>
+               }              
+            </ion-button>
          </div>
       </form>
    }
