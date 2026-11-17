@@ -1,10 +1,11 @@
 import { tableName } from './table-names';
+import { cardApiIds } from './card-api-ids';
 
 export const DB_NAME = 'todo_list_db';
 export const DB_VERSION = 6;
 
 export const version6: string[] = [
-  `ALTER TABLE ${tableName.card} ADD COLUMN apiID INTEGER NULL;`,
+  `ALTER TABLE ${tableName.card} ADD COLUMN apiID TEXT NULL;`,
   `ALTER TABLE ${tableName.card} ADD COLUMN cardmarketID INTEGER NULL;`,
   `CREATE TABLE IF NOT EXISTS ${tableName.cardHistoryPricing} (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,6 +13,9 @@ export const version6: string[] = [
     date TEXT NOT NULL,
     amount INTEGER NOT NULL
   );`,
+  ...cardApiIds.map(([id, apiID, cardmarketID]) =>
+    `UPDATE ${tableName.card} SET apiID = '${apiID}', cardmarketID = ${cardmarketID ?? 'NULL'} WHERE id = ${id};`
+  ),
 ];
 
 export const version5: string[] = [
