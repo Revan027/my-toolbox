@@ -1,7 +1,18 @@
 import { tableName } from './table-names';
 
 export const DB_NAME = 'todo_list_db';
-export const DB_VERSION = 5;
+export const DB_VERSION = 6;
+
+export const version6: string[] = [
+  `ALTER TABLE ${tableName.card} ADD COLUMN apiID INTEGER NULL;`,
+  `ALTER TABLE ${tableName.card} ADD COLUMN cardmarketID INTEGER NULL;`,
+  `CREATE TABLE IF NOT EXISTS ${tableName.cardHistoryPricing} (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cardID INTEGER NOT NULL,
+    date TEXT NOT NULL,
+    amount INTEGER NOT NULL
+  );`,
+];
 
 export const version5: string[] = [
   `ALTER TABLE ${tableName.card} DROP COLUMN picture;`
@@ -249,4 +260,5 @@ export const DB_UPGRADES = [
   { toVersion: 3, statements: version3 },
   { toVersion: 4, statements: version4 },
   { toVersion: 5, statements: version5 },
+  { toVersion: 6, statements: version6 },
 ];

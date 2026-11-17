@@ -5,4 +5,5 @@ export const tableName = {
     serie: 'Serie',
     card: 'Card',
     cardCondition: 'CardCondition',
+    cardHistoryPricing: 'CardHistoryPricing',
 };
