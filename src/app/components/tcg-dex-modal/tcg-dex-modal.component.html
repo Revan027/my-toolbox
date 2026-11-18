@@ -1,4 +1,4 @@
- <ion-modal #tcgDexModal trigger="btn-tcgdex-modal" (ionModalDidPresent)="onModalPresent()">
+ <ion-modal #tcgDexModal trigger="btn-tcgdex-modal" (ionModalDidPresent)="onModalPresent()" (ionModalWillDismiss)="onModalDismiss()">
     <ng-template>
       <ion-content>
         <ion-title class="ion-margin ion-text-center modal-title"> Recherche sur TCGDex </ion-title> 
