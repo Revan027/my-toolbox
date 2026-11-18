@@ -1,0 +1,41 @@
+ <ion-modal #tcgDexModal trigger="btn-tcgdex-modal" (ionModalDidPresent)="onModalPresent()">
+    <ng-template>
+      <ion-content>
+        <ion-title class="ion-margin ion-text-center modal-title"> Recherche sur TCGDex </ion-title> 
+
+        @if(isLoading()){
+          <div class="loader-center">
+            <ion-spinner name="dots"></ion-spinner>
+          </div>
+        }
+        @else {
+          <ion-row>
+            @for (item of cards(); track item.id) 
+            {
+              <ion-col class="ion-margin-bottom" [class.unselected]="selectedCard()?.id != item.id && selectedCard() != undefined" size="3" (click)="onClickCard(item)">
+                <div>
+                  @if(item.image != undefined){
+                    <img [src]="`${item.image}/low.webp`"/>
+                  }
+                  @else {
+                    <img src="../../../../assets/card_empty.png"/>
+                  }
+                </div>
+
+                <div class="section-title">
+                  {{item.name}}
+                </div>
+                  
+                <div class="meta-text">
+                  <small>{{item.id}}</small>
+                </div>   
+              </ion-col>        
+            } 
+            @empty {
+              <ion-col size="12 ion-text-center ion-margin-top" color="info">Aucune cartes trouvées</ion-col>
+            }
+          </ion-row>       
+        }      
+      </ion-content>
+    </ng-template>
+  </ion-modal>

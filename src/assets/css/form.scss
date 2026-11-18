@@ -71,6 +71,12 @@ ion-button.button--empty.button--main-small  {
     --color: white;
 }
 
+ion-button.button--input{
+    min-height: 46px !important;
+    margin: 0;
+    color: var(--color-A6A2B6);
+}
+
 ion-button.button--main {
     @include f.button-text;
     --background: var(--color-6B3FF7);
