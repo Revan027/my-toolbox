@@ -12,7 +12,7 @@
           <ion-row>
             @for (item of cards(); track item.id) 
             {
-              <ion-col class="ion-margin-bottom" [class.unselected]="selectedCard()?.id != item.id && selectedCard() != undefined" size="3" (click)="onClickCard(item)">
+              <ion-col class="ion-margin-bottom" [class.unselected]="selectedCard().id != item.id && selectedCard().id != undefined" size="3" (click)="onClickCard(item)">
                 <div>
                   @if(item.image != undefined){
                     <img [src]="`${item.image}/low.webp`"/>

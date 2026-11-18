@@ -1,5 +1,6 @@
-import { Component, DestroyRef, inject, output, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TCGDexCard } from 'src/app/models/TCGDexCard';
 import { TCGDexService } from 'src/app/services/tcg-dex.service';
 
 @Component({  
@@ -11,21 +12,22 @@ import { TCGDexService } from 'src/app/services/tcg-dex.service';
 export class TcgDexModalComponent { 
   private destroyRef = inject(DestroyRef);
 
+  cardName = input.required<string>();
   apiID = output<string>();
 
   protected isLoading = signal<boolean>(false);
-  protected cards = signal<any>(undefined);
-  protected selectedCard = signal<any>(undefined);
+  protected cards = signal<TCGDexCard[]>([]);
+  protected selectedCard = signal<TCGDexCard>(new TCGDexCard());
 
   constructor(private TCGDexService: TCGDexService) {}
   
   onModalPresent(){
     this.setIsLoading(true);
 
-    this.TCGDexService.searchCard()
+    this.TCGDexService.searchCard(this.cardName())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-        this.setCards(result); 
+        this.setCards(Object.values(result));
 
         this.setIsLoading(false);
       });
@@ -33,8 +35,8 @@ export class TcgDexModalComponent {
 
   onModalDismiss(){
     this.setIsLoading(false);
-    this.setSelectedCard(undefined); 
-    this.setCards(undefined);
+    this.setSelectedCard(new TCGDexCard()); 
+    this.setCards([]);
   }
 
   onClickCard(card: any){
@@ -47,11 +49,11 @@ export class TcgDexModalComponent {
     this.isLoading.set(value);
   }
 
-  setCards(value: any){
+  setCards(value: TCGDexCard[]){
     this.cards.set(value);
   }
 
-  setSelectedCard(value: any){
-    this.selectedCard.set(value);
+  setSelectedCard(value: TCGDexCard){
+    this.selectedCard.set({...value});
   }
 }

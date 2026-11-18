@@ -228,7 +228,7 @@
          </div>
       </form>
 
-      <app-tcg-dex-modal (apiID)="onChoiceApiID($event)"></app-tcg-dex-modal>
+      <app-tcg-dex-modal (apiID)="onChoiceApiID($event)" [cardName]="formGroup.get('name')?.value" ></app-tcg-dex-modal>
    }
    @else{
       <div class="loader-center">
