@@ -19,7 +19,6 @@ export class Card {
     conditionID?: number;
     dateAcquired?: string;
     apiID?: string;
-    cardmarketID?: number;
 
     static fromSQL(data: any): Card {
         const card = new Card();
@@ -39,7 +38,6 @@ export class Card {
         card.generation = new Generation();
         card.generation.libelle = data.generation_libelle;
         card.apiID = data.apiID;
-        card.cardmarketID = data.cardmarketID;
 
         return card;
     }

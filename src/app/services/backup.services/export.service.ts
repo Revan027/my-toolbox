@@ -52,7 +52,6 @@ export class ExportService extends BackupService {
     }
 
     private async exportDataCards(): Promise<void>{
-        //alert(JSON.stringify(this.storageService, null, 2));
         // On exporte la base
         const capSQLiteJson = await this.storageService.exportJson();
     

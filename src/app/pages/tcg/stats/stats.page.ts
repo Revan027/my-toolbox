@@ -8,6 +8,8 @@ import { CardService } from 'src/app/services/card.service';
 import { ChartService } from 'src/app/services/chart.service';
 import { FileService } from 'src/app/services/capacitor.services.common/file.service';
 import { StatistiqueService } from 'src/app/services/statistique.service';
+import { TCGDexCardService } from 'src/app/services/tcg-dex-card.service';
+import { TCGDexCard } from 'src/app/models/TCGDexCardPrice';
 
 @Component({
     standalone: false,
@@ -17,7 +19,7 @@ import { StatistiqueService } from 'src/app/services/statistique.service';
 })
 export class StatsPage { 
     private destroyRef = inject(DestroyRef);
-
+    protected test = signal<TCGDexCard[]>([]);
     protected totalValueChart = signal<DataChart>(new DataChart());
     protected categoryChart = signal<DataChart>(new DataChart());
     protected acquisitionChart = signal<DataChart>(new DataChart());
@@ -34,6 +36,7 @@ export class StatsPage {
         private cardService: CardService,
         private chartService: ChartService, 
         private statistiqueService: StatistiqueService, 
+        private TCGDexCardService: TCGDexCardService,
         private fileService: FileService)
     {
         moment.locale('fr');
@@ -68,6 +71,10 @@ export class StatsPage {
                 this.setPercentageCompletionGlobal(results[6]);           
                 this.setTotalValueChart(this.chartService.buildLineArea(results[7]));
             })    
+    }
+
+    async onUpdatePricing(){
+      this.test.set(await this.TCGDexCardService.getPricings());
     }
     
     async onPeriodChanged(periodEnum: PeriodEnum){

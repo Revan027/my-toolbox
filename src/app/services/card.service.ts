@@ -104,12 +104,25 @@ export class CardService {
         let result = await this.storageService.getDb().query(`
             SELECT 
             generation.id AS generationID, generation.libelle AS generation_libelle, 
-            card.id, card.name, card.srcPicture, card.isAcquired, card.averagePrice, card.serieID, card.isLegendary, card.conditionID, card.dateAcquired, card.apiID, card.cardmarketID,
+            card.id, card.name, card.srcPicture, card.isAcquired, card.averagePrice, card.serieID, card.isLegendary, card.conditionID, card.dateAcquired, card.apiID,
             serie.name AS serie_name, serie.srcLogo As serie_src_logo
             FROM ${tableName.card} AS card 
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
             WHERE card.id = ${id}`);
+
+        const card: Card = result.values?.map((data: any)=>{
+            return Card.fromSQL(data);
+        })[0] || new Card();
+    
+        return card;
+    }
+
+     async getByApiId(id: number): Promise<Card> {
+        let result = await this.storageService.getDb().query(`
+            SELECT card.averagePrice
+            FROM ${tableName.card} AS card 
+            WHERE card.apiID LIKE '${id}'`);
 
         const card: Card = result.values?.map((data: any)=>{
             return Card.fromSQL(data);
@@ -140,6 +153,17 @@ export class CardService {
         pagedCardResult.totalValue = cards.map(x => x.averagePrice).reduce((x, y) => x + y);
 
         return pagedCardResult;
+    }
+    
+    async getAllAcquiredIDs(take: number, iteration: number): Promise<number[]> {
+        let result = await this.storageService.getDb().query(`
+            SELECT card.apiID
+            FROM ${tableName.card} AS card 
+            WHERE card.isAcquired = 1
+            LIMIT ${take} 
+            OFFSET ${iteration * take}`);
+            
+        return result.values?.map((value) => value.apiID) as number[] ?? [];
     }
 
     getQuerySearch(cardFilter: CardFilter): string{
@@ -181,7 +205,8 @@ export class CardService {
             FROM ${tableName.card} AS card 
             ${this.getQuerySearch(cardFilter)}
             ${this.getQuerySort(cardSort)}          
-            LIMIT ${offsetBase != undefined ? offsetBase : this.offsetBase} OFFSET ${offset}`);
+            LIMIT ${offsetBase != undefined ? offsetBase : this.offsetBase} 
+            OFFSET ${offset}`);
 
         const cards: Card[] = result.values?.map((data: any)=>{
             return Card.fromSQL(data);

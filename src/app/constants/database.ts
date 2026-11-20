@@ -6,15 +6,18 @@ export const DB_VERSION = 6;
 
 export const version6: string[] = [
   `ALTER TABLE ${tableName.card} ADD COLUMN apiID TEXT NULL;`,
-  `ALTER TABLE ${tableName.card} ADD COLUMN cardmarketID INTEGER NULL;`,
   `CREATE TABLE IF NOT EXISTS ${tableName.cardHistoryPricing} (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     cardID INTEGER NOT NULL,
-    date TEXT NOT NULL,
+    cardHistoryPeriodID INTEGER NOT NULL,
     amount INTEGER NOT NULL
   );`,
+  `CREATE TABLE IF NOT EXISTS ${tableName.cardHistoryPeriod} (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT NOT NULL,
+  );`,
   ...cardApiIds.map(([id, apiID, cardmarketID]) =>
-    `UPDATE ${tableName.card} SET apiID = '${apiID}', cardmarketID = ${cardmarketID ?? 'NULL'} WHERE id = ${id};`
+    `UPDATE ${tableName.card} SET apiID = '${apiID}' WHERE id = ${id};`
   ),
 ];
 

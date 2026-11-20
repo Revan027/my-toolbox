@@ -1,6 +1,6 @@
-export class TCGDexCard {
+export class TCGDexCardLight {
 
-    id!: number;
+    id!: string;
     name!: string;
     image?: string;
 }

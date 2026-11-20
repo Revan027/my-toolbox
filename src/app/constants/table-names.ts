@@ -6,4 +6,5 @@ export const tableName = {
     card: 'Card',
     cardCondition: 'CardCondition',
     cardHistoryPricing: 'CardHistoryPricing',
+    cardHistoryPeriod: 'CardHistoryPeriod',
 };

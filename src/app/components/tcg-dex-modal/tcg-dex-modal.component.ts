@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TCGDexCard } from 'src/app/models/TCGDexCard';
+import { TCGDexCardLight } from 'src/app/models/TCGDexCard';
 import { TCGDexService } from 'src/app/services/tcg-dex.service';
 
 @Component({  
@@ -16,8 +16,8 @@ export class TcgDexModalComponent {
   apiID = output<string>();
 
   protected isLoading = signal<boolean>(false);
-  protected cards = signal<TCGDexCard[]>([]);
-  protected selectedCard = signal<TCGDexCard>(new TCGDexCard());
+  protected cards = signal<TCGDexCardLight[]>([]);
+  protected selectedCard = signal<TCGDexCardLight>(new TCGDexCardLight());
 
   constructor(private TCGDexService: TCGDexService) {}
   
@@ -27,7 +27,7 @@ export class TcgDexModalComponent {
     this.TCGDexService.searchCard(this.cardName())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-        this.setCards(Object.values(result));
+        this.setCards(Object.values(result.sort((a, b) => a.id.localeCompare(b.id))));
 
         this.setIsLoading(false);
       });
@@ -35,7 +35,7 @@ export class TcgDexModalComponent {
 
   onModalDismiss(){
     this.setIsLoading(false);
-    this.setSelectedCard(new TCGDexCard()); 
+    this.setSelectedCard(new TCGDexCardLight()); 
     this.setCards([]);
   }
 
@@ -49,11 +49,11 @@ export class TcgDexModalComponent {
     this.isLoading.set(value);
   }
 
-  setCards(value: TCGDexCard[]){
+  setCards(value: TCGDexCardLight[]){
     this.cards.set(value);
   }
 
-  setSelectedCard(value: TCGDexCard){
+  setSelectedCard(value: TCGDexCardLight){
     this.selectedCard.set({...value});
   }
 }

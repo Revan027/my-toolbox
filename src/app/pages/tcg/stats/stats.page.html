@@ -11,7 +11,7 @@
             <span class="meta-text">
                Statistiques de la collection
             </span> 
-         </div>              
+         </div>          
       </div>
    </ion-toolbar>  
 </ion-header>
@@ -45,6 +45,18 @@
                @if(totalValueChart() != undefined){
                   <div echarts [options]="totalValueChart().option" class="line-chart"></div>
                } 
+            </ion-col>
+         </ion-row>
+
+         <ion-row class="ion-align-items-center">  
+            <ion-col size="auto">
+               <span class="meta-text"> Mis à jour il y a 3 jours </span> 
+            </ion-col>
+
+            <ion-col class="ion-text-right">
+               <ion-button class="button--empty" fill="outline" (click)="onUpdatePricing()">    
+                  <ion-icon name="refresh-outline" slot="start"></ion-icon> <span class="text-6B3FF7">Mettre à jour les cotes</span>
+               </ion-button>    
             </ion-col>
          </ion-row>
       </div>
@@ -182,5 +194,10 @@
       } @empty {
          <ion-text color="info">-</ion-text>
       }     
-   </div>
+   </div> 
+   {{test().length}}
+   @for(item of test(); track item.id;)
+   { 
+                  <div> {{item.name}} {{item.pricing?.cardmarket?.avg30}}</div>
+               }
 </ion-content>
