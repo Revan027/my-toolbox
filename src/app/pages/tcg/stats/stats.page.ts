@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import moment from 'moment';
 import { PeriodEnum } from 'src/app/constants/PeriodEnum';
@@ -8,8 +8,8 @@ import { CardService } from 'src/app/services/card.service';
 import { ChartService } from 'src/app/services/chart.service';
 import { FileService } from 'src/app/services/capacitor.services.common/file.service';
 import { StatistiqueService } from 'src/app/services/statistique.service';
-import { TCGDexCardService } from 'src/app/services/tcg-dex-card.service';
 import { TCGDexCard } from 'src/app/models/TCGDexCardPrice';
+import { CardPricingService } from 'src/app/services/card-pricing.service';
 
 @Component({
     standalone: false,
@@ -29,6 +29,9 @@ export class StatsPage {
     protected percentageCompletionGeneration2 = signal<number>(0);
     protected percentageCompletionGlobal = signal<number>(0);
     protected activeCurrentPeriod = signal<PeriodEnum>(PeriodEnum.TWELVE_MONTH);
+    protected disableUpdatePricings = signal<boolean>(false);
+
+    protected daysPastUpdated: Signal<number>;
 
     protected periodEnum = PeriodEnum;
     
@@ -36,7 +39,7 @@ export class StatsPage {
         private cardService: CardService,
         private chartService: ChartService, 
         private statistiqueService: StatistiqueService, 
-        private TCGDexCardService: TCGDexCardService,
+        private cardPricingService: CardPricingService,
         private fileService: FileService)
     {
         moment.locale('fr');
@@ -46,6 +49,8 @@ export class StatsPage {
             .subscribe(() => {
                 this.ngOnInit();
             });
+
+        this.daysPastUpdated = this.cardPricingService._daysPastUpdated;
     }
 
     async ngOnInit(){
@@ -58,9 +63,10 @@ export class StatsPage {
         const p5 = this.statistiqueService.getCompletionGeneration(2);
         const p6 = this.statistiqueService.getCompletionLegendary();
         const p7 = this.statistiqueService.getCompletionGlobal();
-        const p8 = this.statistiqueService.getTotalValueChart(periods[0], periods[1]);
+        const p8 = this.statistiqueService.getTotalValueChart(periods[0], periods[1]);  
+        const p9 = this.cardPricingService.getDaysPastUpdated();
   
-        await Promise.all([p1, p2, p3, p4, p5, p6, p7, p8])
+        await Promise.all([p1, p2, p3, p4, p5, p6, p7, p8, p9])
             .then(async (results) => {
                 this.setExpensiveCards(results[0]);
                 this.setCategoryChartOption(this.chartService.buildPie(results[1]));
@@ -69,12 +75,19 @@ export class StatsPage {
                 this.setPercentageCompletionGeneration2(results[4]);
                 this.setPercentageCompletionLegendary(results[5]);
                 this.setPercentageCompletionGlobal(results[6]);           
-                this.setTotalValueChart(this.chartService.buildLineArea(results[7]));
+                this.setTotalValueChart(this.chartService.buildLineArea(results[7])); 
+                this.cardPricingService.setDaysPastUpdated(results[8]);
             })    
     }
 
-    async onUpdatePricing(){
-      this.test.set(await this.TCGDexCardService.getPricings());
+    async onUpdatePricings(){
+        this.setDisableUpdatePricings(true);
+
+        await this.cardPricingService.updatePricings();
+
+        this.cardPricingService.setDaysPastUpdated(await this.cardPricingService.getDaysPastUpdated());
+
+        this.setDisableUpdatePricings(false);
     }
     
     async onPeriodChanged(periodEnum: PeriodEnum){
@@ -118,11 +131,15 @@ export class StatsPage {
         this.percentageCompletionGlobal.set(value);
     }
 
+    setDisableUpdatePricings(value: boolean){
+        this.disableUpdatePricings.set(value);
+    } 
+    
     setTotalValueChart(value: DataChart){
         this.totalValueChart.set({...value});
     }
 
     updateActiveCurrentPeriod(value: PeriodEnum){
-        this.activeCurrentPeriod.update((x) => value);
+        this.activeCurrentPeriod.update((currentPeriod) => value);
     }
 }

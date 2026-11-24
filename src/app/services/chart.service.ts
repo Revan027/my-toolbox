@@ -87,7 +87,7 @@ export class ChartService {
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data: dataLineChart.map((x) =>  x.libelle),
+                    data: dataLineChart.map((point) => point.libelle),
                     axisLabel: {
                         color: '#6B3FF7',
                         fontSize: 10
@@ -166,6 +166,6 @@ export class ChartService {
     }
 
     private getTotal(dataLineChart: DataLineChart[]): number{
-        return dataLineChart.map(x => x.value).reduce((x, y) => x + y);
+        return dataLineChart.map(point => point.value).reduce((total, value) => total + value);
     }
 }

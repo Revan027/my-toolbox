@@ -1,24 +1,34 @@
 import { tableName } from './table-names';
-import { cardApiIds } from './card-api-ids';
 
 export const DB_NAME = 'todo_list_db';
-export const DB_VERSION = 6;
+export const DB_VERSION = 9;
 
-export const version6: string[] = [
-  `ALTER TABLE ${tableName.card} ADD COLUMN apiID TEXT NULL;`,
-  `CREATE TABLE IF NOT EXISTS ${tableName.cardHistoryPricing} (
+export const version9: string[] = [
+  `CREATE TABLE ${tableName.cardHistoryPricing} (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     cardID INTEGER NOT NULL,
     cardHistoryPeriodID INTEGER NOT NULL,
     amount INTEGER NOT NULL
   );`,
+];
+
+export const version8: string[] = [
   `CREATE TABLE IF NOT EXISTS ${tableName.cardHistoryPeriod} (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     date TEXT NOT NULL,
+    period TEXT NOT NULL
   );`,
-  ...cardApiIds.map(([id, apiID, cardmarketID]) =>
+];
+
+export const version7: string[] = [
+  `ALTER TABLE ${tableName.cardHistoryPeriod} ADD COLUMN period TEXT NOT NULL;`,
+];
+
+export const version6: string[] = [
+  `ALTER TABLE ${tableName.card} ADD COLUMN apiID TEXT NULL;`,
+  /*...cardApiIds.map(([id, apiID, cardmarketID]) =>
     `UPDATE ${tableName.card} SET apiID = '${apiID}' WHERE id = ${id};`
-  ),
+  ),*/
 ];
 
 export const version5: string[] = [
@@ -267,5 +277,8 @@ export const DB_UPGRADES = [
   { toVersion: 3, statements: version3 },
   { toVersion: 4, statements: version4 },
   { toVersion: 5, statements: version5 },
-  { toVersion: 6, statements: version6 },
+  { toVersion: 6, statements: version6 }, 
+  { toVersion: 7, statements: version7 },
+  { toVersion: 8, statements: version8 },
+  { toVersion: 9, statements: version9 }, 
 ];

@@ -17,15 +17,17 @@ export class TCGDexService {
         return this.httpService.get<TCGDexCardLight[]>(`${environment.apiTCGDexBaseUrl}/fr/cards`, {name: cardName.trim()});
     }
 
-    getCard(id: number, language: string = "fr"): Observable<TCGDexCard>{
+    getCard(id: string, language: string = "fr"): Observable<TCGDexCard>{
         return this.httpService.get<TCGDexCard>(`${environment.apiTCGDexBaseUrl}${language}/cards/${id}`);
     }
 
-    getCards(ids: number[]): Promise<TCGDexCard>[]{
+    getCards(apiIDs: string[]): Promise<TCGDexCard>[]{
         let result: Promise<TCGDexCard>[] = []
 
-        ids.map((id: number) => {
-            result.push(firstValueFrom(this.getCard(id))
+        // si pas trouvé, on essai en anglais
+        apiIDs.map((id: string) => {
+            result.push(
+                firstValueFrom(this.getCard(id))
                 .catch((e) => firstValueFrom(this.getCard(id, "en"))))
         })   
 
@@ -35,7 +37,7 @@ export class TCGDexService {
     async updatePricing(cardApi: any){
 
         if(cardApi.pricing.cardmarket  == undefined){
-            let variant = cardApi.variants_detailed.find((x: any) => x.pricing?.cardmarket != undefined)
+            let variant = cardApi.variants_detailed.find((variantDetail: any) => variantDetail.pricing?.cardmarket != undefined)
 
             cardApi.pricing = new TCGDexPricing();
             cardApi.pricing.cardmarket = new CardmarketPricing();

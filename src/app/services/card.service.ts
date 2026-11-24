@@ -150,20 +150,20 @@ export class CardService {
         let pagedCardResult = new PagedCardResult();   
         pagedCardResult.cards = cards;
         pagedCardResult.totalCard = cards.length;
-        pagedCardResult.totalValue = cards.map(x => x.averagePrice).reduce((x, y) => x + y);
+        pagedCardResult.totalValue = cards.map(card => card.averagePrice).reduce((total, price) => total + price);
 
         return pagedCardResult;
     }
     
-    async getAllAcquiredIDs(take: number, iteration: number): Promise<number[]> {
+    async getPagedAcquired(take: number, iteration: number): Promise<Card[]> {
         let result = await this.storageService.getDb().query(`
-            SELECT card.apiID
+            SELECT card.apiID, card.id
             FROM ${tableName.card} AS card 
             WHERE card.isAcquired = 1
             LIMIT ${take} 
             OFFSET ${iteration * take}`);
             
-        return result.values?.map((value) => value.apiID) as number[] ?? [];
+        return result.values as Card[] ?? [];
     }
 
     getQuerySearch(cardFilter: CardFilter): string{
@@ -290,7 +290,7 @@ export class CardService {
             this._cardFilter.set(cardFilter);
         }
         else{
-            this._cardFilter.update((x) => x = cardFilter);
+            this._cardFilter.update((currentFilter) => currentFilter = cardFilter);
         }
         
         this.notifyFilterChanged();

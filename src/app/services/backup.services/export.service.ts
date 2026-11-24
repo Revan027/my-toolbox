@@ -22,7 +22,7 @@ export class ExportService extends BackupService {
             new BackupStep("Exportation terminée"),
         ];
 
-        this._countStep.set(this.backupSteps.filter(x => x.stepOrder).length);
+        this._countStep.set(this.backupSteps.filter(step => step.stepOrder).length);
 
         this.resetStepProgression();
     }

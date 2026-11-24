@@ -111,8 +111,8 @@ export class ExchangeRateService {
         amount: number,
     ): number {
         // On va chercher le taux de conversion d'un euros en dollards
-        const originalRate = rates.find((x) => x.symbol == originalCurrency);
-        const targetRate = rates.find((x) => x.symbol == targetCurrency);
+        const originalRate = rates.find((rate) => rate.symbol == originalCurrency);
+        const targetRate = rates.find((rate) => rate.symbol == targetCurrency);
         let result = 0;
 
         if (originalRate != undefined && targetRate != undefined) {

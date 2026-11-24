@@ -40,7 +40,7 @@ export class  LoadingPage implements OnInit {
         this.dots.set(".")
       }
       else{
-        this.dots.update(x => x += ".");
+        this.dots.update(currentDots => currentDots += ".");
       }
     }, 300);
   }
