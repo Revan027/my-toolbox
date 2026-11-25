@@ -58,7 +58,7 @@ export class ChartService {
         return dataChart;
     }
 
-    buildLineArea(dataLineChart: DataLineChart[]): DataChart {
+    buildLineArea(purchaseDatas: DataLineChart[], marketDatas: DataLineChart[]): DataChart {
         // on regroupe sur les 6 derniers mois
         // sur un an  soit 12 mois avant
         // sur tout les années
@@ -87,7 +87,7 @@ export class ChartService {
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data: dataLineChart.map((point) => point.libelle),
+                    data: purchaseDatas.map((point) => point.libelle),
                     axisLabel: {
                         color: '#6B3FF7',
                         fontSize: 10
@@ -119,9 +119,8 @@ export class ChartService {
             ],
             series: [
                 {
-                    name: 'Valeur total',
+                    name: 'Valeur achat',
                     type: 'line',
-                    stack: 'Total',
                     smooth: true,
                     lineStyle: {
                         color: '#6B3FF7',
@@ -135,7 +134,25 @@ export class ChartService {
                     emphasis: {
                         focus: 'series'
                     },
-                    data: dataLineChart
+                    data: purchaseDatas
+                }, 
+                {
+                    name: 'Valeur cotes',
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        color: '#9FE8D8',
+                        width: 2
+                    },
+                    showSymbol: false,
+                    areaStyle: {
+                        opacity: 0.6,
+                        color:'#E4F5F1'
+                    },
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: marketDatas
                 },
             ]
         }; 

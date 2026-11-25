@@ -36,19 +36,25 @@ export class AppInitService {
     const p3 = this.cardConditionService.getAll();
     const p4 = this.exchangeRateService.getCurrencies();
     const p5 = this.exchangeRateService.getRates();
-    const p6 = this.statistiqueService.countTotalValue();
-this._isAppInit.set(true);
-      this.router.navigateByUrl('tcg');
+    const p6 = this.statistiqueService.countTotalPurchaseValue();
+    const p7 = this.statistiqueService.countTotalMarketValue();
+
+    /*this._isAppInit.set(true);
+    this.router.navigateByUrl('tcg');*/
+
     // on attend la résolution des promises
-    Promise.all([p1, p2, p3, p4, p5, p6]).then( async (values) => {   
+    Promise.all([p1, p2, p3, p4, p5, p6, p7]).then( async (values) => {   
       this.generationService.set(values[0]);
       this.serieService.set(values[1]);
       this.cardConditionService.set(values[2]);
       this.exchangeRateService.setCurrency(values[3]);
       this.exchangeRateService.setRates(values[4]);
-      this.statistiqueService.setTotalValue(values[5]);
 
-      this.statistiqueService.setProgressionPercentage(await this.statistiqueService.getProgressionByMonth(values[5]));
+      this.statistiqueService.setTotalPurchaseValue(values[5]);
+      this.statistiqueService.setProgressionPurchasePercentage(await this.statistiqueService.getPurchaseProgressionByMonth(values[5]));
+
+      this.statistiqueService.setTotalMarketValue(values[6]);
+      this.statistiqueService.setProgressionMarketPercentage(await this.statistiqueService.getMarketProgressionByMonth(values[6]));
 
       this._isAppInit.set(true);
       this.router.navigateByUrl('tcg');

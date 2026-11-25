@@ -137,7 +137,7 @@
                </ion-label>
 
                @if(!hasDateAcquired()){
-                  <ion-button class="button--empty button--input w-100" fill="clear" (click)="onSelectedEmptyDate()">-</ion-button>
+                  <ion-button class="button--empty button--input w-100" fill="clear" (click)="onSelectedEmptyDate()">{{formGroup.get('dateAcquired')?.value | date:'MM/y'}}</ion-button>
                }
 
                <ion-datetime-button [class.d-none]="!hasDateAcquired()" datetime="datetime"></ion-datetime-button>

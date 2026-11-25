@@ -1,23 +1,55 @@
 <div class="metric-banner">
     <ion-icon class="metric-banner-icon" name="diamond-outline"></ion-icon>
 
-    <p class="metric-banner-title meta-text--white">
-        Valeur d'achat
-    </p>
+    <ion-row class="ion-align-items-center metric-banner-line">
+        <ion-col size="12" class="p-0">
+            <div class="metric-banner-title meta-text--white">
+                Valeur d'achat
+            </div>
+        </ion-col>
 
-    <div class="metric-banner-footer">
-        <div class="metric-banner-amount main-metric-number">
-            {{ totalValue() | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
-        </div>
+            <ion-col size="auto" class="p-0">
+            <span class="main-metric-number">
+                {{ totalPurchaseValue() | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
+            </span>
+        </ion-col>
 
-        <div class="metric-banner-stats positive meta-text" [class.positive]="progressPercentage() > 0" [class.negative]="progressPercentage() <= 0">
-            @if(progressPercentage() > 0){
-                <ion-icon name="trending-up-outline"></ion-icon>
-            }
-            @else{
-                <ion-icon name="trending-down-outline"></ion-icon>
-            }
-            <span>{{progressPercentage() | number:'1.0-1'}} % sur le mois</span>
-        </div>
-    </div>
+        <ion-col size="auto" class="p-0">
+            <span class="metric-banner-stats positive meta-text" [class.positive]="progressPurchasePercentage() > 0" [class.negative]="progressPurchasePercentage() <= 0">
+                @if(progressPurchasePercentage() > 0){
+                    <ion-icon name="trending-up-outline"></ion-icon>
+                }
+                @else{
+                    <ion-icon name="trending-down-outline"></ion-icon>
+                }
+                <span>{{progressPurchasePercentage() | number:'1.0-1'}} % sur le mois</span>
+            </span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-align-items-center metric-banner-line--border ion-margin-top ion-padding-top">
+        <ion-col size="12" class="p-0">
+            <div class="metric-banner-title meta-text--white">
+                Valeur Cardmarket
+            </div>
+        </ion-col>
+
+            <ion-col size="auto" class="p-0">
+            <span class="main-metric-number">
+                {{ totalMarketValue() | currency:'EUR':'symbol':'1.2-2':'fr-FR' }}
+            </span>
+        </ion-col>
+
+        <ion-col size="auto" class="p-0">
+            <span class="metric-banner-stats positive meta-text" [class.positive]="progressMarketPercentage() > 0" [class.negative]="progressMarketPercentage() <= 0">
+                @if(progressMarketPercentage() > 0){
+                    <ion-icon name="trending-up-outline"></ion-icon>
+                }
+                @else{
+                    <ion-icon name="trending-down-outline"></ion-icon>
+                }
+                <span>{{progressMarketPercentage() | number:'1.0-1'}} % sur le mois</span>
+            </span>
+        </ion-col>
+    </ion-row>
 </div>

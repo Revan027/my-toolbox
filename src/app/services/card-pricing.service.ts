@@ -7,40 +7,52 @@ import { CardPricePeriod } from '../models/CardPricePeriod';
 import { StorageService } from './capacitor.services.common/storage-service';
 import moment from 'moment';
 import { CardPricing } from '../models/CardPricing';
+import { ToastService } from './ionic.services.common/toast.service';
+import { StatusEnum } from './ionic.services.common/enum/status.enum';
+import { Subject } from 'rxjs';
+import { Card } from '../models/Card';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CardPricingService {
+    private _pricingChanged$ = new Subject<void>();
+
     private daysPastUpdated = signal<number>(0);
+
+    readonly pricingChanged = this._pricingChanged$.asObservable(); 
+
     _daysPastUpdated = this.daysPastUpdated.asReadonly();
 
     constructor(
         private TCGDexService: TCGDexService, 
         private cardService: CardService, 
         private statistiqueService: StatistiqueService,
-        private storageService: StorageService) 
+        private storageService: StorageService,
+        private toastService: ToastService) 
     {
         moment.locale('fr');
     }
 
     async updatePricings(){      
+        const limit = 100;
+        let cards: Card[] = [];
+        let i = 0
         let cardPricePeriod = new CardPricePeriod();
         cardPricePeriod.date = moment().format("YYYY-MM-DD");
         cardPricePeriod.period = moment().format("YYYY-MM");
         cardPricePeriod.prices = [];
 
-        const limit = 100;
-        const countCard = await this.statistiqueService.countTotalAcquiredCard();
-        let i = 0
-        let progress = 0;
+        // suppression des cotes dont la carte n'est plus en base
+        await this.deleteExpired();
 
-        // recupe des cotes des cartes via l'api
-        while(progress != countCard){
-            const cards = await this.cardService.getPagedAcquired(limit, i);
-            progress += cards.length;
+        // recuperation des cotes des cartes via l'api
+        do{
+            cards = await this.cardService.getAcquiredPaged(limit, i, cardPricePeriod.period);
+
             i++;
-
+   
+            // mise en parallèle des paquets de requetes api par ids
             await Promise
                 .all(this.TCGDexService.getCards(cards.map((card) => card.apiID) as []))
                 .then((result) => {
@@ -57,35 +69,45 @@ export class CardPricingService {
                
                     cardPricePeriod.prices = cardPricePeriod.prices.concat(cardPricings);  
             });
-        } 
+        }while(cards.length > 0);
 
-        const currentPeriod = await this.getByPeriod(cardPricePeriod.period);
+        if(cardPricePeriod.prices.length == 0){
+            await this.toastService.get(`Aucune cote à mettre à jour sur cette période`, StatusEnum.Success);
 
-        // on supprime les anciennes cotes de la période en cours
-        if(currentPeriod.id > 0){
-            await this.deleteCardHistoryPricing(currentPeriod.id); 
-            await this.deleteCardHistoryPeriod(cardPricePeriod.period);
+            return;
         }
-
-        await this.create(cardPricePeriod);
+        
+        const success = await this.create(cardPricePeriod);
+    
+        return success 
+            ? await this.toastService.get(`Mise à jour de ${cardPricePeriod.prices.length} cotes`, StatusEnum.Success)
+            : await this.toastService.get(`Une erreur est survenue`, StatusEnum.Danger);
     }
 
     async create(cardPricePeriod: CardPricePeriod){
-        let success = false;
+        let success = true;
+        let sql = "";
+        let result;
+        const currentPeriod = await this.getByPeriod(cardPricePeriod.period);
+        let cardHistoryPeriodID = currentPeriod.id;
 
-        let sql = `
-            INSERT INTO ${tableName.cardHistoryPeriod} (date, period) 
-            VALUES (?, ?)`;
+        // création de la période si elle n'existe pas deja
+        if(currentPeriod.id == 0){
+            sql = `
+                INSERT INTO ${tableName.cardHistoryPeriod} (date, period) 
+                VALUES (?, ?)`;
 
-        let result = await this.storageService.getDb().run(sql, 
-        [
-            cardPricePeriod.date, cardPricePeriod.period
-        ]);
+            result = await this.storageService.getDb().run(sql, 
+            [
+                cardPricePeriod.date, cardPricePeriod.period
+            ]);
 
-        const cardHistoryPeriodID = result.changes?.lastId;
+            cardHistoryPeriodID = result?.changes?.lastId ?? 0;
 
-        success = cardHistoryPeriodID != undefined && cardHistoryPeriodID > 0;
+            success = cardHistoryPeriodID != undefined && cardHistoryPeriodID > 0;
+        }
 
+        // création des cotes
         for(let item of cardPricePeriod.prices){
             sql = `
                 INSERT INTO ${tableName.cardHistoryPricing} (cardID, cardHistoryPeriodID, amount) 
@@ -102,16 +124,30 @@ export class CardPricingService {
         return success;
     }
 
-    async deleteCardHistoryPeriod(period: string){
-        const sql = `DELETE FROM ${tableName.cardHistoryPeriod} WHERE period = ${period}`;
+    async deleteCardHistoryPeriod(){
+        const sql = `DELETE FROM ${tableName.cardHistoryPeriod}`;
 
         const result = await this.storageService.getDb().execute(sql);
 
         return result;
     }
 
-     async deleteCardHistoryPricing(cardHistoryPeriodID: number){
-        const sql = `DELETE FROM ${tableName.cardHistoryPricing} WHERE cardHistoryPeriodID = ${cardHistoryPeriodID}`;
+    async deleteCardHistoryPricing(){
+        const sql = `DELETE FROM ${tableName.cardHistoryPricing}`;
+
+        const result = await this.storageService.getDb().execute(sql);
+
+        return result;
+    }
+
+    async deleteExpired() {
+        const sql = `
+            DELETE FROM ${tableName.cardHistoryPricing}
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM ${tableName.card} AS card
+                WHERE card.id = ${tableName.cardHistoryPricing}.cardID
+            );`;
 
         const result = await this.storageService.getDb().execute(sql);
 
@@ -122,6 +158,7 @@ export class CardPricingService {
         let result = await this.storageService.getDb().query(`
             SELECT id, period, date
             FROM ${tableName.cardHistoryPeriod}
+
             WHERE period = '${periodDate}'           
             LIMIT 1;
         `);
@@ -146,6 +183,10 @@ export class CardPricingService {
 
     setDaysPastUpdated(value: number){
         this.daysPastUpdated.set(value);
+    }
+
+    notifyPricingChanged(): void {
+        this._pricingChanged$.next();
     }
 }
 

@@ -156,8 +156,11 @@ export class EditTCGPage implements OnDestroy {
 
         card.dateAcquired = Card.getPeriod(new Date(card.dateAcquired ?? ""));
 
-        let result = this.card().id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
-        isSuccess = (result.changes?.changes ?? 0) > 0;
+        let result = this.card().id > 0 
+            ? await this.cardService.update(card) 
+            : await this.cardService.create(card);
+
+        let isSuccess = (result.changes?.changes ?? 0) > 0;
 
         await this.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
 
