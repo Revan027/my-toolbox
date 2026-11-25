@@ -22,11 +22,11 @@ export class DashboardComponent implements OnInit {
 
   constructor(private statistiqueService: StatistiqueService, private cardService: CardService, ) {
     this.averagePrice = computed<number>(() =>
-      this.statistiqueService.getAveragePrice(this.statistiqueService._totalValue(),  this.totalCard())
+      this.statistiqueService.getAveragePrice(this.statistiqueService.totalPurchaseValue(), this.totalCard())
     );
 
     this.percentageCompletion = computed<number>(() =>
-      this.statistiqueService.getCompletionPercentage(this.totalAcquiredCard(),  this.totalCard())
+      this.statistiqueService.getCompletionPercentage(this.totalAcquiredCard(), this.totalCard())
     );
 
     this.cardService.cardsChanged

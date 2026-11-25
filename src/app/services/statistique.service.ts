@@ -11,11 +11,15 @@ import { PeriodEnum } from '../constants/PeriodEnum';
     providedIn: 'root',
 })
 export class StatistiqueService {  
-    private progressionPercentage = signal<number>(0);
-    private totalValue = signal<number>(0);
+    private _progressionPurchasePercentage = signal<number>(0);
+    private _totalPurchaseValue = signal<number>(0);
+    private _progressionMarketPercentage = signal<number>(0);
+    private _totalMarketValue = signal<number>(0);
 
-    _progressionPercentage = this.progressionPercentage.asReadonly();
-    _totalValue = this.totalValue.asReadonly();
+    progressionPurchasePercentage = this._progressionPurchasePercentage.asReadonly();
+    totalPurchaseValue = this._totalPurchaseValue.asReadonly();
+    progressionMarketPercentage = this._progressionMarketPercentage.asReadonly();
+    totalMarketValue = this._totalMarketValue.asReadonly();
 
     constructor(private storageService: StorageService) {
         moment.locale('fr');
@@ -39,11 +43,18 @@ export class StatistiqueService {
         return result.values != undefined ? result.values[0].totalCount : 0
     }
     
-    async countTotalValue(): Promise<number>{
+    async countTotalPurchaseValue(): Promise<number>{
         let result = await this.storageService.getDb().query(`
             SELECT SUM(averagePrice) as totalCount FROM ${tableName.card}`);
         
-        return result.values != undefined ? result.values[0].totalCount : 0
+        return result.values != undefined && result.values[0].totalCount != null ? result.values[0].totalCount : 0
+    }
+
+    async countTotalMarketValue(): Promise<number>{
+        let result = await this.storageService.getDb().query(`
+            SELECT SUM(amount) as totalCount FROM ${tableName.cardHistoryPricing}`);
+
+        return result.values != undefined && result.values[0].totalCount != null ? result.values[0].totalCount : 0
     }
 
     async countTotalCard(): Promise<number>{
@@ -81,7 +92,7 @@ export class StatistiqueService {
         return ((finalValue - initValue) / initValue) * 100;
     }
 
-    async getProgressionByMonth(currentValue: number): Promise<number>{
+    async getPurchaseProgressionByMonth(currentValue: number): Promise<number>{
         const periods = this.getPeriods(PeriodEnum.PREVIOUS_MONTH);
         
         // récupération de la valeur du mois dernier
@@ -90,8 +101,24 @@ export class StatistiqueService {
             WHERE DATE(dateAcquired || '-01') <= ?
             AND isAcquired = 1`, [periods[0]]);
            
-        const initValue = result.values != undefined ? result.values[0].totalCount : 0;    
+        const initValue = result.values != undefined && result.values[0].totalCount  != null ? result.values[0].totalCount : 0;    
  
+        return this.getProgressionPercentage(initValue, currentValue);
+    }
+
+    async getMarketProgressionByMonth(currentValue: number): Promise<number>{
+        const periods = this.getPeriods(PeriodEnum.PREVIOUS_MONTH);
+        
+        // récupération de la valeur du mois dernier
+        let result = await this.storageService.getDb().query(`
+            SELECT SUM(price.amount) as totalCount 
+            FROM ${tableName.cardHistoryPeriod} as period
+            INNER JOIN ${tableName.cardHistoryPricing} AS price ON price.cardHistoryPeriodID = period.id 
+            WHERE DATE(period.period || '-01') <= ?`,
+            [periods[0]]);
+           
+        const initValue = result.values != undefined && result.values[0].totalCount != null ? result.values[0].totalCount : 0;    
+
         return this.getProgressionPercentage(initValue, currentValue);
     }
 
@@ -156,41 +183,87 @@ export class StatistiqueService {
         return this.getCompletionPercentage(currentValue, total);
     }
     
-    async getTotalValueChart(startBegin: string, endBegin: string): Promise<DataLineChart[]>{   
+    async getTotalPurchaseChart(startBegin: string, endBegin: string): Promise<DataLineChart[]>{   
+        let dataLinesChart: DataLineChart[] = [];
+        let currentPeriod = moment(startBegin);
+        let endPeriod = moment(endBegin);
         let startValue = 0;
-        // regroupement par mois et calcul de la valeur des cartes du mois
-        //WHERE DATE(dateAcquired || '-01') >= ? AND DATE(dateAcquired || '-01') <= ?
-  
+
         // recherche de la valeur de la collection avant la date de début
        let result = await this.storageService.getDb().query(`
-            SELECT SUM(averagePrice) as totalCount FROM ${tableName.card}
+            SELECT SUM(averagePrice) as totalCount 
+            FROM ${tableName.card}
             WHERE DATE(dateAcquired || '-01') < ?
             AND isAcquired = 1`, [startBegin]);
 
-        startValue = result.values != undefined ? result.values[0].totalCount : 0;
-
-        result = await this.storageService.getDb().query(`
-            SELECT SUM(averagePrice) as totalCount, dateAcquired as libelle  FROM ${tableName.card}
-            WHERE DATE(dateAcquired || '-01') >= ? AND DATE(dateAcquired || '-01') <= ?
-            AND isAcquired = 1
-            GROUP BY dateAcquired`, [startBegin, endBegin]);
+        startValue = result.values != undefined && result.values[0].totalCount != undefined ? result.values[0].totalCount : 0;
         
-        const values: any[] = result.values ?? [];
         let previousValue = startValue;
 
-        // parcours des mois et ajout de la valeur précédente à la valeur en cours pour avoir une progression total
-        for(let value of values){
-            value.totalCount = (Math.round((value.totalCount + previousValue) * 100) / 100); // on arrondie pour éviter des chiffres infinie du a sql lite
+         // on parcours sur chaque mois et on calcul le total
+        while(currentPeriod < endPeriod){
 
-            previousValue = value.totalCount;
-            value.libelle = moment(value.libelle).format('MM/YY');
-        }
+            result = await this.storageService.getDb().query(`
+                SELECT SUM(averagePrice) as totalCount, dateAcquired as libelle  
+                FROM ${tableName.card}
+                WHERE DATE(dateAcquired || '-01') = ?
+                AND isAcquired = 1`,
+                [currentPeriod.format('YYYY-MM-01')]);
+            
+            const values: any[] = result.values ?? []; 
 
-        const lines: DataLineChart[] = values?.map((data: any)=>{
-            return DataLineChart.fromSQL(data);
-        })|| []; 
+            dataLinesChart.push( 
+            {
+                libelle: currentPeriod.format('MM/YY'), 
+                value: (Math.round((values[0].totalCount + previousValue) * 100) / 100) // on arrondie pour éviter des chiffres infinie du a sql lite
+            });
+           
+            previousValue += values[0].totalCount;
+            currentPeriod = currentPeriod.add('1', "months");
+        } 
 
-        return lines;
+        return dataLinesChart;       
+    }
+
+     async getTotalMarketValueChart(startBegin: string, endBegin: string): Promise<DataLineChart[]>{  
+        let dataLinesChart: DataLineChart[] = [];
+        let currentPeriod = moment(startBegin);
+        let endPeriod = moment(endBegin);
+        let startValue = 0;
+       
+        // recherche de la valeur de la collection avant la date de début
+       let result = await this.storageService.getDb().query(`
+            SELECT SUM(price.amount) as totalCount 
+            FROM ${tableName.cardHistoryPeriod} as period
+            INNER JOIN ${tableName.cardHistoryPricing} AS price ON price.cardHistoryPeriodID = period.id 
+            WHERE DATE(period.period || '-01') < ?`, [startBegin]);
+
+        startValue = result.values != undefined && result.values[0].totalCount != undefined ? result.values[0].totalCount : 0;
+
+        let previousValue = startValue;
+
+        // on parcours sur chaque mois et on calcul le total
+        while(currentPeriod < endPeriod){
+
+            result = await this.storageService.getDb().query(`
+                SELECT SUM(price.amount) as totalCount, period.period as libelle  
+                FROM ${tableName.cardHistoryPeriod} as period
+                INNER JOIN ${tableName.cardHistoryPricing} AS price ON price.cardHistoryPeriodID = period.id 
+                WHERE DATE(period.period || '-01') = ?`,
+                [currentPeriod.format('YYYY-MM-01')]);
+            
+            const values: any[] = result.values ?? []; 
+
+            dataLinesChart.push( 
+            {
+                libelle: currentPeriod.format('MM/YY'), 
+                value: (Math.round((values[0].totalCount + previousValue) * 100) / 100) // on arrondie pour éviter des chiffres infinie du a sql lite
+            });
+           
+            previousValue += values[0].totalCount;
+            currentPeriod = currentPeriod.add('1', "months");
+        } 
+        return dataLinesChart;
     }
 
     async getCategoryChart(): Promise<DataLineChart[]>{
@@ -229,17 +302,29 @@ export class StatistiqueService {
     }   
 
     async resfreshMetricBanner(): Promise<void>{
-        const totalValue = await this.countTotalValue();
+        const totalPurchaseValue = await this.countTotalPurchaseValue();
+        const totalMarketValue = await this.countTotalMarketValue();
 
-        this.setTotalValue(totalValue);
-        this.setProgressionPercentage(await this.getProgressionByMonth(totalValue));
+        this.setTotalPurchaseValue(totalPurchaseValue);
+        this.setProgressionPurchasePercentage(await this.getPurchaseProgressionByMonth(totalPurchaseValue));
+
+        this.setTotalMarketValue(totalMarketValue);
+        this.setProgressionMarketPercentage(await this.getMarketProgressionByMonth(totalMarketValue));
     }
 
-    setProgressionPercentage(value: number): void{
-        this.progressionPercentage.set(value)
+    setProgressionPurchasePercentage(value: number): void{
+        this._progressionPurchasePercentage.set(value)
     }
 
-    setTotalValue(value: number): void{
-        this.totalValue.set(value)
+    setTotalPurchaseValue(value: number): void{
+        this._totalPurchaseValue.set(value)
+    } 
+
+    setProgressionMarketPercentage(value: number): void{
+        this._progressionMarketPercentage.set(value)
+    }
+
+    setTotalMarketValue(value: number): void{
+        this._totalMarketValue.set(value)
     } 
 }

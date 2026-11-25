@@ -40,7 +40,7 @@
                   }
                   
                   @if(card().serie){
-                     <span class="meta-text">{{card().serie.name}}</span>
+                     <div class="meta-text">{{card().serie.name}}</div>
                   }   
                </ion-col>
 
@@ -137,7 +137,7 @@
                </ion-label>
 
                @if(!hasDateAcquired()){
-                  <ion-button class="button--empty w-100" fill="clear" (click)="onSelectedEmptyDate()">-</ion-button>
+                  <ion-button class="button--empty button--input w-100" fill="clear" (click)="onSelectedEmptyDate()">{{formGroup.get('dateAcquired')?.value | date:'MM/y'}}</ion-button>
                }
 
                <ion-datetime-button [class.d-none]="!hasDateAcquired()" datetime="datetime"></ion-datetime-button>
@@ -153,7 +153,6 @@
                               month: '2-digit',
                               year: 'numeric',
                            }
-                          
                         }" 
                         (ionChange)="onDateAcquiredChanged($event)">
                      </ion-datetime>
@@ -180,6 +179,20 @@
             }
          </div>
 
+         <div class="ion-margin-bottom">
+            <ion-label>
+               Identifiant TCGDex
+            </ion-label>
+
+            <input type="hidden" formControlName="apiID">
+
+            <ion-button class="button--empty button--input w-100" fill="clear" id="btn-tcgdex-modal" expand="block"> {{formGroup.get("apiID")?.value}}</ion-button>
+
+            @if(formGroup.controls['apiID'].invalid && (formGroup.controls['apiID'].dirty)){
+               <ion-text color="danger"><p class="ion-no-margin ion-margin-bottom ion-padding-start">L'id de l'api est requis</p></ion-text>
+            }
+         </div>
+          
          <div class="ion-display-flex ion-justify-content-between ion-margin-top ion-margin-bottom">           
             <ion-toggle
                formControlName="isAcquired"
@@ -214,6 +227,8 @@
             </ion-button>
          </div>
       </form>
+
+      <app-tcg-dex-modal (apiID)="onChoiceApiID($event)" [cardName]="formGroup.get('name')?.value" ></app-tcg-dex-modal>
    }
    @else{
       <div class="loader-center">

@@ -35,8 +35,8 @@ export class CardService {
 
     async create(card: Card): Promise<capSQLiteChanges> {
         const sql = `
-            INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isAcquired, serieID, generationID, isLegendary, conditionID, dateAcquired) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            INSERT INTO ${tableName.card} (name, srcPicture, averagePrice, isAcquired, serieID, generationID, isLegendary, conditionID, dateAcquired, apiID) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const result = await this.storageService.getDb().run(sql, 
             [
@@ -49,6 +49,7 @@ export class CardService {
                 card.isLegendary, 
                 card.conditionID, 
                 card.dateAcquired,
+                card.apiID,
             ]);
 
         return result;
@@ -57,7 +58,7 @@ export class CardService {
     async update(card: Card): Promise<capSQLiteChanges> {
         const sql = `
             UPDATE ${tableName.card}
-            SET name = ?, srcPicture = ?, averagePrice = ?, isAcquired = ?, serieID = ?, generationID = ?, isLegendary = ?, conditionID = ?, dateAcquired = ?
+            SET name = ?, srcPicture = ?, averagePrice = ?, isAcquired = ?, serieID = ?, generationID = ?, isLegendary = ?, conditionID = ?, dateAcquired = ?, apiID = ?
             WHERE id = ?`;
 
         return await this.storageService.getDb().run(sql, 
@@ -71,7 +72,8 @@ export class CardService {
             card.isLegendary, 
             card.conditionID, 
             card.dateAcquired,
-            card.id,
+            card.id, 
+            card.apiID,
         ]);
     }
 
@@ -104,12 +106,25 @@ export class CardService {
         let result = await this.storageService.getDb().query(`
             SELECT 
             generation.id AS generationID, generation.libelle AS generation_libelle, 
-            card.id, card.name, card.srcPicture, card.isAcquired, card.averagePrice, card.serieID, card.isLegendary, card.conditionID, card.dateAcquired, 
+            card.id, card.name, card.srcPicture, card.isAcquired, card.averagePrice, card.serieID, card.isLegendary, card.conditionID, card.dateAcquired, card.apiID,
             serie.name AS serie_name, serie.srcLogo As serie_src_logo
             FROM ${tableName.card} AS card 
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
             WHERE card.id = ${id}`);
+
+        const card: Card = result.values?.map((data: any)=>{
+            return Card.fromSQL(data);
+        })[0] || new Card();
+    
+        return card;
+    }
+
+     async getByApiId(id: number): Promise<Card> {
+        let result = await this.storageService.getDb().query(`
+            SELECT card.averagePrice
+            FROM ${tableName.card} AS card 
+            WHERE card.apiID LIKE '${id}'`);
 
         const card: Card = result.values?.map((data: any)=>{
             return Card.fromSQL(data);
@@ -127,7 +142,7 @@ export class CardService {
             INNER JOIN ${tableName.generation} AS generation ON ${tableName.generation}.id = generationID
             INNER JOIN ${tableName.serie} AS serie ON ${tableName.serie}.id = serieId 
             WHERE card.isAcquired = 1
-            ORDER BY card.dateAcquired DESC
+            ORDER BY card.dateAcquired DESC, card.id DESC
             LIMIT ${take}`);
 
          const cards: Card[] = result.values?.map((data: any)=>{
@@ -137,9 +152,27 @@ export class CardService {
         let pagedCardResult = new PagedCardResult();   
         pagedCardResult.cards = cards;
         pagedCardResult.totalCard = cards.length;
-        pagedCardResult.totalValue = cards.map(x => x.averagePrice).reduce((x, y) => x + y);
+        pagedCardResult.totalValue = cards.map(card => card.averagePrice).reduce((total, price) => total + price);
 
         return pagedCardResult;
+    }
+    
+    async getAcquiredPaged(take: number, iteration: number, currentPeriod: string): Promise<Card[]> {
+        let sqlPricesFounded = `
+            SELECT price.cardID  
+            FROM ${tableName.cardHistoryPeriod} AS period 
+            INNER JOIN ${tableName.cardHistoryPricing} AS price ON price.cardHistoryPeriodID = period.id 
+            WHERE period.period = ? 
+        `;
+
+        let result = await this.storageService.getDb().query(`
+            SELECT card.apiID, card.id
+            FROM ${tableName.card} AS card 
+            WHERE card.id NOT IN (${sqlPricesFounded}) AND card.isAcquired = 1 
+            LIMIT ${take} 
+            OFFSET ${iteration * take}`, [currentPeriod]);
+
+        return result.values as Card[] ?? [];
     }
 
     getQuerySearch(cardFilter: CardFilter): string{
@@ -181,7 +214,8 @@ export class CardService {
             FROM ${tableName.card} AS card 
             ${this.getQuerySearch(cardFilter)}
             ${this.getQuerySort(cardSort)}          
-            LIMIT ${offsetBase != undefined ? offsetBase : this.offsetBase} OFFSET ${offset}`);
+            LIMIT ${offsetBase != undefined ? offsetBase : this.offsetBase} 
+            OFFSET ${offset}`);
 
         const cards: Card[] = result.values?.map((data: any)=>{
             return Card.fromSQL(data);
@@ -265,7 +299,7 @@ export class CardService {
             this._cardFilter.set(cardFilter);
         }
         else{
-            this._cardFilter.update((x) => x = cardFilter);
+            this._cardFilter.update((currentFilter) => currentFilter = cardFilter);
         }
         
         this.notifyFilterChanged();

@@ -1,7 +1,7 @@
 import { Component, DestroyRef, ElementRef, inject, OnDestroy, signal, Signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import Panzoom, { PanzoomObject } from '@panzoom/panzoom';
 import { folder } from 'src/app/constants/folder';
@@ -60,7 +60,6 @@ export class EditTCGPage implements OnDestroy {
         private cardConditionService: CardConditionService,
         private toastService: ToastService,
         private confirmationService: ConfirmationService,
-        private router: Router,
         private generationService: GenerationService,
         private location: Location,
     ) 
@@ -134,6 +133,7 @@ export class EditTCGPage implements OnDestroy {
             conditionID: [this.card()?.conditionID, null],
             isLegendary: [this.card()?.isLegendary, Validators.required],
             dateAcquired: [this.card()?.dateAcquired ?? (new Date()).toISOString(), null],
+            apiID: [this.card()?.apiID, Validators.required],
         });
     }
 
@@ -156,8 +156,11 @@ export class EditTCGPage implements OnDestroy {
 
         card.dateAcquired = Card.getPeriod(new Date(card.dateAcquired ?? ""));
 
-        let result = this.card().id > 0 ? await this.cardService.update(card) : await this.cardService.create(card),
-        isSuccess = (result.changes?.changes ?? 0) > 0;
+        let result = this.card().id > 0 
+            ? await this.cardService.update(card) 
+            : await this.cardService.create(card);
+
+        let isSuccess = (result.changes?.changes ?? 0) > 0;
 
         await this.toastService.get(isSuccess ? MessageEnum.AppSuccess : MessageEnum.AppError, isSuccess ? StatusEnum.Success : StatusEnum.Danger);
 
@@ -237,10 +240,14 @@ export class EditTCGPage implements OnDestroy {
     }
 
     onSelectedEmptyDate(){
-      this.dateAcquiredModal()?.present()           
+      this.dateAcquiredModal()?.present();           
     }
 
-    onDateAcquiredChanged(e: any){
+    onChoiceApiID(apiID: string){
+        this.formGroup.get("apiID")?.setValue(apiID, { emitEvent: false },);
+    }
+
+    onDateAcquiredChanged(event: any){
         this.setHasDateAcquired(true);
     }
 
