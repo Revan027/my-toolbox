@@ -39,8 +39,8 @@ export class AppInitService {
     const p6 = this.statistiqueService.countTotalPurchaseValue();
     const p7 = this.statistiqueService.countTotalMarketValue();
 
-    this._isAppInit.set(true);
-    this.router.navigateByUrl('tcg');
+    /*this._isAppInit.set(true);
+    this.router.navigateByUrl('tcg');*/
 
     // on attend la résolution des promises
     Promise.all([p1, p2, p3, p4, p5, p6, p7]).then( async (values) => {   
