@@ -72,8 +72,8 @@ export class CardService {
             card.isLegendary, 
             card.conditionID, 
             card.dateAcquired,
-            card.id, 
             card.apiID,
+            card.id,            
         ]);
     }
 

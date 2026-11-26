@@ -31,7 +31,7 @@
                 </div>   
               </ion-col>        
             } 
-            @empty {
+            @if(cards()?.length == 0) {
               <ion-col size="12 ion-text-center ion-margin-top" color="info">Aucune cartes trouvées</ion-col>
             }
           </ion-row>       

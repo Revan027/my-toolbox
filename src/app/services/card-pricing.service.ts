@@ -141,6 +141,8 @@ export class CardPricingService {
     }
 
     async deleteExpired() {
+        /*await this.deleteCardHistoryPricing();
+        await this.deleteCardHistoryPeriod();*/
         const sql = `
             DELETE FROM ${tableName.cardHistoryPricing}
             WHERE NOT EXISTS (

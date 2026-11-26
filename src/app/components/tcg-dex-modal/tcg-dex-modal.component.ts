@@ -16,7 +16,7 @@ export class TcgDexModalComponent {
   apiID = output<string>();
 
   protected isLoading = signal<boolean>(false);
-  protected cards = signal<TCGDexCardLight[]>([]);
+  protected cards = signal<TCGDexCardLight[] | undefined>(undefined);
   protected selectedCard = signal<TCGDexCardLight>(new TCGDexCardLight());
 
   constructor(private TCGDexService: TCGDexService) {}
@@ -24,19 +24,13 @@ export class TcgDexModalComponent {
   onModalPresent(){
     this.setIsLoading(true);
 
-    this.TCGDexService.searchCard(this.cardName())
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        this.setCards(Object.values(result.sort((a, b) => a.id.localeCompare(b.id))));
-
-        this.setIsLoading(false);
-      });
+    this.onSearchCard();
   }
 
   onModalDismiss(){
     this.setIsLoading(false);
     this.setSelectedCard(new TCGDexCardLight()); 
-    this.setCards([]);
+    this.setCards(undefined);
   }
 
   onClickCard(card: any){
@@ -45,11 +39,27 @@ export class TcgDexModalComponent {
     this.apiID.emit(card.id); 
   }
 
+  onSearchCard(language: string = "fr", reload: boolean = false){
+    this.TCGDexService.searchCard(this.cardName(), language)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+
+        // nouvelle essai en anglais
+        if(result.length == 0 && !reload){
+          this.onSearchCard("en", true);
+        }
+        else{
+          this.setCards(Object.values(result.sort((a, b) => a.id.localeCompare(b.id)))); // trie par id tcgdex
+          this.setIsLoading(false);
+        }
+    });
+  }
+
   setIsLoading(value: boolean){
     this.isLoading.set(value);
   }
 
-  setCards(value: TCGDexCardLight[]){
+  setCards(value: TCGDexCardLight[] | undefined){
     this.cards.set(value);
   }
 

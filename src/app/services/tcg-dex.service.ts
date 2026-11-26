@@ -13,12 +13,12 @@ export class TCGDexService {
 
     constructor(private httpService: HttpService, private cardService: CardService) {}
 
-    searchCard(cardName: string): Observable<TCGDexCardLight[]>{
-        return this.httpService.get<TCGDexCardLight[]>(`${environment.apiTCGDexBaseUrl}/fr/cards`, {name: cardName.trim()});
+    searchCard(cardName: string, language: string = "fr"): Observable<TCGDexCardLight[]>{
+        return this.httpService.get<TCGDexCardLight[]>(`${environment.apiTCGDexBaseUrl}/${language}/cards`, {name: cardName.trim()});
     }
 
     getCard(id: string, language: string = "fr"): Observable<TCGDexCard>{
-        return this.httpService.get<TCGDexCard>(`${environment.apiTCGDexBaseUrl}${language}/cards/${id}`);
+        return this.httpService.get<TCGDexCard>(`${environment.apiTCGDexBaseUrl}/${language}/cards/${id}`);
     }
 
     getCards(apiIDs: string[]): Promise<TCGDexCard>[]{
