@@ -229,22 +229,10 @@ export class StatistiqueService {
         let dataLinesChart: DataLineChart[] = [];
         let currentPeriod = moment(startBegin);
         let endPeriod = moment(endBegin);
-        let startValue = 0;
+        let result;
        
-        // recherche de la valeur de la collection avant la date de début
-       let result = await this.storageService.getDb().query(`
-            SELECT SUM(price.amount) as totalCount 
-            FROM ${tableName.cardHistoryPeriod} as period
-            INNER JOIN ${tableName.cardHistoryPricing} AS price ON price.cardHistoryPeriodID = period.id 
-            WHERE DATE(period.period || '-01') < ?`, [startBegin]);
-
-        startValue = result.values != undefined && result.values[0].totalCount != undefined ? result.values[0].totalCount : 0;
-
-        let previousValue = startValue;
-
-        // on parcours sur chaque mois et on calcul le total
+        // ce graphique sui l'évolution dans le temps des cotes mensuel des cartes acquises
         while(currentPeriod < endPeriod){
-
             result = await this.storageService.getDb().query(`
                 SELECT SUM(price.amount) as totalCount, period.period as libelle  
                 FROM ${tableName.cardHistoryPeriod} as period
@@ -257,10 +245,9 @@ export class StatistiqueService {
             dataLinesChart.push( 
             {
                 libelle: currentPeriod.format('MM/YY'), 
-                value: (Math.round((values[0].totalCount + previousValue) * 100) / 100) // on arrondie pour éviter des chiffres infinie du a sql lite
+                value: (Math.round((values[0].totalCount) * 100) / 100) // on arrondie pour éviter des chiffres infinie du a sql lite
             });
-           
-            previousValue += values[0].totalCount;
+
             currentPeriod = currentPeriod.add('1', "months");
         } 
         return dataLinesChart;
