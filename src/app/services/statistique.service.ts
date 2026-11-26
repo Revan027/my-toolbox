@@ -52,7 +52,12 @@ export class StatistiqueService {
 
     async countTotalMarketValue(): Promise<number>{
         let result = await this.storageService.getDb().query(`
-            SELECT SUM(amount) as totalCount FROM ${tableName.cardHistoryPricing}`);
+            SELECT AVG(total_par_periode) AS totalCount
+            FROM (
+                SELECT SUM(amount) AS total_par_periode
+                FROM ${tableName.cardHistoryPricing}
+                GROUP BY cardHistoryPeriodID
+            )`);
 
         return result.values != undefined && result.values[0].totalCount != null ? result.values[0].totalCount : 0
     }
@@ -114,7 +119,7 @@ export class StatistiqueService {
             SELECT SUM(price.amount) as totalCount 
             FROM ${tableName.cardHistoryPeriod} as period
             INNER JOIN ${tableName.cardHistoryPricing} AS price ON price.cardHistoryPeriodID = period.id 
-            WHERE DATE(period.period || '-01') <= ?`,
+            WHERE DATE(period.period || '-01') = ?`,
             [periods[0]]);
            
         const initValue = result.values != undefined && result.values[0].totalCount != null ? result.values[0].totalCount : 0;    
